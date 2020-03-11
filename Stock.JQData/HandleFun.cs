@@ -41,16 +41,15 @@ namespace Stock.JQData
                 var item = db.Securities.FirstOrDefault(s => s.Code==sec.Code);
                 if (item == null)
                 {
-                    //db.Securities.Add(sec);
+                    db.Securities.Add(sec);
                 }
                 else
                 {
-                    //mapper.Map(sec, item);
+                    mapper.Map(sec, item);
                 }
 
-                db.SaveChanges();
-                db.Entry(sec).State = EntityState.Detached;
             }
+                db.SaveChanges();
 
         }
     }
