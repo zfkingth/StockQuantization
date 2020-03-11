@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stock.Model", "Stock.Model\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.Data", "Stock.Data\Stock.Data.csproj", "{12AA0263-0120-4BDE-8623-454A87B8D387}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.JQData", "Stock.JQData\Stock.JQData.csproj", "{70112647-F8D1-4496-A37B-1CEC901CEDB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock.NUnitTestJQ", "Stock.NUnitTestJQ\Stock.NUnitTestJQ.csproj", "{C55177B3-A636-43D7-BBDD-0625E6F6C9A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{12AA0263-0120-4BDE-8623-454A87B8D387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12AA0263-0120-4BDE-8623-454A87B8D387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12AA0263-0120-4BDE-8623-454A87B8D387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70112647-F8D1-4496-A37B-1CEC901CEDB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70112647-F8D1-4496-A37B-1CEC901CEDB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70112647-F8D1-4496-A37B-1CEC901CEDB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70112647-F8D1-4496-A37B-1CEC901CEDB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C55177B3-A636-43D7-BBDD-0625E6F6C9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C55177B3-A636-43D7-BBDD-0625E6F6C9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C55177B3-A636-43D7-BBDD-0625E6F6C9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C55177B3-A636-43D7-BBDD-0625E6F6C9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
