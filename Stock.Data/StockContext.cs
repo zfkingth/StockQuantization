@@ -11,5 +11,10 @@ namespace Stock.Data
 
         public DbSet<Securities> Securities { get; set; }
 
+
+        public StockContext(DbContextOptions<StockContext> options) : base(options) { }
+
+
+
     }
 }
