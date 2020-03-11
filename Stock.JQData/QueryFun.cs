@@ -7,8 +7,14 @@ using System.Text.Json;
 
 namespace Stock.JQData
 {
-    public class Utility
+    public class QueryFun
     {
+        public static string _token;
+
+        /// <summary>
+        /// 获取用户token，并保存到类的静态字段中。
+        /// </summary>
+        /// <returns></returns>
         public static string Get_token()
         {
             using (var client = new HttpClient())
@@ -29,9 +35,9 @@ namespace Stock.JQData
 
 
                 //读取返回的TOKEN
-                string token = QueryInfo(client, body);
+                 _token = QueryInfo(client, body);
 
-                return token;
+                return _token;
 
             }
 
@@ -39,8 +45,26 @@ namespace Stock.JQData
 
         public static string Get_all_securities()
         {
+            using (var client = new HttpClient())
+            {
+                //需要添加System.Web.Extensions
+                //生成JSON请求信息
 
-            throw new Exception();
+
+
+                //查询所有股票代码
+                var body = new
+                {
+                    method = "get_all_securities",
+                    token = _token, //token
+                    code = "stock",
+                    date = DateTime.Now.ToString(PubConstan.DateFormatString)
+                };
+                string info = QueryInfo(client, body);
+
+                return info;
+            }
+
         }
 
         public static string Get_security_info()
