@@ -12,7 +12,8 @@ namespace Stock.NUnitTestJQ
         [SetUp]
         public void Setup()
         {
-            JQData.QueryFun.Get_token();
+            var qf = new QueryFun();
+            qf.Get_token();
 
             //set context options;
 
@@ -23,23 +24,24 @@ namespace Stock.NUnitTestJQ
         }
 
         [Test]
-        public void Test_Get_all_securities()
+        public void Test_Update_allStock_basicInfo()
         {
-            string res = JQData.QueryFun.Get_all_securities();
+
             using (StockContext db = new StockContext(_options))
             {
-                JQData.HandleFun.Update_all_securities(db, res);
+                var hf = new HandleFun();
+                hf.Update_allStock_basicInfo(db);
             }
             Assert.Pass();
         }
         [Test]
-        public void Test_Get_price()
+        public void Test_Update_allStock_price1d()
         {
-            string res = JQData.QueryFun.Get_all_securities();
             using (StockContext db = new StockContext(_options))
             {
-                var sec = db.Securities.AsNoTracking().FirstOrDefault();
-                res = JQData.QueryFun.Get_price(db, sec,10,UnitEnum.Unit_1d);
+
+                var hf = new HandleFun();
+                hf.Update_allStock_price1d(db);
             }
             Assert.Pass();
         }

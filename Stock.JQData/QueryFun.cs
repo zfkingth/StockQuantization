@@ -2,6 +2,7 @@
 using Stock.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -29,7 +30,7 @@ namespace Stock.JQData
             };
             var client = new HttpClient(handler);
 
-            client.BaseAddress =new Uri( "https://dataapi.joinquant.com");
+            client.BaseAddress = new Uri("https://dataapi.joinquant.com");
 
 
 
@@ -43,11 +44,12 @@ namespace Stock.JQData
         );
 
 
+
         /// <summary>
         /// 获取用户token，并保存到类的静态字段中。
         /// </summary>
         /// <returns></returns>
-        public static string Get_token()
+        public string Get_token()
         {
 
             object body = new
@@ -69,7 +71,7 @@ namespace Stock.JQData
 
         }
 
-        public static string Get_all_securities()
+        public string Get_all_securities()
         {
             //查询所有股票代码
             var body = new
@@ -86,14 +88,14 @@ namespace Stock.JQData
 
         }
 
-        public static string Get_price(StockContext db, Securities sec, int cnt, UnitEnum unit_param)
+        public string Get_price(StockContext db, string  secCode, int cnt, UnitEnum unit_param)
         {
 
             var body = new
             {
                 method = "get_price",
                 token = _token,
-                code = sec.Code,
+                code = secCode,
                 count = cnt,
                 unit = PubConstan.UnitParamDic[unit_param],
                 end_date = DateTime.Now.ToString(PubConstan.DateFormatString)
@@ -104,7 +106,7 @@ namespace Stock.JQData
 
         }
 
-        public static string Get_security_info()
+        public string Get_security_info()
         {
 
             throw new Exception();
@@ -112,7 +114,7 @@ namespace Stock.JQData
 
 
 
-        protected static string QueryInfo(object body)
+        protected string QueryInfo(object body)
         {
             var client = SingleClient;
             var options = new JsonSerializerOptions
