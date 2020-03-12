@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Stock.Data;
+using Stock.Model;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-
+using System.Threading.Tasks;
 
 namespace Stock.JQData
 {
@@ -19,9 +21,6 @@ namespace Stock.JQData
         {
             using (var client = new HttpClient())
             {
-                //需要添加System.Web.Extensions
-                //生成JSON请求信息
-
 
 
                 object body = new
@@ -35,7 +34,7 @@ namespace Stock.JQData
 
 
                 //读取返回的TOKEN
-                 _token = QueryInfo(client, body);
+                _token = QueryInfo(client, body);
 
                 return _token;
 
@@ -47,10 +46,6 @@ namespace Stock.JQData
         {
             using (var client = new HttpClient())
             {
-                //需要添加System.Web.Extensions
-                //生成JSON请求信息
-
-
 
                 //查询所有股票代码
                 var body = new
@@ -65,6 +60,27 @@ namespace Stock.JQData
                 return info;
             }
 
+        }
+
+        public static string Get_price(StockContext db, Securities sec)
+        {
+            using (var client = new HttpClient())
+            {
+
+
+                var body = new
+                {
+                    method = "get_price",
+                    token = _token,
+                    code = sec.Code,
+                    count = 100,
+                    unit = "1d",
+                    end_date = DateTime.Now.ToString(PubConstan.DateFormatString)
+                };
+                string info = QueryInfo(client, body);
+
+                return info;
+            }
         }
 
         public static string Get_security_info()

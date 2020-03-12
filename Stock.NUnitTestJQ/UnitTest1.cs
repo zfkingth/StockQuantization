@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Stock.Data;
+using System.Linq;
 
 namespace Stock.NUnitTestJQ
 {
@@ -24,9 +25,23 @@ namespace Stock.NUnitTestJQ
         public void Test_Get_all_securities()
         {
             string res = JQData.QueryFun.Get_all_securities();
-            StockContext db = new StockContext(_options);
-            JQData.HandleFun.Update_all_securities(db, res);
+            using (StockContext db = new StockContext(_options))
+            {
+                JQData.HandleFun.Update_all_securities(db, res);
+            }
             Assert.Pass();
         }
+        [Test]
+        public void Test_Get_price()
+        {
+            string res = JQData.QueryFun.Get_all_securities();
+            using (StockContext db = new StockContext(_options))
+            {
+                var sec = db.Securities.AsNoTracking().FirstOrDefault();
+                res = JQData.QueryFun.Get_price(db, sec);
+            }
+            Assert.Pass();
+        }
+
     }
 }

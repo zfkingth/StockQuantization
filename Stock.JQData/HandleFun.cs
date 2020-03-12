@@ -6,6 +6,8 @@ using System.Linq;
 using System.Globalization;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using Stock.Model;
 
 namespace Stock.JQData
 {
@@ -38,7 +40,7 @@ namespace Stock.JQData
                     sec.Type = Model.SecuritiesEnum.Stock;
                 }
                 //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
-                var item = db.Securities.FirstOrDefault(s => s.Code==sec.Code);
+                var item = db.Securities.FirstOrDefault(s => s.Code == sec.Code);
                 if (item == null)
                 {
                     db.Securities.Add(sec);
@@ -49,8 +51,9 @@ namespace Stock.JQData
                 }
 
             }
-                db.SaveChanges();
+            db.SaveChanges();
 
         }
+
     }
 }
