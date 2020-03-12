@@ -31,7 +31,6 @@ namespace Stock.JQData
 
 
 
-            client.BaseAddress = new Uri("https://dataapi.joinquant.com/apis");
 
 
             client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
@@ -87,7 +86,7 @@ namespace Stock.JQData
 
         }
 
-        public static string Get_price(StockContext db, Securities sec, int cnt)
+        public static string Get_price(StockContext db, Securities sec, int cnt, UnitEnum unit_param)
         {
 
             var body = new
@@ -96,7 +95,7 @@ namespace Stock.JQData
                 token = _token,
                 code = sec.Code,
                 count = cnt,
-                unit = "1d",
+                unit = PubConstan.UnitParamDic[unit_param],
                 end_date = DateTime.Now.ToString(PubConstan.DateFormatString)
             };
             string info = QueryInfo(body);
@@ -115,6 +114,7 @@ namespace Stock.JQData
 
         protected static string QueryInfo(object body)
         {
+            const string url = "https://dataapi.joinquant.com/apis";
             var client = SingleClient;
             var options = new JsonSerializerOptions
             {
@@ -127,7 +127,7 @@ namespace Stock.JQData
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             //POST请求并等待结果
-            var result = client.PostAsync("", bodyContent).Result;
+            var result = client.PostAsync(url, bodyContent).Result;
 
 
             return result.Content.ReadAsStringAsync().Result;
