@@ -2,6 +2,7 @@
 using Stock.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -88,9 +89,8 @@ namespace Stock.JQData
 
         }
 
-        public string Get_price(StockContext db, string  secCode, int cnt, UnitEnum unit_param)
+        public string Get_price(string secCode, int cnt, UnitEnum unit_param)
         {
-
             var body = new
             {
                 method = "get_price",
@@ -106,10 +106,20 @@ namespace Stock.JQData
 
         }
 
-        public string Get_security_info()
+        public int Get_query_count()
         {
 
-            throw new Exception();
+
+            var body = new
+            {
+                method = "get_query_count",
+                token = _token, //token
+            };
+
+            var info = QueryInfo(body);
+            int num = Convert.ToInt32(info, CultureInfo.InvariantCulture);
+
+            return num;
         }
 
 

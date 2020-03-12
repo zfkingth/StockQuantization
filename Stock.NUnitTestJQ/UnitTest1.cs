@@ -17,33 +17,36 @@ namespace Stock.NUnitTestJQ
 
             //set context options;
 
-
-            var optionsBuilder = new DbContextOptionsBuilder<StockContext>();
-            optionsBuilder.UseMySql("server=localhost;database=StockQuantization;user=root;password=dragon00");
-            _options = optionsBuilder.Options;
         }
 
         [Test]
         public void Test_Update_allStock_basicInfo()
         {
 
-            using (StockContext db = new StockContext(_options))
-            {
-                var hf = new HandleFun();
-                hf.Update_allStock_basicInfo(db);
-            }
+            var hf = new HandleFun();
+            hf.Update_allStock_basicInfo();
             Assert.Pass();
         }
         [Test]
         public void Test_Update_allStock_price1d()
         {
-            using (StockContext db = new StockContext(_options))
-            {
 
-                var hf = new HandleFun();
-                hf.Update_allStock_price1d(db);
-            }
+            var hf = new HandleFun();
+            hf.Update_allStock_price1d();
             Assert.Pass();
+        }
+
+        [Test]
+        public void Test_Get_query_count()
+        {
+
+
+            var qf = new QueryFun();
+            int cnt = qf.Get_query_count();
+            TestContext.WriteLine($"还剩余调用次数{cnt}");
+
+            Assert.Pass();
+
         }
 
     }
