@@ -29,7 +29,7 @@ namespace Stock.JQData
             };
             var client = new HttpClient(handler);
 
-
+            client.BaseAddress =new Uri( "https://dataapi.joinquant.com");
 
 
 
@@ -114,7 +114,6 @@ namespace Stock.JQData
 
         protected static string QueryInfo(object body)
         {
-            const string url = "https://dataapi.joinquant.com/apis";
             var client = SingleClient;
             var options = new JsonSerializerOptions
             {
@@ -127,7 +126,7 @@ namespace Stock.JQData
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             //POST请求并等待结果
-            var result = client.PostAsync(url, bodyContent).Result;
+            var result = client.PostAsync("apis", bodyContent).Result;
 
 
             return result.Content.ReadAsStringAsync().Result;
