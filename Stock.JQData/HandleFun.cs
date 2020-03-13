@@ -27,9 +27,9 @@ namespace Stock.JQData
                                 where p.Code == sec.Code
                                 orderby p.Date descending
                                 select p.Date;
-                    var date = query.FirstOrDefault();
+                    var date = query.DefaultIfEmpty(PubConstan.PriceStartDate).FirstOrDefault();
 
-                    int dayCnt = (int)(DateTime.Now.Subtract(date).TotalDays + 1);
+                    int dayCnt = (int)(DateTime.Now.Subtract(date).TotalDays + 1);//有多出来的数据
 
                     string res = qf.Get_price( sec.Code, dayCnt, UnitEnum.Unit_1d);
                     Update_Single_securities_Price1d(sec.Code, res);
@@ -116,11 +116,16 @@ namespace Stock.JQData
                         Preclose = Convert.ToDouble(words[11]),
 
                     };
-                    //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
-                    var item = db.Price1d.FirstOrDefault(s => s.Code == newItem.Code && s.Date == newItem.Date);
-                    if (item == null)
+
+                    //只处理系统设置的起始时间以后的数据
+                    if (newItem.Date >= PubConstan.PriceStartDate)
                     {
-                        db.Price1d.Add(newItem);
+                        //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
+                        var exsit = db.Price1d.Any(s => s.Code == newItem.Code && s.Date == newItem.Date);
+                        if (exsit == false)
+                        {
+                            db.Price1d.Add(newItem);
+                        }
                     }
                 }
                 db.SaveChanges();
