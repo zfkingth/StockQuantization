@@ -40,6 +40,7 @@ namespace Stock.Data
                 t.Date
             });
 
+        
         }
 
 

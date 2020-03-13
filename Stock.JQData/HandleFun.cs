@@ -13,7 +13,13 @@ namespace Stock.JQData
 {
     public class HandleFun
     {
+        static IMapper _mapper = null;
 
+        static HandleFun()
+        {
+            var mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
+            _mapper = mappingConfig.CreateMapper();
+        }
         public void Update_allStock_price1d()
         {
             using (StockContext db = new StockContext())
@@ -27,11 +33,15 @@ namespace Stock.JQData
                                 where p.Code == sec.Code
                                 orderby p.Date descending
                                 select p.Date;
-                    var date = query.DefaultIfEmpty(PubConstan.PriceStartDate).FirstOrDefault();
+                    var date = query.FirstOrDefault();
+                    if (date == default)
+                    {
+                        date = PubConstan.PriceStartDate;
+                    }
 
                     int dayCnt = (int)(DateTime.Now.Subtract(date).TotalDays + 1);//有多出来的数据
 
-                    string res = qf.Get_price( sec.Code, dayCnt, UnitEnum.Unit_1d);
+                    string res = qf.Get_price(sec.Code, dayCnt, UnitEnum.Unit_1d);
                     Update_Single_securities_Price1d(sec.Code, res);
                 }
             }
@@ -47,8 +57,6 @@ namespace Stock.JQData
                 var qf = new QueryFun();
                 string res = qf.Get_all_securities();
 
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<Model.Securities, Model.Securities>());
-                var mapper = config.CreateMapper();
 
 
 
@@ -79,7 +87,7 @@ namespace Stock.JQData
                     }
                     else
                     {
-                        mapper.Map(sec, item);
+                        _mapper.Map(sec, item);
                     }
 
                 }
@@ -125,6 +133,13 @@ namespace Stock.JQData
                         if (exsit == false)
                         {
                             db.Price1d.Add(newItem);
+                        }
+                        else if (i == records.Length - 1)
+                        {
+                            //已经在数据库中存在，但是最后一次
+                            var itemIndb = db.Price1d.FirstOrDefault(s => s.Code == newItem.Code && s.Date == newItem.Date);
+                            //如果是最后一次就更新。
+                            _mapper.Map(newItem, itemIndb);
                         }
                     }
                 }
