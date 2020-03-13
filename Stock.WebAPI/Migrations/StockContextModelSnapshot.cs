@@ -17,8 +17,11 @@ namespace Stock.WebAPI.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Stock.Model.Price1d", b =>
+            modelBuilder.Entity("Stock.Model.Price", b =>
                 {
+                    b.Property<byte>("Unit")
+                        .HasColumnType("tinyint unsigned");
+
                     b.Property<string>("Code")
                         .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
                         .HasMaxLength(15);
@@ -59,9 +62,9 @@ namespace Stock.WebAPI.Migrations
                     b.Property<double>("Volume")
                         .HasColumnType("double");
 
-                    b.HasKey("Code", "Date");
+                    b.HasKey("Unit", "Code", "Date");
 
-                    b.ToTable("Price1d");
+                    b.ToTable("PriceSet");
                 });
 
             modelBuilder.Entity("Stock.Model.Securities", b =>
@@ -89,7 +92,7 @@ namespace Stock.WebAPI.Migrations
 
                     b.HasKey("Code");
 
-                    b.ToTable("Securities");
+                    b.ToTable("SecuritiesSet");
                 });
 #pragma warning restore 612, 618
         }

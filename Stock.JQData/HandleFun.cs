@@ -20,16 +20,16 @@ namespace Stock.JQData
             var mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             _mapper = mappingConfig.CreateMapper();
         }
-        public void Update_allStock_price1d()
+        public void Update_allStock_price(UnitEnum unit)
         {
             using (StockContext db = new StockContext())
             {
-                var secList = db.Securities.AsNoTracking().ToList();
+                var secList = db.SecuritiesSet.AsNoTracking().ToList();
                 QueryFun qf = new QueryFun();
                 foreach (var sec in secList)
                 {
                     //获取数据库中最新的时间
-                    var query = from p in db.Price1d
+                    var query = from p in db.PriceSet
                                 where p.Code == sec.Code
                                 orderby p.Date descending
                                 select p.Date;
@@ -41,8 +41,8 @@ namespace Stock.JQData
 
                     int dayCnt = (int)(DateTime.Now.Subtract(date).TotalDays + 1);//有多出来的数据
 
-                    string res = qf.Get_price(sec.Code, dayCnt, UnitEnum.Unit_1d);
-                    Update_Single_securities_Price1d(sec.Code, res);
+                    string res = qf.Get_price(sec.Code, dayCnt, unit);
+                    Update_Single_securities_Price(sec.Code, res,unit);
                 }
             }
 
@@ -80,10 +80,10 @@ namespace Stock.JQData
                         sec.Type = Model.SecuritiesEnum.Stock;
                     }
                     //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
-                    var item = db.Securities.FirstOrDefault(s => s.Code == sec.Code);
+                    var item = db.SecuritiesSet.FirstOrDefault(s => s.Code == sec.Code);
                     if (item == null)
                     {
-                        db.Securities.Add(sec);
+                        db.SecuritiesSet.Add(sec);
                     }
                     else
                     {
@@ -96,7 +96,7 @@ namespace Stock.JQData
 
         }
 
-        public void Update_Single_securities_Price1d(string code, string res)
+        public void Update_Single_securities_Price(string code, string res, UnitEnum unit)
         {
 
             using (StockContext db = new StockContext())
@@ -107,8 +107,9 @@ namespace Stock.JQData
                 {
                     var ss = records[i];
                     var words = ss.Split(',');
-                    Stock.Model.Price1d newItem = new Model.Price1d
+                    Stock.Model.Price newItem = new Model.Price
                     {
+                        Unit=unit,
                         Code = code,
                         Date = DateTime.ParseExact(words[0], PubConstan.DateFormatString, CultureInfo.InvariantCulture),
                         Open = Convert.ToDouble(words[1]),
@@ -129,15 +130,15 @@ namespace Stock.JQData
                     if (newItem.Date >= PubConstan.PriceStartDate)
                     {
                         //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
-                        var exsit = db.Price1d.Any(s => s.Code == newItem.Code && s.Date == newItem.Date);
+                        var exsit = db.PriceSet.Any(s => s.Code == newItem.Code && s.Date == newItem.Date);
                         if (exsit == false)
                         {
-                            db.Price1d.Add(newItem);
+                            db.PriceSet.Add(newItem);
                         }
                         else if (i == records.Length - 1)
                         {
                             //已经在数据库中存在，但是最后一次
-                            var itemIndb = db.Price1d.FirstOrDefault(s => s.Code == newItem.Code && s.Date == newItem.Date);
+                            var itemIndb = db.PriceSet.FirstOrDefault(s => s.Code == newItem.Code && s.Date == newItem.Date);
                             //如果是最后一次就更新。
                             _mapper.Map(newItem, itemIndb);
                         }

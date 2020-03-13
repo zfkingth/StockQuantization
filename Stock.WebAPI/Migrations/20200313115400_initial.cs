@@ -3,14 +3,15 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Stock.WebAPI.Migrations
 {
-    public partial class price1d : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Price1d",
+                name: "PriceSet",
                 columns: table => new
                 {
+                    Unit = table.Column<byte>(nullable: false),
                     Code = table.Column<string>(maxLength: 15, nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     Open = table.Column<double>(nullable: false),
@@ -27,14 +28,33 @@ namespace Stock.WebAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Price1d", x => new { x.Code, x.Date });
+                    table.PrimaryKey("PK_PriceSet", x => new { x.Unit, x.Code, x.Date });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SecuritiesSet",
+                columns: table => new
+                {
+                    Code = table.Column<string>(maxLength: 15, nullable: false),
+                    Displayname = table.Column<string>(maxLength: 10, nullable: true),
+                    Name = table.Column<string>(maxLength: 10, nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    Type = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SecuritiesSet", x => x.Code);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Price1d");
+                name: "PriceSet");
+
+            migrationBuilder.DropTable(
+                name: "SecuritiesSet");
         }
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Stock.Data;
 using Stock.JQData;
+using Stock.Model;
 using System.Linq;
 
 namespace Stock.NUnitTestJQ
@@ -32,7 +33,7 @@ namespace Stock.NUnitTestJQ
         {
 
             var hf = new HandleFun();
-            hf.Update_allStock_price1d();
+            hf.Update_allStock_price(UnitEnum.Unit1d);
             Assert.Pass();
         }
 

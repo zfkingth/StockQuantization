@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Stock.Model
 {
-    public class Price1d
+    public class Price
     {
+        public UnitEnum Unit { get; set; }
         [MaxLength(15)]
         public string Code { get; set; }
 

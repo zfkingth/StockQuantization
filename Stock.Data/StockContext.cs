@@ -9,8 +9,8 @@ namespace Stock.Data
     public class StockContext : DbContext
     {
 
-        public DbSet<Securities> Securities { get; set; }
-        public DbSet<Price1d> Price1d { get; set; }
+        public DbSet<Securities> SecuritiesSet { get; set; }
+        public DbSet<Price> PriceSet { get; set; }
 
 
 
@@ -34,15 +34,21 @@ namespace Stock.Data
         {
 
             //获取历史数据时，以单个股票为单位。
-            modelBuilder.Entity<Price1d>().HasKey(t => new
+            modelBuilder.Entity<Price>().HasKey(t => new
             {
+                t.Unit,
                 t.Code,
                 t.Date
             });
 
-        
+            ConfigureModelBuilderForPrice(modelBuilder);
         }
 
+        void ConfigureModelBuilderForPrice(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Price>().Property(s => s.Unit).HasConversion<byte>();
+        }
+          
 
     }
 }

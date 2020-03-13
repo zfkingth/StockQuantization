@@ -11,7 +11,7 @@ namespace Stock.JQData
         {
             CreateMap<Model.Securities, Model.Securities>();
              
-            CreateMap<Model.Price1d, Model.Price1d>();
+            CreateMap<Model.Price, Model.Price>();
                   }
     }
 

@@ -9,8 +9,8 @@ using Stock.Data;
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    [Migration("20200313102854_add30m")]
-    partial class add30m
+    [Migration("20200313115400_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,8 +19,11 @@ namespace Stock.WebAPI.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Stock.Model.Price1d", b =>
+            modelBuilder.Entity("Stock.Model.Price", b =>
                 {
+                    b.Property<byte>("Unit")
+                        .HasColumnType("tinyint unsigned");
+
                     b.Property<string>("Code")
                         .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
                         .HasMaxLength(15);
@@ -61,56 +64,9 @@ namespace Stock.WebAPI.Migrations
                     b.Property<double>("Volume")
                         .HasColumnType("double");
 
-                    b.HasKey("Code", "Date");
+                    b.HasKey("Unit", "Code", "Date");
 
-                    b.ToTable("Price1d");
-                });
-
-            modelBuilder.Entity("Stock.Model.Price30m", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
-                        .HasMaxLength(15);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<double>("Avg")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Close")
-                        .HasColumnType("double");
-
-                    b.Property<double>("High")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Highlimit")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Low")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Lowlimit")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Money")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Open")
-                        .HasColumnType("double");
-
-                    b.Property<bool>("Paused")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<double>("Preclose")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Volume")
-                        .HasColumnType("double");
-
-                    b.HasKey("Code", "Date");
-
-                    b.ToTable("Price30m");
+                    b.ToTable("PriceSet");
                 });
 
             modelBuilder.Entity("Stock.Model.Securities", b =>
@@ -138,7 +94,7 @@ namespace Stock.WebAPI.Migrations
 
                     b.HasKey("Code");
 
-                    b.ToTable("Securities");
+                    b.ToTable("SecuritiesSet");
                 });
 #pragma warning restore 612, 618
         }
