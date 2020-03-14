@@ -41,12 +41,20 @@ namespace Stock.Data
                 t.Date
             });
 
+            modelBuilder.Entity<Securities>().HasKey(t => new
+            {
+                t.Type,
+                t.Code,
+            });
+
+
             ConfigureModelBuilderForPrice(modelBuilder);
         }
 
         void ConfigureModelBuilderForPrice(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Price>().Property(s => s.Unit).HasConversion<byte>();
+            modelBuilder.Entity<Securities>().Property(s => s.Type).HasConversion<byte>();
         }
           
 

@@ -9,8 +9,8 @@ using Stock.Data;
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    [Migration("20200313120419_alterColumn")]
-    partial class alterColumn
+    [Migration("20200313125027_columns")]
+    partial class columns
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,6 +71,9 @@ namespace Stock.WebAPI.Migrations
 
             modelBuilder.Entity("Stock.Model.Securities", b =>
                 {
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint unsigned");
+
                     b.Property<string>("Code")
                         .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
                         .HasMaxLength(15);
@@ -89,10 +92,7 @@ namespace Stock.WebAPI.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Code");
+                    b.HasKey("Type", "Code");
 
                     b.ToTable("SecuritiesSet");
                 });

@@ -35,16 +35,16 @@ namespace Stock.WebAPI.Migrations
                 name: "SecuritiesSet",
                 columns: table => new
                 {
+                    Type = table.Column<byte>(nullable: false),
                     Code = table.Column<string>(maxLength: 15, nullable: false),
                     Displayname = table.Column<string>(maxLength: 10, nullable: true),
                     Name = table.Column<string>(maxLength: 10, nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    Type = table.Column<int>(nullable: false)
+                    EndDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SecuritiesSet", x => x.Code);
+                    table.PrimaryKey("PK_SecuritiesSet", x => new { x.Type, x.Code });
                 });
         }
 

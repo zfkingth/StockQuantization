@@ -80,7 +80,7 @@ namespace Stock.JQData
                 method = "get_all_securities",
                 token = _token, //token
                 code = "stock",
-                date = DateTime.Now.ToString(PubConstan.DateFormatString)
+                date = DateTime.Now.ToString(PubConstan.ShortDateFormat)
             };
             string info = QueryInfo(body);
 
@@ -89,7 +89,7 @@ namespace Stock.JQData
 
         }
 
-        public string Get_price(string secCode, int cnt, UnitEnum unit_param)
+        public string Get_price(UnitEnum unit_param, string secCode, int cnt,DateTime endDate)
         {
             var body = new
             {
@@ -98,7 +98,7 @@ namespace Stock.JQData
                 code = secCode,
                 count = cnt,
                 unit = PubConstan.UnitParamDic[unit_param],
-                end_date = DateTime.Now.ToString(PubConstan.DateFormatString)
+                end_date = Utility.ToDateString(endDate, unit_param)
             };
             string info = QueryInfo(body);
 

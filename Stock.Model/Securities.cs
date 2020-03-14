@@ -10,7 +10,7 @@ namespace Stock.Model
         //code,display_name,name,start_date,end_date,type
 
 
-        [Key]
+        public SecuritiesEnum Type { get; set; }
         [MaxLength(15)]
         public string Code { get; set; }
 
@@ -23,7 +23,6 @@ namespace Stock.Model
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public SecuritiesEnum Type { get; set; }
 
 
 

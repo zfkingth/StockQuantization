@@ -29,10 +29,12 @@ namespace Stock.NUnitTestJQ
             Assert.Pass();
         }
         [Test]
-        public void Test_Update_allStock_price1d()
+        public void Test_Update_allStock_price()
         {
 
             var hf = new HandleFun();
+            hf.Update_allStock_price(UnitEnum.Unit30m);
+            hf.Update_allStock_price(UnitEnum.Unit120m);
             hf.Update_allStock_price(UnitEnum.Unit1d);
             Assert.Pass();
         }
