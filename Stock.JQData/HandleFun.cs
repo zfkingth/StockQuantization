@@ -48,7 +48,7 @@ namespace Stock.JQData
                     //循环次数
                     var circleCnt = Math.Ceiling((double)numCnt / PubConstan.MaxRecordCntPerFetch);
                     var tempdays = 1.0;
-                    if (circleCnt < PubConstan.MaxRecordCntPerFetch)
+                    if (numCnt < PubConstan.MaxRecordCntPerFetch)
                     {
 
                         tempdays = numCnt / PubConstan.RecordCntPerDay[unit];
@@ -73,8 +73,10 @@ namespace Stock.JQData
                             var d1 = Math.Ceiling((DateTime.Now - lastDate).TotalDays);
                             var d2 = PubConstan.RecordCntPerDay[unit];
                             cntForThisFetch = (int)(d1 * d2);
+                            endDate = DateTime.Now;
 
                         }
+
 
 
 
