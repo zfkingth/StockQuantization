@@ -47,7 +47,16 @@ namespace Stock.JQData
                     //不是每天都有数据，会丢弃很多数据
                     //循环次数
                     var circleCnt = Math.Ceiling((double)numCnt / PubConstan.MaxRecordCntPerFetch);
-                    var tempdays = PubConstan.MaxRecordCntPerFetch / PubConstan.RecordCntPerDay[unit];
+                    var tempdays = 1.0;
+                    if (circleCnt < PubConstan.MaxRecordCntPerFetch)
+                    {
+
+                        tempdays = numCnt / PubConstan.RecordCntPerDay[unit];
+                    }
+                    else
+                    {
+                        tempdays = PubConstan.MaxRecordCntPerFetch / PubConstan.RecordCntPerDay[unit];
+                    }
                     for (int fetchIndex = 0; fetchIndex < circleCnt; fetchIndex++)
                     {
                         //分段操作

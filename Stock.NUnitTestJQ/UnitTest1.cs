@@ -33,8 +33,8 @@ namespace Stock.NUnitTestJQ
         {
 
             var hf = new HandleFun();
-            hf.Update_allStock_price(UnitEnum.Unit30m);
             hf.Update_allStock_price(UnitEnum.Unit120m);
+            hf.Update_allStock_price(UnitEnum.Unit30m);
             hf.Update_allStock_price(UnitEnum.Unit1d);
             Assert.Pass();
         }
