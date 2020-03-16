@@ -24,20 +24,52 @@ namespace Stock.JQData
         {
             using (StockContext db = new StockContext())
             {
-                var secList = db.SecuritiesSet.Where(s => s.Type == secType).AsNoTracking().ToList();
-                QueryFun qf = new QueryFun();
-                foreach (var sec in secList)
+                var secList = (from s in db.SecuritiesSet
+                               where s.Type == secType
+                               select s.Code).ToList();
+
+                foreach (var secCode in secList)
                 {
-                    //获取数据库中最新的时间
-                    var query = from p in db.PriceSet
-                                where p.Unit == unit && p.Code == sec.Code
-                                orderby p.Date descending
-                                select p.Date;
-                    var startDate = query.FirstOrDefault();
-                    if (startDate == default)
-                    {
-                        startDate = PubConstan.PriceStartDate;
-                    }
+
+                    Update_Price(unit, secCode);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 更新主板，上证指数30m的数据
+        /// </summary>
+        public void UpdateMainIndex()
+        {
+            Update_Price(UnitEnum.Unit30m, PubConstan.IndexsCode[0],true);
+        }
+
+        private void Update_Price(UnitEnum unit, string secCode, bool forceUpdate = false)
+        {
+            using (StockContext db = new StockContext())
+            {
+
+                QueryFun qf = new QueryFun();
+                //获取数据库中最新的时间
+                var query = from p in db.PriceSet
+                            where p.Unit == unit && p.Code == secCode
+                            orderby p.Date descending
+                            select p.Date;
+                var startDate = query.FirstOrDefault();
+                if (startDate == default)
+                {
+                    startDate = PubConstan.PriceStartDate;
+                }
+
+                //日线数据的小时，分钟都是0
+                if (unit == UnitEnum.Unit1d)
+                {
+                    startDate = startDate.Add(PubConstan.MarketEndTime);
+                }
+
+                if (forceUpdate || startDate < PubConstan.LastTradeEndDateTime)
+                {
 
                     int daysCnt = (int)(Math.Ceiling((DateTime.Now - startDate).TotalDays));//有多出来的数据
                     int numCnt = (int)(daysCnt * PubConstan.RecordCntPerDay[unit]);
@@ -81,18 +113,15 @@ namespace Stock.JQData
 
 
 
-                        string res = qf.Get_price(unit, sec.Code, cntForThisFetch, endDate);
-                        Update_Single_securities_Price(unit, sec.Code, res);
+                        string res = qf.Get_price(unit, secCode, cntForThisFetch, endDate);
+                        Parse_WriteDb_Price(unit, secCode, res);
 
                     }
-
-
                 }
             }
 
+
         }
-
-
 
         public void Update_allStock_basicInfo()
         {
@@ -138,6 +167,16 @@ namespace Stock.JQData
                     }
                     //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
                     var item = db.SecuritiesSet.FirstOrDefault(s => s.Code == sec.Code); ;
+
+                    //只处理三种指数
+                    if (sec.Type == SecuritiesEnum.Index)
+                    {
+                        if (!PubConstan.IndexsCode.Contains(sec.Code))
+                        {
+                            continue;
+                        }
+                    }
+
                     if (item == null)
                     {
                         db.SecuritiesSet.Add(sec);
@@ -152,7 +191,7 @@ namespace Stock.JQData
             }
         }
 
-        public void Update_Single_securities_Price(UnitEnum unit, string code, string res)
+        public void Parse_WriteDb_Price(UnitEnum unit, string code, string res)
         {
 
             using (StockContext db = new StockContext())

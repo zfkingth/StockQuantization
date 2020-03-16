@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Stock.Data;
 using Stock.JQData;
 using Stock.Model;
+using System;
 using System.Linq;
 
 namespace Stock.NUnitTestJQ
@@ -28,13 +29,30 @@ namespace Stock.NUnitTestJQ
             hf.Update_allStock_basicInfo();
             Assert.Pass();
         }
+
+       
+
         [Test]
         public void Test_Update_allStock_price()
         {
 
             var hf = new HandleFun();
-            hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit120m);
+
+            var qf = new QueryFun();
+
+            hf.UpdateMainIndex();
+
+            //set in static field
+            DateTime date = qf.GetLastTradeEndDateTime();
+
+            hf.Update_allStock_price(SecuritiesEnum.Index, UnitEnum.Unit30m);
+
+            hf.Update_allStock_price(SecuritiesEnum.Index, UnitEnum.Unit120m);
+
+            hf.Update_allStock_price(SecuritiesEnum.Index, UnitEnum.Unit1d);
+
             hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit30m);
+            hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit120m);
             hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit1d);
             Assert.Pass();
         }

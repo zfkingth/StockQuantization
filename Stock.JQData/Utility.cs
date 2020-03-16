@@ -12,7 +12,7 @@ namespace Stock.JQData
         {
             string format = PubConstan.ShortDateFormat;
             if (unit < UnitEnum.Unit1d)
-                format = PubConstan.LongDateFormat;
+                format = PubConstan.MiddleDateFormat;
             var date = DateTime.ParseExact(s, format, CultureInfo.InvariantCulture);
             return date;
         }

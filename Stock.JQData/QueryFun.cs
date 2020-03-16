@@ -72,6 +72,26 @@ namespace Stock.JQData
 
         }
 
+
+        /// <summary>
+        /// 从指数30分钟数据里，获取最新的30分钟数据的结束时间。
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetLastTradeEndDateTime()
+        {
+            using (StockContext db = new StockContext())
+            {
+                var query = (from p in db.PriceSet
+                             where p.Unit == UnitEnum.Unit30m && p.Code == PubConstan.IndexsCode[0]
+                             orderby p.Date descending
+                             select p.Date).FirstOrDefault();
+                PubConstan.LastTradeEndDateTime = query;
+
+                return query;
+            }
+        }
+
+
         public string Get_all_securities(SecuritiesEnum type)
         {
             //查询所有股票代码

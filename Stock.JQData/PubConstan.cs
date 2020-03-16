@@ -8,7 +8,8 @@ namespace Stock.JQData
     public class PubConstan
     {
         public const string ShortDateFormat = "yyyy-MM-dd";
-        public const string LongDateFormat = "yyyy-MM-dd HH:mm";
+        public const string MiddleDateFormat = "yyyy-MM-dd HH:mm";
+        public const string LongDateFormat = "yyyy-MM-dd HH:mm:ss";
         public static readonly DateTime PriceStartDate = new DateTime(2015, 1, 1);
         public static readonly Dictionary<UnitEnum, string> UnitParamDic = new Dictionary<UnitEnum, string>
         {{ UnitEnum.Unit1d,"1d"},{ UnitEnum.Unit30m,"30m"},{UnitEnum.Unit60m,"60m" },{UnitEnum.Unit120m,"120m" } };
@@ -22,5 +23,35 @@ namespace Stock.JQData
         {{ SecuritiesEnum.Stock,"stock"},{ SecuritiesEnum.Index,"index"}};
 
 
+        public static readonly string EventPullStockNames = "pullStockNames";
+        public static readonly string EventPullF10 = "pullF10";
+        public static readonly string EventPullDailyData = "pullDaily";
+        public static readonly string EventPullReadTimeData = "pullRealTime";
+
+        public static readonly TimeSpan IdleTimeStartSpan = new TimeSpan(0);
+        public static readonly TimeSpan IdleTimeEndSpan = new TimeSpan(6, 30, 0);
+
+        public static readonly TimeSpan StockStartSpan = new TimeSpan(9, 15, 0);
+
+        /// <summary>
+        /// 把交易时间延长了半小时，appsettings.json里的FetchRealTimeDataCycle 不要超过1800秒，不然有会导致取不到最后一次实时数据
+        /// </summary>
+        public static readonly TimeSpan StockEndSpan = new TimeSpan(15, 25, 0);
+
+        public static readonly int MaxQueueCnt = 5;
+
+
+
+        //收市时间
+        public static readonly TimeSpan MarketEndTime = new TimeSpan(15, 0, 0);
+
+        public static DateTime LastTradeEndDateTime { get; internal set; }
+
+
+        /// <summary>
+        /// 需要处理的指数Code
+        /// </summary>
+        public static readonly string[] IndexsCode = new string[] { "000001.XSHG" ,
+        "399001.XSHE","399006.XSHE"};
     }
 }
