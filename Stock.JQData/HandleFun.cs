@@ -96,12 +96,17 @@ namespace Stock.JQData
 
         public void Update_allStock_basicInfo()
         {
-            //获取数据 
+
+
             var qf = new QueryFun();
-            string res = qf.Get_all_securities(SecuritiesEnum.Stock);
+
+
+            string res = qf.Get_all_securities(SecuritiesEnum.Index);
             updateSecuritiesByResult(res);
 
-            res = qf.Get_all_securities(SecuritiesEnum.Index);
+
+            //获取数据 
+             res = qf.Get_all_securities(SecuritiesEnum.Stock);
             updateSecuritiesByResult(res);
 
         }

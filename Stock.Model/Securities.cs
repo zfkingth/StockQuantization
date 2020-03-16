@@ -14,7 +14,7 @@ namespace Stock.Model
         [MaxLength(15)]
         public string Code { get; set; }
 
-        [MaxLength(10)]
+        [MaxLength(20)]
         public string Displayname { get; set; }
 
         [MaxLength(10)]
