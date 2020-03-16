@@ -96,13 +96,20 @@ namespace Stock.JQData
 
         public void Update_allStock_basicInfo()
         {
+            //获取数据 
+            var qf = new QueryFun();
+            string res = qf.Get_all_securities(SecuritiesEnum.Stock);
+            updateSecuritiesByResult(res);
+
+            res = qf.Get_all_securities(SecuritiesEnum.Index);
+            updateSecuritiesByResult(res);
+
+        }
+
+        private void updateSecuritiesByResult(string res)
+        {
             using (StockContext db = new StockContext())
             {
-                //获取数据 
-                var qf = new QueryFun();
-                string res = qf.Get_all_securities();
-
-
 
                 var records = res.Split('\r', '\n');
                 //跳过第一行
@@ -118,9 +125,11 @@ namespace Stock.JQData
                         StartDate = DateTime.ParseExact(words[3], PubConstan.ShortDateFormat, CultureInfo.InvariantCulture),
                         EndDate = DateTime.ParseExact(words[4], PubConstan.ShortDateFormat, CultureInfo.InvariantCulture)
                     };
-                    if (words[5] == "stock")
+                    switch (words[5])
                     {
-                        sec.Type = Model.SecuritiesEnum.Stock;
+                        case "stock": sec.Type = Model.SecuritiesEnum.Stock; break;
+                        case "index": sec.Type = Model.SecuritiesEnum.Index; break;
+                        default: throw new Exception("未处理这个类型的标的。");
                     }
                     //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
                     var item = db.SecuritiesSet.FirstOrDefault(s => s.Code == sec.Code);
@@ -136,7 +145,6 @@ namespace Stock.JQData
                 }
                 db.SaveChanges();
             }
-
         }
 
         public void Update_Single_securities_Price(UnitEnum unit, string code, string res)

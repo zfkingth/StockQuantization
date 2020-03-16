@@ -72,14 +72,14 @@ namespace Stock.JQData
 
         }
 
-        public string Get_all_securities()
+        public string Get_all_securities(SecuritiesEnum type)
         {
             //查询所有股票代码
             var body = new
             {
                 method = "get_all_securities",
                 token = _token, //token
-                code = "stock",
+                code = PubConstan.TypeParamDic[type],
                 date = DateTime.Now.ToString(PubConstan.ShortDateFormat)
             };
             string info = QueryInfo(body);

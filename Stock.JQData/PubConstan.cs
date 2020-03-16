@@ -16,5 +16,11 @@ namespace Stock.JQData
         public static int MaxRecordCntPerFetch = 4992;//能够被8,整除比较好，最小支持30分钟线
         public static readonly Dictionary<UnitEnum, double> RecordCntPerDay = new Dictionary<UnitEnum, double>
         {{ UnitEnum.Unit30m,8f},{UnitEnum.Unit60m,4f },{UnitEnum.Unit120m,2f },{ UnitEnum.Unit1d,1f}, };
+
+
+        public static readonly Dictionary<SecuritiesEnum, string> TypeParamDic = new Dictionary<SecuritiesEnum, string>
+        {{ SecuritiesEnum.Stock,"stock"},{ SecuritiesEnum.Index,"index"}};
+
+
     }
 }
