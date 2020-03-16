@@ -9,11 +9,11 @@ namespace Stock.Model
     {
         //code,display_name,name,start_date,end_date,type
 
-
         public SecuritiesEnum Type { get; set; }
+
         [MaxLength(15)]
         public string Code { get; set; }
-
+    
         [MaxLength(20)]
         public string Displayname { get; set; }
 

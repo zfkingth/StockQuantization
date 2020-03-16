@@ -20,11 +20,11 @@ namespace Stock.JQData
             var mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             _mapper = mappingConfig.CreateMapper();
         }
-        public void Update_allStock_price(UnitEnum unit)
+        public void Update_allStock_price(SecuritiesEnum secType, UnitEnum unit)
         {
             using (StockContext db = new StockContext())
             {
-                var secList = db.SecuritiesSet.AsNoTracking().ToList();
+                var secList = db.SecuritiesSet.Where(s => s.Type == secType).AsNoTracking().ToList();
                 QueryFun qf = new QueryFun();
                 foreach (var sec in secList)
                 {
@@ -106,7 +106,7 @@ namespace Stock.JQData
 
 
             //获取数据 
-             res = qf.Get_all_securities(SecuritiesEnum.Stock);
+            res = qf.Get_all_securities(SecuritiesEnum.Stock);
             updateSecuritiesByResult(res);
 
         }
@@ -137,7 +137,7 @@ namespace Stock.JQData
                         default: throw new Exception("未处理这个类型的标的。");
                     }
                     //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
-                    var item = db.SecuritiesSet.FirstOrDefault(s => s.Code == sec.Code);
+                    var item = db.SecuritiesSet.FirstOrDefault(s => s.Code == sec.Code); ;
                     if (item == null)
                     {
                         db.SecuritiesSet.Add(sec);

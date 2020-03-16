@@ -46,6 +46,10 @@ namespace Stock.Data
                 t.Type,
                 t.Code,
             });
+            modelBuilder.Entity<Securities>().HasIndex(t => new
+            {
+                t.Code,
+            });
 
 
             ConfigureModelBuilderForPrice(modelBuilder);

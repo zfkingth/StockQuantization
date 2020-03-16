@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock.Data;
 
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    partial class StockContextModelSnapshot : ModelSnapshot
+    [Migration("20200316041457_codeAsPK")]
+    partial class codeAsPK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,9 +71,6 @@ namespace Stock.WebAPI.Migrations
 
             modelBuilder.Entity("Stock.Model.Securities", b =>
                 {
-                    b.Property<byte>("Type")
-                        .HasColumnType("tinyint unsigned");
-
                     b.Property<string>("Code")
                         .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
                         .HasMaxLength(15);
@@ -90,9 +89,12 @@ namespace Stock.WebAPI.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Type", "Code");
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.HasIndex("Code");
+                    b.HasKey("Code");
+
+                    b.HasIndex("Type");
 
                     b.ToTable("SecuritiesSet");
                 });
