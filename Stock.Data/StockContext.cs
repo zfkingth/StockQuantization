@@ -12,6 +12,7 @@ namespace Stock.Data
 
         public DbSet<Securities> SecuritiesSet { get; set; }
         public DbSet<Price> PriceSet { get; set; }
+        public DbSet<TempPrice> TempPrice { get; set; }
         public DbSet<User> Users { get; set; }
 
 
@@ -122,6 +123,7 @@ namespace Stock.Data
         {
             //await this.Database.ExecuteSqlCommandAsync("truncate table RealTimeDataSet");
             await this.Database.ExecuteSqlRawAsync("truncate table SearchResultSet");
+            await this.Database.ExecuteSqlRawAsync("truncate table TempPrice");
 
         }
 

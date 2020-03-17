@@ -7,5 +7,9 @@ namespace Stock.WebAPI.ViewModels.Fillers
 {
     public class DayDataFillerViewModel
     {
+        internal Task PullAll(int v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

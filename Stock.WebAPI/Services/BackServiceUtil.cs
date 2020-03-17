@@ -40,7 +40,7 @@ namespace BackgroundTasksSample.Services
         public bool IsIdleTime(DateTime time)
         {
             var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
-            if (sp >=Constants .IdleTimeStartSpan
+            if (sp >= Constants.IdleTimeStartSpan
                 && sp <= Constants.IdleTimeEndSpan)
             {
                 return true;
@@ -207,7 +207,8 @@ namespace BackgroundTasksSample.Services
         {
 
             DateTime newestDate;
-            var newestItem = await (from i in db.RealTimeDataSet
+            var newestItem = await (from i in db.PriceSet
+                                    where i.Unit == UnitEnum.Unit1d
                                     orderby i.Date descending
                                     select i).FirstOrDefaultAsync();
             if (newestItem == null) return false; //空表，不用truncate操作
@@ -220,7 +221,8 @@ namespace BackgroundTasksSample.Services
             //从网易取得的历史数据只有日期，时间都是00:00:00。
             var handledDate = new DateTime(newestDate.Year, newestDate.Month, newestDate.Day);
 
-            bool existInHistory = await db.DayDataSet.AnyAsync(s => s.Date == handledDate);
+            bool existInHistory = await db.PriceSet.AnyAsync(s => s.Unit == UnitEnum.Unit1d &&
+                                             s.Date == handledDate);
 
             return existInHistory;
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BackgroundTasksSample.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Stock.Data;
 using Stock.WebAPI.Services;
 using Stock.WebAPI.Services.Abstraction;
+using Stock.WebAPI.ViewModels.Fillers;
 
 namespace Stock.WebAPI
 {
@@ -89,6 +91,36 @@ namespace Stock.WebAPI
             services.AddSignalR().AddJsonProtocol();
 
 
+            services.AddSingleton<TimedService>();
+            #region snippet1
+
+            if (Configuration.GetValue<bool>("EnableTimedService"))
+            {
+                //有这个标志才会开启系统的后台服务
+                //可以在mysql 服务器上驻存这个服务，专门来取数据，减小主服务器的网络带宽压力。
+                //然后在其他服务器上关闭这个服务，减小资源占用。
+                //需要副作用wrapper 来开启timed service中的定时器
+                services.AddHostedService<WrappeHostedService>();
+            }
+            #endregion
+
+
+
+            #region snippet3
+            //提供后台队列服务
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+            #endregion
+
+            int threadNum = Configuration.GetValue<int>("MaxThreadNum");
+            BaseDoWorkViewModel.MaxThreadNum = threadNum;
+
+
+            services.AddSingleton<BackServiceUtil>();
+            services.AddScoped<PullAllStockNamesViewModel>();
+            services.AddScoped<F10FHPGFillerViewModel>();
+            services.AddScoped<DayDataFillerViewModel>();
+            services.AddScoped<RealTimeDataFillerViewModel>();
 
 
             services.AddControllers();

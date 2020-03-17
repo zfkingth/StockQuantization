@@ -15,11 +15,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stock.Data\Stock.Data.csproj" />
+    <ProjectReference Include="..\Stock.JQData\Stock.JQData.csproj" />
     <ProjectReference Include="..\Stock.Model\Stock.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ViewModels\Auth\" />
+    <Folder Include="Notifications\" />
   </ItemGroup>
 
 

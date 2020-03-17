@@ -7,5 +7,9 @@ namespace Stock.WebAPI.ViewModels.Fillers
 {
     public class RealTimeDataFillerViewModel
     {
+        internal Task PullAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

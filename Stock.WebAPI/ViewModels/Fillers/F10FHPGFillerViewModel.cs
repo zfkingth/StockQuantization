@@ -7,5 +7,9 @@ namespace Stock.WebAPI.ViewModels.Fillers
 {
     public class F10FHPGFillerViewModel
     {
+        internal Task PullAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
