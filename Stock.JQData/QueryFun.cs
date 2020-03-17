@@ -82,10 +82,10 @@ namespace Stock.JQData
             using (StockContext db = new StockContext())
             {
                 var query = (from p in db.PriceSet
-                             where p.Unit == UnitEnum.Unit30m && p.Code == PubConstan.IndexsCode[0]
+                             where p.Unit == UnitEnum.Unit30m && p.Code == Constants.IndexsCode[0]
                              orderby p.Date descending
                              select p.Date).FirstOrDefault();
-                PubConstan.LastTradeEndDateTime = query;
+                Constants.LastTradeEndDateTime = query;
 
                 return query;
             }
@@ -99,8 +99,8 @@ namespace Stock.JQData
             {
                 method = "get_all_securities",
                 token = _token, //token
-                code = PubConstan.TypeParamDic[type],
-                date = DateTime.Now.ToString(PubConstan.ShortDateFormat)
+                code = Constants.TypeParamDic[type],
+                date = DateTime.Now.ToString(Constants.ShortDateFormat)
             };
             string info = QueryInfo(body);
 
@@ -117,7 +117,7 @@ namespace Stock.JQData
                 token = _token,
                 code = secCode,
                 count = cnt,
-                unit = PubConstan.UnitParamDic[unit_param],
+                unit = Constants.UnitParamDic[unit_param],
                 end_date = Utility.ToDateString(endDate, unit_param)
             };
             string info = QueryInfo(body);

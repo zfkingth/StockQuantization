@@ -10,20 +10,28 @@ namespace Stock.JQData
     {
         public static DateTime ParseDateString(string s, UnitEnum unit)
         {
-            string format = PubConstan.ShortDateFormat;
+            string format = Constants.ShortDateFormat;
             if (unit < UnitEnum.Unit1d)
-                format = PubConstan.MiddleDateFormat;
+                format = Constants.MiddleDateFormat;
             var date = DateTime.ParseExact(s, format, CultureInfo.InvariantCulture);
             return date;
         }
 
         public static string ToDateString(DateTime date, UnitEnum unit)
         {
-            string format = PubConstan.ShortDateFormat;
+            string format = Constants.ShortDateFormat;
             if (unit < UnitEnum.Unit1d)
-                format = PubConstan.ShortDateFormat;
+                format = Constants.ShortDateFormat;
             string s = date.ToString(format, CultureInfo.InvariantCulture);
             return s;
+        }
+
+        public static bool IsSameDay(DateTime lastedDate, DateTime lastTradeDay)
+        {
+            if (lastedDate.Year == lastTradeDay.Year && lastedDate.Month == lastTradeDay.Month
+                 && lastedDate.Day == lastTradeDay.Day)
+                return true;
+            return false;
         }
     }
 }

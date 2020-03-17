@@ -42,7 +42,7 @@ namespace Stock.JQData
         /// </summary>
         public void UpdateMainIndex()
         {
-            Update_Price(UnitEnum.Unit30m, PubConstan.IndexsCode[0],true);
+            Update_Price(UnitEnum.Unit30m, Constants.IndexsCode[0],true);
         }
 
         private void Update_Price(UnitEnum unit, string secCode, bool forceUpdate = false)
@@ -59,35 +59,35 @@ namespace Stock.JQData
                 var startDate = query.FirstOrDefault();
                 if (startDate == default)
                 {
-                    startDate = PubConstan.PriceStartDate;
+                    startDate = Constants.PriceStartDate;
                 }
 
                 //日线数据的小时，分钟都是0
                 if (unit == UnitEnum.Unit1d)
                 {
-                    startDate = startDate.Add(PubConstan.MarketEndTime);
+                    startDate = startDate.Add(Constants.MarketEndTime);
                 }
 
-                if (forceUpdate || startDate < PubConstan.LastTradeEndDateTime)
+                if (forceUpdate || startDate < Constants.LastTradeEndDateTime)
                 {
 
                     int daysCnt = (int)(Math.Ceiling((DateTime.Now - startDate).TotalDays));//有多出来的数据
-                    int numCnt = (int)(daysCnt * PubConstan.RecordCntPerDay[unit]);
+                    int numCnt = (int)(daysCnt * Constants.RecordCntPerDay[unit]);
                     DateTime endDate = startDate;//初始化
 
 
                     //不是每天都有数据，会丢弃很多数据
                     //循环次数
-                    var circleCnt = Math.Ceiling((double)numCnt / PubConstan.MaxRecordCntPerFetch);
+                    var circleCnt = Math.Ceiling((double)numCnt / Constants.MaxRecordCntPerFetch);
                     var tempdays = 1.0;
-                    if (numCnt < PubConstan.MaxRecordCntPerFetch)
+                    if (numCnt < Constants.MaxRecordCntPerFetch)
                     {
 
-                        tempdays = numCnt / PubConstan.RecordCntPerDay[unit];
+                        tempdays = numCnt / Constants.RecordCntPerDay[unit];
                     }
                     else
                     {
-                        tempdays = PubConstan.MaxRecordCntPerFetch / PubConstan.RecordCntPerDay[unit];
+                        tempdays = Constants.MaxRecordCntPerFetch / Constants.RecordCntPerDay[unit];
                     }
                     for (int fetchIndex = 0; fetchIndex < circleCnt; fetchIndex++)
                     {
@@ -98,12 +98,12 @@ namespace Stock.JQData
 
                         endDate = endDate.AddDays(tempdays);
 
-                        int cntForThisFetch = PubConstan.MaxRecordCntPerFetch;
+                        int cntForThisFetch = Constants.MaxRecordCntPerFetch;
 
                         if (endDate >= DateTime.Now)
                         {
                             var d1 = Math.Ceiling((DateTime.Now - lastDate).TotalDays);
-                            var d2 = PubConstan.RecordCntPerDay[unit];
+                            var d2 = Constants.RecordCntPerDay[unit];
                             cntForThisFetch = (int)(d1 * d2);
                             endDate = DateTime.Now;
 
@@ -156,8 +156,8 @@ namespace Stock.JQData
                         Code = words[0],
                         Displayname = words[1],
                         Name = words[2],
-                        StartDate = DateTime.ParseExact(words[3], PubConstan.ShortDateFormat, CultureInfo.InvariantCulture),
-                        EndDate = DateTime.ParseExact(words[4], PubConstan.ShortDateFormat, CultureInfo.InvariantCulture)
+                        StartDate = DateTime.ParseExact(words[3], Constants.ShortDateFormat, CultureInfo.InvariantCulture),
+                        EndDate = DateTime.ParseExact(words[4], Constants.ShortDateFormat, CultureInfo.InvariantCulture)
                     };
                     switch (words[5])
                     {
@@ -171,7 +171,7 @@ namespace Stock.JQData
                     //只处理三种指数
                     if (sec.Type == SecuritiesEnum.Index)
                     {
-                        if (!PubConstan.IndexsCode.Contains(sec.Code))
+                        if (!Constants.IndexsCode.Contains(sec.Code))
                         {
                             continue;
                         }
@@ -227,7 +227,7 @@ namespace Stock.JQData
                     }
 
                     //只处理系统设置的起始时间以后的数据
-                    if (newItem.Date >= PubConstan.PriceStartDate)
+                    if (newItem.Date >= Constants.PriceStartDate)
                     {
                         //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
                         var exsit = db.PriceSet.Any(s => s.Unit == unit && s.Code == newItem.Code && s.Date == newItem.Date);

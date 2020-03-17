@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Stock.JQData
 {
-    public class PubConstan
+    public class Constants
     {
         public const string ShortDateFormat = "yyyy-MM-dd";
         public const string MiddleDateFormat = "yyyy-MM-dd HH:mm";

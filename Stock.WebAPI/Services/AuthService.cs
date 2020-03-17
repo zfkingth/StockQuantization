@@ -48,12 +48,25 @@ namespace Stock.WebAPI.Services
 
         public string HashPassword(string password)
         {
-            return Crypto.HashPassword(password);
+            var md5 = System.Security.Cryptography.SHA1.Create();
+
+            var buf = md5.ComputeHash(Encoding.ASCII.GetBytes(password));
+
+            var res = Encoding.ASCII.GetString(buf);
+
+            return res;
         }
 
         public bool VerifyPassword(string actualPassword, string hashedPassword)
         {
-            return Crypto.VerifyHashedPassword(hashedPassword, actualPassword);
+            var md5 =  System.Security.Cryptography.SHA1.Create();
+
+            var buf = md5.ComputeHash(Encoding.ASCII.GetBytes(actualPassword));
+
+            var res = Encoding.ASCII.GetString(buf);
+
+
+            return string.Equals(res, hashedPassword);
         }
     }
 }
