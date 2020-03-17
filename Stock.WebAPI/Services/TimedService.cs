@@ -25,6 +25,7 @@ namespace BackgroundTasksSample.Services
         public void Start(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Timed Background Service is starting.");
+            System.Diagnostics.Debug.WriteLine("Timed Background Service is starting.");
 
             setTimerForPullBasicData();
 

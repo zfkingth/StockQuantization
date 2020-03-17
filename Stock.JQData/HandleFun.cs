@@ -31,7 +31,7 @@ namespace Stock.JQData
                 foreach (var secCode in secList)
                 {
 
-                 await   Update_PriceAsync(unit, secCode);
+                    await Update_PriceAsync(unit, secCode);
                 }
             }
 
@@ -42,7 +42,7 @@ namespace Stock.JQData
         /// </summary>
         public async Task UpdateMainIndexAsync()
         {
-         await   Update_PriceAsync(UnitEnum.Unit30m, Constants.IndexsCode[0],true);
+            await Update_PriceAsync(UnitEnum.Unit30m, Constants.IndexsCode[0], true);
         }
 
         private async Task Update_PriceAsync(UnitEnum unit, string secCode, bool forceUpdate = false)
@@ -113,8 +113,8 @@ namespace Stock.JQData
 
 
 
-                        string res =await qf.Get_priceAsync(unit, secCode, cntForThisFetch, endDate);
-                        Parse_WriteDb_Price(unit, secCode, res);
+                        string res = await qf.Get_priceAsync(unit, secCode, cntForThisFetch, endDate);
+                        await Parse_WriteDb_PriceAsync(unit, secCode, res);
 
                     }
                 }
@@ -130,17 +130,17 @@ namespace Stock.JQData
             var qf = new QueryFun();
 
 
-            string res =await qf.Get_all_securitiesAsync(SecuritiesEnum.Index);
-            updateSecuritiesByResult(res);
+            string res = await qf.Get_all_securitiesAsync(SecuritiesEnum.Index);
+            await updateSecuritiesByResultAsync(res);
 
 
             //获取数据 
-            res =await qf.Get_all_securitiesAsync(SecuritiesEnum.Stock);
-            updateSecuritiesByResult(res);
+            res = await qf.Get_all_securitiesAsync(SecuritiesEnum.Stock);
+            await updateSecuritiesByResultAsync(res);
 
         }
 
-        private void updateSecuritiesByResult(string res)
+        private async Task updateSecuritiesByResultAsync(string res)
         {
             using (StockContext db = new StockContext())
             {
@@ -187,11 +187,11 @@ namespace Stock.JQData
                     }
 
                 }
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
         }
 
-        public void Parse_WriteDb_Price(UnitEnum unit, string code, string res)
+        public async Task Parse_WriteDb_PriceAsync(UnitEnum unit, string code, string res)
         {
 
             using (StockContext db = new StockContext())
@@ -244,7 +244,7 @@ namespace Stock.JQData
                         }
                     }
                 }
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Stock.Data;
+using Stock.WebAPI.Notifications;
 using Stock.WebAPI.Services;
 using Stock.WebAPI.Services.Abstraction;
 using Stock.WebAPI.ViewModels.Fillers;
@@ -123,8 +125,16 @@ namespace Stock.WebAPI
             services.AddScoped<RealTimeDataFillerViewModel>();
 
 
-            services.AddControllers();
         }
+
+        private void printSystemInfo()
+        {
+            var temp2 = Assembly.GetEntryAssembly();
+            string ret = temp2.GetName().Version.ToString();
+            System.Console.WriteLine($"Service version is {ret}");
+        }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -134,12 +144,37 @@ namespace Stock.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+
+            IConfigurationSection myArraySection = Configuration.GetSection("corsOrigins");
+            var corsOrigins = (from i in myArraySection.AsEnumerable()
+                               where i.Value != null
+                               select i.Value).ToArray();
+
+            foreach (var item in corsOrigins)
+                System.Console.WriteLine("allow cors have " + item);
+            printSystemInfo();
+
+            app.UseCors(builder => builder
+                .WithOrigins(corsOrigins)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+            );
+            // app.UseHttpsRedirection();
+
+            Utils.DbInitializer.MigrateLatest(app);
+            Utils.DbInitializer.Seed(app);
+            //不要所有的程序都对这flag进行操作
+            //Utils.DbInitializer.CheckIfClearFlags(app);
+
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationsHub>("/notifications");
                 endpoints.MapControllers();
             });
         }
