@@ -85,7 +85,7 @@ namespace Stock.JQData
 
         }
 
-
+ 
         /// <summary>
         /// 从指数30分钟数据里，获取最新的30分钟数据的结束时间。
         /// </summary>

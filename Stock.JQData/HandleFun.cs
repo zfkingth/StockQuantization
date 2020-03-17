@@ -123,6 +123,11 @@ namespace Stock.JQData
 
         }
 
+        public Task FillStockData(UnitEnum unit1d, string stockId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Update_allStock_Names()
         {
 

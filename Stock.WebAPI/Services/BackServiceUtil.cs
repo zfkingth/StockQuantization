@@ -309,7 +309,7 @@ namespace BackgroundTasksSample.Services
         var puller = scopedServices.GetRequiredService<DayDataFillerViewModel>();
 
         //只取最近1年的数据分析
-        await puller.PullAll(1);
+        await puller.PullAll();
     }
 
 });
