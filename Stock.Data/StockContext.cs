@@ -48,6 +48,14 @@ namespace Stock.Data
                 t.Date
             });
 
+            modelBuilder.Entity<TempPrice>().HasKey(t => new
+            {
+                t.Unit,
+                t.Code,
+                t.Date
+            });
+
+
             modelBuilder.Entity<Securities>().HasKey(t => new
             {
                 t.Type,

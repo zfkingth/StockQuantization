@@ -5,60 +5,59 @@ using Stock.JQData;
 using Stock.Model;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Stock.NUnitTestJQ
 {
     public class Tests
     {
-        protected DbContextOptions<StockContext> _options;
         [SetUp]
         public void Setup()
         {
             var qf = new QueryFun();
-            qf.Get_token();
 
             //set context options;
 
         }
 
         [Test]
-        public void Test_Update_allStock_basicInfo()
+        public void TestUpdateallStockbasicInfoAsync()
         {
 
             var hf = new HandleFun();
-            hf.Update_allStock_basicInfo();
+            hf.Update_allStock_Names().Wait();
             Assert.Pass();
         }
 
-       
+
 
         [Test]
-        public void Test_Update_allStock_price()
+        public void TestUpdateallStockPriceAsync()
         {
 
             var hf = new HandleFun();
 
             var qf = new QueryFun();
 
-            hf.UpdateMainIndex();
+             hf.UpdateMainIndexAsync().Wait();
 
             //set in static field
-            DateTime date = qf.GetLastTradeEndDateTime();
+            DateTime date =  qf.GetLastTradeEndDateTimeAsync().Result;
 
-            hf.Update_allStock_price(SecuritiesEnum.Index, UnitEnum.Unit30m);
+             hf.Update_allStock_priceAsync(SecuritiesEnum.Index, UnitEnum.Unit30m).Wait();
 
-            hf.Update_allStock_price(SecuritiesEnum.Index, UnitEnum.Unit120m);
+             hf.Update_allStock_priceAsync(SecuritiesEnum.Index, UnitEnum.Unit120m).Wait();
 
-            hf.Update_allStock_price(SecuritiesEnum.Index, UnitEnum.Unit1d);
+             hf.Update_allStock_priceAsync(SecuritiesEnum.Index, UnitEnum.Unit1d).Wait();
 
-            hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit30m);
-            hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit120m);
-            hf.Update_allStock_price(SecuritiesEnum.Stock, UnitEnum.Unit1d);
+             hf.Update_allStock_priceAsync(SecuritiesEnum.Stock, UnitEnum.Unit30m).Wait();
+             hf.Update_allStock_priceAsync(SecuritiesEnum.Stock, UnitEnum.Unit120m).Wait();
+             hf.Update_allStock_priceAsync(SecuritiesEnum.Stock, UnitEnum.Unit1d).Wait();
             Assert.Pass();
         }
 
         [Test]
-        public void Test_Get_query_count()
+        public void TestGetQueryCount()
         {
 
 

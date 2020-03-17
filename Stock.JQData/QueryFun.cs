@@ -1,4 +1,5 @@
-﻿using Stock.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Stock.Data;
 using Stock.Model;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,19 @@ namespace Stock.JQData
 {
     public class QueryFun
     {
-        public static string _token;
+        public static DateTime GetTokenTime { get; set; }
+        public static string _token=null;
+        public string MyToken
+        {
+            get
+            {
+                if(_token==null)
+                {
+                    _token = Get_tokenAsync().Result;
+                }
+                return _token;
+            }
+        }
 
         public static HttpClient SingleClient { get { return lazy.Value; } }
 
@@ -50,7 +63,7 @@ namespace Stock.JQData
         /// 获取用户token，并保存到类的静态字段中。
         /// </summary>
         /// <returns></returns>
-        public string Get_token()
+        public async Task<string> Get_tokenAsync()
         {
 
             object body = new
@@ -64,9 +77,9 @@ namespace Stock.JQData
 
 
             //读取返回的TOKEN
-            _token = QueryInfo(body);
+            var res = await QueryInfoAsync(body);
 
-            return _token;
+            return res;
 
 
 
@@ -77,50 +90,50 @@ namespace Stock.JQData
         /// 从指数30分钟数据里，获取最新的30分钟数据的结束时间。
         /// </summary>
         /// <returns></returns>
-        public DateTime GetLastTradeEndDateTime()
+        public async Task<DateTime> GetLastTradeEndDateTimeAsync()
         {
             using (StockContext db = new StockContext())
             {
                 var query = (from p in db.PriceSet
                              where p.Unit == UnitEnum.Unit30m && p.Code == Constants.IndexsCode[0]
                              orderby p.Date descending
-                             select p.Date).FirstOrDefault();
-                Constants.LastTradeEndDateTime = query;
-
-                return query;
+                             select p.Date).FirstOrDefaultAsync();
+                var res = await query;
+                Constants.LastTradeEndDateTime = res;
+                return res;
             }
         }
 
 
-        public string Get_all_securities(SecuritiesEnum type)
+        public async Task<string> Get_all_securitiesAsync(SecuritiesEnum type)
         {
             //查询所有股票代码
             var body = new
             {
                 method = "get_all_securities",
-                token = _token, //token
+                token = MyToken, //token
                 code = Constants.TypeParamDic[type],
                 date = DateTime.Now.ToString(Constants.ShortDateFormat)
             };
-            string info = QueryInfo(body);
+            string info = await QueryInfoAsync(body);
 
             return info;
 
 
         }
 
-        public string Get_price(UnitEnum unit_param, string secCode, int cnt,DateTime endDate)
+        public async Task<string> Get_priceAsync(UnitEnum unit_param, string secCode, int cnt, DateTime endDate)
         {
             var body = new
             {
                 method = "get_price",
-                token = _token,
+                token = MyToken,
                 code = secCode,
                 count = cnt,
                 unit = Constants.UnitParamDic[unit_param],
                 end_date = Utility.ToDateString(endDate, unit_param)
             };
-            string info = QueryInfo(body);
+            string info = await QueryInfoAsync(body);
 
             return info;
 
@@ -133,10 +146,10 @@ namespace Stock.JQData
             var body = new
             {
                 method = "get_query_count",
-                token = _token, //token
+                token = MyToken, //token
             };
 
-            var info = QueryInfo(body);
+            var info = QueryInfoAsync(body);
             int num = Convert.ToInt32(info, CultureInfo.InvariantCulture);
 
             return num;
@@ -144,7 +157,7 @@ namespace Stock.JQData
 
 
 
-        protected string QueryInfo(object body)
+        protected async Task<string> QueryInfoAsync(object body)
         {
             var client = SingleClient;
             var options = new JsonSerializerOptions
@@ -158,10 +171,10 @@ namespace Stock.JQData
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             //POST请求并等待结果
-            var result = client.PostAsync("apis", bodyContent).Result;
+            var result = await client.PostAsync("apis", bodyContent);
 
 
-            return result.Content.ReadAsStringAsync().Result;
+            return await result.Content.ReadAsStringAsync();
         }
 
 

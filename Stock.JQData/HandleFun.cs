@@ -20,7 +20,7 @@ namespace Stock.JQData
             var mappingConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
             _mapper = mappingConfig.CreateMapper();
         }
-        public void Update_allStock_price(SecuritiesEnum secType, UnitEnum unit)
+        public async Task Update_allStock_priceAsync(SecuritiesEnum secType, UnitEnum unit)
         {
             using (StockContext db = new StockContext())
             {
@@ -31,7 +31,7 @@ namespace Stock.JQData
                 foreach (var secCode in secList)
                 {
 
-                    Update_Price(unit, secCode);
+                 await   Update_PriceAsync(unit, secCode);
                 }
             }
 
@@ -40,12 +40,12 @@ namespace Stock.JQData
         /// <summary>
         /// 更新主板，上证指数30m的数据
         /// </summary>
-        public void UpdateMainIndex()
+        public async Task UpdateMainIndexAsync()
         {
-            Update_Price(UnitEnum.Unit30m, Constants.IndexsCode[0],true);
+         await   Update_PriceAsync(UnitEnum.Unit30m, Constants.IndexsCode[0],true);
         }
 
-        private void Update_Price(UnitEnum unit, string secCode, bool forceUpdate = false)
+        private async Task Update_PriceAsync(UnitEnum unit, string secCode, bool forceUpdate = false)
         {
             using (StockContext db = new StockContext())
             {
@@ -113,7 +113,7 @@ namespace Stock.JQData
 
 
 
-                        string res = qf.Get_price(unit, secCode, cntForThisFetch, endDate);
+                        string res =await qf.Get_priceAsync(unit, secCode, cntForThisFetch, endDate);
                         Parse_WriteDb_Price(unit, secCode, res);
 
                     }
@@ -123,19 +123,19 @@ namespace Stock.JQData
 
         }
 
-        public void Update_allStock_basicInfo()
+        public async Task Update_allStock_Names()
         {
 
 
             var qf = new QueryFun();
 
 
-            string res = qf.Get_all_securities(SecuritiesEnum.Index);
+            string res =await qf.Get_all_securitiesAsync(SecuritiesEnum.Index);
             updateSecuritiesByResult(res);
 
 
             //获取数据 
-            res = qf.Get_all_securities(SecuritiesEnum.Stock);
+            res =await qf.Get_all_securitiesAsync(SecuritiesEnum.Stock);
             updateSecuritiesByResult(res);
 
         }

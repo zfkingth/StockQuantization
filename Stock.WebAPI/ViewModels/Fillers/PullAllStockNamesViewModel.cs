@@ -9,7 +9,11 @@ namespace Stock.WebAPI.ViewModels.Fillers
     {
         internal Task PullAll()
         {
-            throw new NotImplementedException();
+            JQData.HandleFun hf = new JQData.HandleFun();
+
+            var res = hf.Update_allStock_Names();
+            return res;
+
         }
     }
 }
