@@ -16,17 +16,22 @@ namespace Stock.JQData
     public class QueryFun
     {
         public static DateTime GetTokenTime { get; set; }
-        public static string _token=null;
+        public static string _token = null;
         public string MyToken
         {
             get
             {
-                if(_token==null)
+                if (_token == null)
                 {
-                    _token = Get_tokenAsync().Result;
+                    RefreshTokenAsync().Wait();
                 }
                 return _token;
             }
+        }
+
+        public async Task RefreshTokenAsync()
+        {
+            _token = await Get_tokenAsync();
         }
 
         public static HttpClient SingleClient { get { return lazy.Value; } }
@@ -57,13 +62,36 @@ namespace Stock.JQData
         }
         );
 
+        public async Task RefreshAllTradeDays()
+        {
+            var body = new
+            {
+                method = "get_price",
+                token = MyToken,
+                date = Utility.ToDateString(Constants.PriceStartDate),
+                end_date = Utility.ToDateString(DateTime.Now)
+            };
+            string info = await QueryInfoAsync(body);
+
+            var lines = info.Split('\n', '\r');
+            var list = new List<DateTime>();
+            foreach (var line in lines)
+            {
+                DateTime date = Utility.ParseDateString(line, UnitEnum.Unit1d);
+                list.Add(date);
+            }
+
+            Constants.AllTradeDays = list;
+
+        }
+
 
 
         /// <summary>
         /// 获取用户token，并保存到类的静态字段中。
         /// </summary>
         /// <returns></returns>
-        public async Task<string> Get_tokenAsync()
+        private async Task<string> Get_tokenAsync()
         {
 
             object body = new
@@ -85,7 +113,7 @@ namespace Stock.JQData
 
         }
 
- 
+
         /// <summary>
         /// 从指数30分钟数据里，获取最新的30分钟数据的结束时间。
         /// </summary>
@@ -95,7 +123,7 @@ namespace Stock.JQData
             using (StockContext db = new StockContext())
             {
                 var query = (from p in db.PriceSet
-                             where p.Unit == UnitEnum.Unit30m && p.Code == Constants.IndexsCode[0]
+                             where p.Unit == UnitEnum.Unit30m && p.Code == Constants.ShangHaiIndex
                              orderby p.Date descending
                              select p.Date).FirstOrDefaultAsync();
                 var res = await query;
@@ -131,7 +159,7 @@ namespace Stock.JQData
                 code = secCode,
                 count = cnt,
                 unit = Constants.UnitParamDic[unit_param],
-                end_date = Utility.ToDateString(endDate, unit_param)
+                end_date = Utility.ToDateString(endDate)
             };
             string info = await QueryInfoAsync(body);
 
@@ -139,7 +167,7 @@ namespace Stock.JQData
 
         }
 
-        public int Get_query_count()
+        public async Task<int> Get_query_countAsync()
         {
 
 
@@ -149,7 +177,7 @@ namespace Stock.JQData
                 token = MyToken, //token
             };
 
-            var info = QueryInfoAsync(body);
+            var info = await QueryInfoAsync(body);
             int num = Convert.ToInt32(info, CultureInfo.InvariantCulture);
 
             return num;

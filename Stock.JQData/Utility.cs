@@ -17,11 +17,11 @@ namespace Stock.JQData
             return date;
         }
 
-        public static string ToDateString(DateTime date, UnitEnum unit)
+        public static string ToDateString(DateTime date)
         {
             string format = Constants.ShortDateFormat;
-            if (unit < UnitEnum.Unit1d)
-                format = Constants.ShortDateFormat;
+            //if (unit < UnitEnum.Unit1d)
+            //    format = Constants.ShortDateFormat;
             string s = date.ToString(format, CultureInfo.InvariantCulture);
             return s;
         }

@@ -205,7 +205,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         }
 
-       #region search clause
+        #region search clause
 
         /// <summary>
         /// 全局唯一，存储任务状态。
@@ -561,7 +561,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         private async Task<DateTime> getLastTradeDateInHistoryData(StockContext db)
         {
             var date = await (from i in db.PriceSet
-                              where i.Unit==UnitEnum.Unit1d
+                              where i.Unit == UnitEnum.Unit1d
                               orderby i.Date descending
                               select i.Date
                         ).FirstOrDefaultAsync();
@@ -572,8 +572,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
         private async Task<DateTime> getIndexTradeDateInRealData(StockContext db)
         {
             DateTime date = await (from i in db.TempPrice
-                                   where i.Unit==UnitEnum.Unit1d&&
-                                   i.Code == Constants.IndexsCode[0]
+                                   where i.Unit == UnitEnum.Unit1d &&
+                                   i.Code == Constants.ShangHaiIndex
                                    orderby i.Date descending
                                    select i.Date).FirstOrDefaultAsync();
 

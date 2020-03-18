@@ -28,6 +28,11 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             JQData.HandleFun hf = new JQData.HandleFun();
 
+            //在这里负责刷新token
+            JQData.QueryFun qf = new QueryFun();
+            await qf.RefreshTokenAsync();
+            await qf.RefreshAllTradeDays();
+
             var res = hf.Update_allStock_Names();
 
             await setFinishedDate();

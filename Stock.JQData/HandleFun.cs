@@ -42,7 +42,7 @@ namespace Stock.JQData
         /// </summary>
         public async Task UpdateMainIndexAsync()
         {
-            await Update_PriceAsync(UnitEnum.Unit30m, Constants.IndexsCode[0], true);
+            await Update_PriceAsync(UnitEnum.Unit30m,Constants.ShangHaiIndex, true);
         }
 
         private async Task Update_PriceAsync(UnitEnum unit, string secCode, bool forceUpdate = false)
@@ -123,7 +123,7 @@ namespace Stock.JQData
 
         }
 
-        public Task FillStockData(UnitEnum unit1d, string stockId)
+        public Task FillData1d(string stockId)
         {
             throw new NotImplementedException();
         }

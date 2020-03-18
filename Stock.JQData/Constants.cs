@@ -38,6 +38,8 @@ namespace Stock.JQData
         /// </summary>
         public static readonly TimeSpan StockEndSpan = new TimeSpan(15, 25, 0);
 
+        public static List<DateTime> AllTradeDays = null;
+
         public static readonly int MaxQueueCnt = 5;
 
 
@@ -48,10 +50,12 @@ namespace Stock.JQData
         public static DateTime LastTradeEndDateTime { get; internal set; }
 
 
+        public  const string ShangHaiIndex= "000001.XSHG";
+
         /// <summary>
         /// 需要处理的指数Code
         /// </summary>
-        public static readonly string[] IndexsCode = new string[] { "000001.XSHG" ,
+        public static readonly string[] IndexsCode = new string[] {ShangHaiIndex ,
         "399001.XSHE","399006.XSHE"};
     }
 }

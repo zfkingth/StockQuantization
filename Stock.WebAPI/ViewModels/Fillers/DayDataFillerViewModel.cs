@@ -90,7 +90,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         public async Task FillStockData(string stockId)
         {
             HandleFun hf = new HandleFun();
-           await hf.FillStockData(UnitEnum.Unit1d, stockId);
+           await hf.FillData1d(stockId);
         }
 
 
