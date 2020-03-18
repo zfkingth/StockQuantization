@@ -19,6 +19,7 @@ namespace Stock.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<StockEvent> StockEvents { get; set; }
         public DbSet<SearchResult> SearchResultSet { get; set; }
+        public DbSet<TradeDay> TradeDays { get; set; }
 
 
 

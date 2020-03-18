@@ -177,12 +177,17 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    //上一次操作成功设置了标志位，而且和今天的时间是同一天。
-                    if (se.Status == EventStatusEnum.Idle && Utility.IsSameDay(DateTime.Now, se.LastAriseStartDate))
-                        return;
-
+                    //只有在空闲时间才更新
                     if (IsIdleTime(DateTime.Now))
-                        EnquePullF10Task();
+                    {
+                        //检查标志位，如果上一次没有成果
+                        //或者上一次的开始时间和今天不是同一天
+                        if (se.Status != EventStatusEnum.Idle ||
+                            !Utility.IsSameDay(DateTime.Now, se.LastAriseStartDate))
+                        {
+                            EnquePullF10Task();
+                        }
+                    }
                 }
             }
 
@@ -245,12 +250,17 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    //上一次操作成功设置了标志位，而且和今天的时间是同一天。
-                    if (se.Status == EventStatusEnum.Idle && Utility.IsSameDay(DateTime.Now, se.LastAriseStartDate))
-                        return;
-
+                    //只有在空闲时间才更新
                     if (IsIdleTime(DateTime.Now))
-                        EnquePullAllStockNamesTask();
+                    {
+                        //检查标志位，如果上一次没有成果
+                        //或者上一次的开始时间和今天不是同一天
+                        if (se.Status != EventStatusEnum.Idle ||
+                            !Utility.IsSameDay(DateTime.Now, se.LastAriseStartDate))
+                        {
+                            EnquePullAllStockNamesTask();
+                        }
+                    }
                 }
             }
         }

@@ -57,12 +57,12 @@ namespace Stock.NUnitTestJQ
         }
 
         [Test]
-        public void TestGetQueryCount()
+        public void TestGetQueryCountAsync()
         {
 
 
             var qf = new QueryFun();
-            int cnt = qf.Get_query_countAsync();
+            int cnt = qf.Get_query_countAsync().Result;
             TestContext.WriteLine($"还剩余调用次数{cnt}");
 
             Assert.Pass();

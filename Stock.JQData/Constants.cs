@@ -38,9 +38,9 @@ namespace Stock.JQData
         /// </summary>
         public static readonly TimeSpan StockEndSpan = new TimeSpan(15, 25, 0);
 
-        public static List<DateTime> AllTradeDays = null;
 
-        public static readonly int MaxQueueCnt = 5;
+        //队列中最大后台任务的个数
+        public static readonly int MaxQueueCnt = 1;
 
 
 

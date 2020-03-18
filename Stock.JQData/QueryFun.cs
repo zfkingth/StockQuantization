@@ -15,8 +15,7 @@ namespace Stock.JQData
 {
     public class QueryFun
     {
-        public static DateTime GetTokenTime { get; set; }
-        public static string _token = null;
+        private static string _token = null;
         public string MyToken
         {
             get
@@ -35,6 +34,21 @@ namespace Stock.JQData
         }
 
         public static HttpClient SingleClient { get { return lazy.Value; } }
+
+        private static List<DateTime> _allTradeDays = null;
+        public List<DateTime> AllTradeDays
+        {
+            get
+            {
+
+                if (_allTradeDays == null)
+                {
+                    RefreshAllTradeDays().Wait();
+                }
+
+                return _allTradeDays;
+            }
+        }
 
         private static readonly Lazy<HttpClient> lazy =
     new Lazy<HttpClient>(
@@ -64,24 +78,40 @@ namespace Stock.JQData
 
         public async Task RefreshAllTradeDays()
         {
-            var body = new
+            using (StockContext db = new StockContext())
             {
-                method = "get_price",
-                token = MyToken,
-                date = Utility.ToDateString(Constants.PriceStartDate),
-                end_date = Utility.ToDateString(DateTime.Now)
-            };
-            string info = await QueryInfoAsync(body);
+                var list = await (from i in db.TradeDays
+                                  orderby i.Date ascending
+                                  select i.Date).ToListAsync();
+                var lastDate = list.DefaultIfEmpty(Constants.PriceStartDate).LastOrDefault();
 
-            var lines = info.Split('\n', '\r');
-            var list = new List<DateTime>();
-            foreach (var line in lines)
-            {
-                DateTime date = Utility.ParseDateString(line, UnitEnum.Unit1d);
-                list.Add(date);
+                var body = new
+                {
+                    method = "get_trade_days",
+                    token = MyToken,
+                    code = Constants.ShangHaiIndex,
+                    date = Utility.ToDateString(lastDate),
+                    end_date = Utility.ToDateString(DateTime.Now)
+                };
+                string info = await QueryInfoAsync(body);
+
+                var lines = info.Split('\n', '\r');
+                foreach (var line in lines)
+                {
+                    DateTime date = Utility.ParseDateString(line, UnitEnum.Unit1d);
+                    if (!list.Contains(date))
+                    {
+                        list.Add(date);
+                        var item = new TradeDay();
+                        item.Date = date;
+                        db.TradeDays.Add(item);
+                    }
+                }
+
+                await db.SaveChangesAsync();
+
+                _allTradeDays = list;
             }
-
-            Constants.AllTradeDays = list;
 
         }
 
