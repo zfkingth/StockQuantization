@@ -131,7 +131,7 @@ namespace Stock.JQData
         internal int getTradeDaysCntBetween(DateTime startDate, DateTime uptoDate)
         {
             var query = from i in AllTradeDays
-                        where i.Date > startDate && i.Date < uptoDate
+                        where i.Date > startDate && i.Date <= uptoDate
                         select i;
             int cnt = query.Count();
             return cnt;

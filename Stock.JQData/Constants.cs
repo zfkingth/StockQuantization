@@ -45,7 +45,6 @@ namespace Stock.JQData
 
 
         //收市时间
-        public static readonly TimeSpan MarketEndTime = new TimeSpan(15, 0, 0);
 
 
 

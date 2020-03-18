@@ -85,10 +85,10 @@ namespace Stock.JQData
                             cntForThisFetch = (int)totalRecordCnt - recordIndex;
                         }
 
-                        double tempDaysCnt =cntForThisFetch / Constants.RecordCntPerDay[unit];
+                        double tempDaysCnt = cntForThisFetch / Constants.RecordCntPerDay[unit];
                         endDate = qf.AddTradDays(endDate, tempDaysCnt); ;
 
-                     
+
                         string res = await qf.Get_priceAsync(unit, secCode, cntForThisFetch, endDate);
                         await Parse_WriteDb_PriceAsync(unit, secCode, res);
 
@@ -175,6 +175,10 @@ namespace Stock.JQData
         public async Task Parse_WriteDb_PriceAsync(UnitEnum unit, string code, string res)
         {
 
+            var now = DateTime.Now;
+            QueryFun qf = new QueryFun();
+            DateTime lastTradeDay = qf.AllTradeDays.LastOrDefault();
+
             using (StockContext db = new StockContext())
             {
                 var records = res.Split('\r', '\n');
@@ -208,7 +212,9 @@ namespace Stock.JQData
                     }
 
                     //只处理系统设置的起始时间以后的数据
-                    if (newItem.Date >= Constants.PriceStartDate)
+                    ///最后一个交易的数据，在完成前不能插入到数据库中。
+                    if (Utility.IsSameDay(newItem.Date, lastTradeDay) == false
+                        || now > lastTradeDay.Add(Constants.StockEndSpan))
                     {
                         //var item = db.Securities.FirstOrDefault(s => string.Equals(s.Code, sec.Code, StringComparison.CurrentCultureIgnoreCase));
                         var exsit = db.PriceSet.Any(s => s.Unit == unit && s.Code == newItem.Code && s.Date == newItem.Date);
@@ -216,14 +222,15 @@ namespace Stock.JQData
                         {
                             db.PriceSet.Add(newItem);
                         }
-                        else if (i == records.Length - 1)
-                        {
-                            //已经在数据库中存在，但是最后一次
-                            var itemIndb = db.PriceSet.FirstOrDefault(s => s.Unit == unit && s.Code == newItem.Code && s.Date == newItem.Date);
-                            //如果是最后一次就更新。
-                            _mapper.Map(newItem, itemIndb);
-                        }
+                        //else
+                        //{
+                        //    //已经在数据库中存在，但是最后一次
+                        //    var itemIndb = db.PriceSet.FirstOrDefault(s => s.Unit == unit && s.Code == newItem.Code && s.Date == newItem.Date);
+                        //    //如果是最后一次就更新。
+                        //    _mapper.Map(newItem, itemIndb);
+                        //}
                     }
+
                 }
                 await db.SaveChangesAsync();
             }
