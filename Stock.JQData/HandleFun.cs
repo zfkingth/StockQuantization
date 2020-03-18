@@ -45,7 +45,7 @@ namespace Stock.JQData
             await Update_PriceAsync(UnitEnum.Unit30m, Constants.ShangHaiIndex);
         }
 
-        private async Task Update_PriceAsync(UnitEnum unit, string secCode)
+        public async Task Update_PriceAsync(UnitEnum unit, string secCode)
         {
             using (StockContext db = new StockContext())
             {
@@ -97,11 +97,6 @@ namespace Stock.JQData
             }
 
 
-        }
-
-        public Task FillData1d(string stockId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task Update_allStock_Names()

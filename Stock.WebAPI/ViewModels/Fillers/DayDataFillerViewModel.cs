@@ -29,8 +29,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
         {
 
             System.Diagnostics.Debug.WriteLine($"******************pull daily data : {e.StockId}***************************");
-            await FillStockData(e.StockId);
-
+            HandleFun hf = new HandleFun();
+            await hf.Update_PriceAsync(UnitEnum.Unit30m, e.StockId);
 
         }
 
@@ -85,14 +85,6 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             }
         }
-
-
-        public async Task FillStockData(string stockId)
-        {
-            HandleFun hf = new HandleFun();
-           await hf.FillData1d(stockId);
-        }
-
 
 
 

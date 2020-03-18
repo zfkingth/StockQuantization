@@ -16,13 +16,18 @@ namespace Stock.JQData
     public class QueryFun
     {
         private static string _token = null;
+        private static object lockerForToken = new object();
         public string MyToken
         {
             get
             {
                 if (_token == null)
                 {
-                    RefreshTokenAsync().Wait();
+                    lock (lockerForToken)
+                    {
+                        if (_token == null)
+                            RefreshTokenAsync().Wait();
+                    }
                 }
                 return _token;
             }
@@ -31,11 +36,13 @@ namespace Stock.JQData
         public async Task RefreshTokenAsync()
         {
             _token = await Get_tokenAsync();
+            System.Diagnostics.Debug.WriteLine("**************refresh token**************");
         }
 
         public static HttpClient SingleClient { get { return lazy.Value; } }
 
         private static List<DateTime> _allTradeDays = null;
+        private static object lockerForDates = new object();
         public List<DateTime> AllTradeDays
         {
             get
@@ -43,7 +50,11 @@ namespace Stock.JQData
 
                 if (_allTradeDays == null)
                 {
-                    RefreshAllTradeDays().Wait();
+                    lock (lockerForDates)
+                    {
+                        if (_allTradeDays == null)
+                            RefreshAllTradeDays().Wait();
+                    }
                 }
 
                 return _allTradeDays;
@@ -113,6 +124,7 @@ namespace Stock.JQData
                 _allTradeDays = list;
             }
 
+            System.Diagnostics.Debug.WriteLine("**************refresh all trade days**************");
         }
 
         internal DateTime AddTradDays(DateTime endDate, double offset)

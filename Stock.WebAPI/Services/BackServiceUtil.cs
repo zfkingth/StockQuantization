@@ -318,7 +318,6 @@ namespace BackgroundTasksSample.Services
         var scopedServices = scope.ServiceProvider;
         var puller = scopedServices.GetRequiredService<DayDataFillerViewModel>();
 
-        //只取最近1年的数据分析
         await puller.PullAll();
     }
 
