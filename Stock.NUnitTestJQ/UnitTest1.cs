@@ -37,12 +37,8 @@ namespace Stock.NUnitTestJQ
 
             var hf = new HandleFun();
 
-            var qf = new QueryFun();
-
-             hf.UpdateMainIndexAsync().Wait();
 
             //set in static field
-            DateTime date =  qf.GetLastTradeEndDateTimeAsync().Result;
 
              hf.Update_allStock_priceAsync(SecuritiesEnum.Index, UnitEnum.Unit30m).Wait();
 

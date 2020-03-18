@@ -42,10 +42,10 @@ namespace Stock.JQData
         /// </summary>
         public async Task UpdateMainIndexAsync()
         {
-            await Update_PriceAsync(UnitEnum.Unit30m,Constants.ShangHaiIndex, true);
+            await Update_PriceAsync(UnitEnum.Unit30m, Constants.ShangHaiIndex);
         }
 
-        private async Task Update_PriceAsync(UnitEnum unit, string secCode, bool forceUpdate = false)
+        private async Task Update_PriceAsync(UnitEnum unit, string secCode)
         {
             using (StockContext db = new StockContext())
             {
@@ -56,63 +56,39 @@ namespace Stock.JQData
                             where p.Unit == unit && p.Code == secCode
                             orderby p.Date descending
                             select p.Date;
-                var startDate = query.FirstOrDefault();
-                if (startDate == default)
+                var dateInPrice = query.FirstOrDefault();
+                if (dateInPrice == default)
                 {
-                    startDate = Constants.PriceStartDate;
+                    dateInPrice = Constants.PriceStartDate;
                 }
 
-                //日线数据的小时，分钟都是0
-                if (unit == UnitEnum.Unit1d)
-                {
-                    startDate = startDate.Add(Constants.MarketEndTime);
-                }
+                DateTime uptoDate = qf.GetUptoDate();
 
-                if (forceUpdate || startDate < Constants.LastTradeEndDateTime)
+                //都去掉小时和分钟，
+                var startDate = new DateTime(dateInPrice.Year, dateInPrice.Month, dateInPrice.Day);
+
+                int daysCnt = qf.getTradeDaysCntBetween(startDate, uptoDate);
+                if (daysCnt > 0)
                 {
 
-                    int daysCnt = (int)(Math.Ceiling((DateTime.Now - startDate).TotalDays));//有多出来的数据
-                    int numCnt = (int)(daysCnt * Constants.RecordCntPerDay[unit]);
+                    double totalRecordCnt = daysCnt * Constants.RecordCntPerDay[unit];
                     DateTime endDate = startDate;//初始化
-
-
-                    //不是每天都有数据，会丢弃很多数据
-                    //循环次数
-                    var circleCnt = Math.Ceiling((double)numCnt / Constants.MaxRecordCntPerFetch);
-                    var tempdays = 1.0;
-                    if (numCnt < Constants.MaxRecordCntPerFetch)
-                    {
-
-                        tempdays = numCnt / Constants.RecordCntPerDay[unit];
-                    }
-                    else
-                    {
-                        tempdays = Constants.MaxRecordCntPerFetch / Constants.RecordCntPerDay[unit];
-                    }
-                    for (int fetchIndex = 0; fetchIndex < circleCnt; fetchIndex++)
+                    for (int recordIndex = 0; recordIndex < totalRecordCnt;
+                        recordIndex += Constants.MaxRecordCntPerFetch)
                     {
                         //分段操作
-                        //把次数换成天
-
-                        var lastDate = endDate;
-
-                        endDate = endDate.AddDays(tempdays);
 
                         int cntForThisFetch = Constants.MaxRecordCntPerFetch;
 
-                        if (endDate >= DateTime.Now)
+                        if (recordIndex + Constants.MaxRecordCntPerFetch >= totalRecordCnt)
                         {
-                            var d1 = Math.Ceiling((DateTime.Now - lastDate).TotalDays);
-                            var d2 = Constants.RecordCntPerDay[unit];
-                            cntForThisFetch = (int)(d1 * d2);
-                            endDate = DateTime.Now;
-
+                            cntForThisFetch = (int)totalRecordCnt - recordIndex;
                         }
 
+                        double tempDaysCnt =cntForThisFetch / Constants.RecordCntPerDay[unit];
+                        endDate = qf.AddTradDays(endDate, tempDaysCnt); ;
 
-
-
-
+                     
                         string res = await qf.Get_priceAsync(unit, secCode, cntForThisFetch, endDate);
                         await Parse_WriteDb_PriceAsync(unit, secCode, res);
 

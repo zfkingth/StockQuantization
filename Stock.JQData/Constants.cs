@@ -47,7 +47,6 @@ namespace Stock.JQData
         //收市时间
         public static readonly TimeSpan MarketEndTime = new TimeSpan(15, 0, 0);
 
-        public static DateTime LastTradeEndDateTime { get; internal set; }
 
 
         public  const string ShangHaiIndex= "000001.XSHG";

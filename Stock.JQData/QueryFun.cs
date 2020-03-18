@@ -115,6 +115,33 @@ namespace Stock.JQData
 
         }
 
+        internal DateTime AddTradDays(DateTime endDate, double offset)
+        {
+            int index = AllTradeDays.IndexOf(endDate);
+            var date = AllTradeDays[index + (int)offset];
+            return date;
+        }
+
+        /// <summary>
+        /// 两个时间之有多少个交易日
+        /// /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="uptoDate"></param>
+        /// <returns></returns>
+        internal int getTradeDaysCntBetween(DateTime startDate, DateTime uptoDate)
+        {
+            var query = from i in AllTradeDays
+                        where i.Date > startDate && i.Date < uptoDate
+                        select i;
+            int cnt = query.Count();
+            return cnt;
+        }
+
+        internal DateTime GetUptoDate()
+        {
+            return AllTradeDays.LastOrDefault();
+        }
+
 
 
         /// <summary>
@@ -143,24 +170,6 @@ namespace Stock.JQData
 
         }
 
-
-        /// <summary>
-        /// 从指数30分钟数据里，获取最新的30分钟数据的结束时间。
-        /// </summary>
-        /// <returns></returns>
-        public async Task<DateTime> GetLastTradeEndDateTimeAsync()
-        {
-            using (StockContext db = new StockContext())
-            {
-                var query = (from p in db.PriceSet
-                             where p.Unit == UnitEnum.Unit30m && p.Code == Constants.ShangHaiIndex
-                             orderby p.Date descending
-                             select p.Date).FirstOrDefaultAsync();
-                var res = await query;
-                Constants.LastTradeEndDateTime = res;
-                return res;
-            }
-        }
 
 
         public async Task<string> Get_all_securitiesAsync(SecuritiesEnum type)
