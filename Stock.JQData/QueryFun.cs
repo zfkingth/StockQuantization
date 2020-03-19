@@ -35,8 +35,9 @@ namespace Stock.JQData
 
         public async Task RefreshTokenAsync()
         {
+            System.Diagnostics.Debug.WriteLine("**************  refresh token start   **************");
             _token = await Get_tokenAsync();
-            System.Diagnostics.Debug.WriteLine("**************refresh token**************");
+            System.Diagnostics.Debug.WriteLine("**************  refresh token end     **************");
         }
 
         public static HttpClient SingleClient { get { return lazy.Value; } }
@@ -89,6 +90,7 @@ namespace Stock.JQData
 
         public async Task RefreshAllTradeDays()
         {
+            System.Diagnostics.Debug.WriteLine("**************  refresh all trade days start     **************");
             using (StockContext db = new StockContext())
             {
                 var list = await (from i in db.TradeDays
@@ -124,7 +126,7 @@ namespace Stock.JQData
                 _allTradeDays = list;
             }
 
-            System.Diagnostics.Debug.WriteLine("**************refresh all trade days**************");
+            System.Diagnostics.Debug.WriteLine("**************  refresh all trade days end   **************");
         }
 
         internal DateTime AddTradDays(DateTime endDate, double offset)

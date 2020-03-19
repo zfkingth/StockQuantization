@@ -28,10 +28,13 @@ namespace Stock.WebAPI.ViewModels.Fillers
         async Task DayDataFiller_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
 
-            System.Diagnostics.Debug.WriteLine($"******************pull daily data : {e.StockId}***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {e.StockId} start  ***************************");
             HandleFun hf = new HandleFun();
             await hf.Update_PriceAsync(UnitEnum.Unit30m, e.StockId);
+            await hf.Update_PriceAsync(UnitEnum.Unit120m, e.StockId);
+            await hf.Update_PriceAsync(UnitEnum.Unit1d, e.StockId);
 
+            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {e.StockId} end    ***************************");
         }
 
         /// <summary>
