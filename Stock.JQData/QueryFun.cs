@@ -203,6 +203,26 @@ namespace Stock.JQData
 
         }
 
+        public async Task<string> Get_StockXrXdAsync(string code)
+        {
+            //查询所有股票代码
+            var body = new
+            {
+                method = "run_query",
+                token = MyToken, //token
+                table = "finance.STK_XR_XD",
+                columns = "code,a_xr_date,dividend_ratio,transfer_ratio,bonus_ratio_rmb",
+                conditions = $"code#=#{code}&a_xr_date#>=#{Utility.ToDateString(Constants.PriceStartDate)}",
+                count = 1000
+            };
+            string info = await QueryInfoAsync(body);
+
+            return info;
+
+
+        }
+
+
         public async Task<string> Get_priceAsync(UnitEnum unit_param, string secCode, int cnt, DateTime endDate)
         {
             var body = new

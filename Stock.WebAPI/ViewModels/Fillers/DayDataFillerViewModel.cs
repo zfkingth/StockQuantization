@@ -65,7 +65,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         public async Task PullAll()
         {
             await setStartDate();
-            System.Diagnostics.Debug.WriteLine("Filling all day data");
+            System.Diagnostics.Debug.WriteLine("start pull all day data");
 
 
             base.DoWork();
@@ -73,6 +73,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             await setFinishedDate();
 
+            System.Diagnostics.Debug.WriteLine("end pull all day data");
         }
 
         private async Task setStartDate()

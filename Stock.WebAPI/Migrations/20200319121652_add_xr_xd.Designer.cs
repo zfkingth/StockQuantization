@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock.Data;
 
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    partial class StockContextModelSnapshot : ModelSnapshot
+    [Migration("20200319121652_add_xr_xd")]
+    partial class add_xr_xd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,7 +176,7 @@ namespace Stock.WebAPI.Migrations
                     b.Property<double>("TransferRatio")
                         .HasColumnType("double");
 
-                    b.HasKey("Code", "AXrDate");
+                    b.HasKey("Code");
 
                     b.ToTable("StockXRXD");
                 });

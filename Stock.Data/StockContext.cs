@@ -14,6 +14,7 @@ namespace Stock.Data
         public DbSet<Price> PriceSet { get; set; }
         public DbSet<TempPrice> TempPrice { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<StockXRXD> StockXRXD { get; set; }
 
 
         public DbSet<Message> Messages { get; set; }
@@ -48,6 +49,13 @@ namespace Stock.Data
                 t.Code,
                 t.Date
             });
+
+            modelBuilder.Entity<StockXRXD>().HasKey(t => new
+            {
+                t.Code,
+                t.AXrDate
+            });
+
 
             modelBuilder.Entity<TempPrice>().HasKey(t => new
             {

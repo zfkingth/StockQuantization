@@ -37,6 +37,47 @@ namespace Stock.JQData
 
         }
 
+        //更新分红除权数据
+        public async Task UpdateStockXrXd(string code)
+        {
+            QueryFun qf = new QueryFun();
+
+            string res = await qf.Get_StockXrXdAsync(code);
+
+            using (StockContext db = new StockContext())
+            {
+                var records = res.Split('\r', '\n');
+                //跳过第一行
+                for (int i = 1; i < records.Length; i++)
+                {
+                    var ss = records[i];
+                    var words = ss.Split(',');
+                    Stock.Model.StockXRXD newItem = new StockXRXD
+                    {
+                        Code = code,
+                        AXrDate = Utility.ParseDateString(words[1], UnitEnum.Unit1d),
+                        DividendRatio = Convert.ToDouble("0" + words[2]),
+                        TransferRatio = Convert.ToDouble("0" + words[3]),
+                        BonusRatioRmb = Convert.ToDouble("0" + words[4]),
+                    };
+                    var exsit = db.StockXRXD.Any(s => s.Code == newItem.Code
+                            && s.AXrDate == newItem.AXrDate);
+                    if (exsit == false)
+                    {
+                        db.StockXRXD.Add(newItem);
+                    }
+
+
+                }
+                await db.SaveChangesAsync();
+            }
+
+
+
+
+
+        }
+
         /// <summary>
         /// 更新主板，上证指数30m的数据
         /// </summary>
