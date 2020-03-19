@@ -123,10 +123,10 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
 
         /// <summary>
-        /// 获取所有的股票id，不包括指数
+        /// 获取需要处理的股票或者指数在代码,默认只处理股票
         /// </summary>
         /// <returns></returns>
-        protected List<string> GetAllStockAndMainIndex()
+        protected virtual List<string> GetCodeList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -135,8 +135,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
 
                 var list = (from i in db.SecuritiesSet
-                            where i.Type == SecuritiesEnum.Stock ||
-                            i.Type == SecuritiesEnum.Index
+                            where i.Type == SecuritiesEnum.Stock
                             select i.Code).ToList();
                 return list;
             }
@@ -159,7 +158,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 {
                     var db = scope.ServiceProvider.GetRequiredService<StockContext>();
 
-                    var list = GetAllStockAndMainIndex();
+                    var list = GetCodeList();
                     //定义线程取消的一个对象
 
                     int progressCnt = 0;

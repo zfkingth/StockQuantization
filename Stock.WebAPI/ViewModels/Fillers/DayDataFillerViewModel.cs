@@ -37,6 +37,24 @@ namespace Stock.WebAPI.ViewModels.Fillers
             System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {e.StockId} end    ***************************");
         }
 
+
+        protected override List<string> GetCodeList()
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+
+                var list = (from i in db.SecuritiesSet
+                            where i.Type == SecuritiesEnum.Index ||
+                                  i.Type == SecuritiesEnum.Stock
+                            select i.Code).ToList();
+                return list;
+            }
+        }
+
+
         /// <summary>
         /// 填充所有的股票日线数据
         /// </summary>
