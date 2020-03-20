@@ -9,8 +9,8 @@ using Stock.Data;
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    [Migration("20200317082357_addTemp")]
-    partial class addTemp
+    [Migration("20200320055335_changeType")]
+    partial class changeType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -158,6 +158,33 @@ namespace Stock.WebAPI.Migrations
                     b.ToTable("StockEvents");
                 });
 
+            modelBuilder.Entity("Stock.Model.StockXRXD", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
+                        .HasMaxLength(15);
+
+                    b.Property<DateTime>("AXrDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("BonusType")
+                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
+                        .HasMaxLength(10);
+
+                    b.Property<double>("BonusRatioRmb")
+                        .HasColumnType("double");
+
+                    b.Property<double>("DividendRatio")
+                        .HasColumnType("double");
+
+                    b.Property<double>("TransferRatio")
+                        .HasColumnType("double");
+
+                    b.HasKey("Code", "AXrDate", "BonusType");
+
+                    b.ToTable("StockXRXD");
+                });
+
             modelBuilder.Entity("Stock.Model.TempPrice", b =>
                 {
                     b.Property<int>("Unit")
@@ -206,6 +233,16 @@ namespace Stock.WebAPI.Migrations
                     b.HasKey("Unit", "Code", "Date");
 
                     b.ToTable("TempPrice");
+                });
+
+            modelBuilder.Entity("Stock.Model.TradeDay", b =>
+                {
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Date");
+
+                    b.ToTable("TradeDays");
                 });
 
             modelBuilder.Entity("Stock.Model.User", b =>

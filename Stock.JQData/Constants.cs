@@ -14,7 +14,7 @@ namespace Stock.JQData
         public static readonly Dictionary<UnitEnum, string> UnitParamDic = new Dictionary<UnitEnum, string>
         {{ UnitEnum.Unit1d,"1d"},{ UnitEnum.Unit30m,"30m"},{UnitEnum.Unit60m,"60m" },{UnitEnum.Unit120m,"120m" } };
 
-        public static int MaxRecordCntPerFetch = 4992;//能够被8,整除比较好，最小支持30分钟线
+        public static int MaxRecordCntPerFetch = 512;//能够被8,整除比较好，最小支持30分钟线
         public static readonly Dictionary<UnitEnum, double> RecordCntPerDay = new Dictionary<UnitEnum, double>
         {{ UnitEnum.Unit30m,8f},{UnitEnum.Unit60m,4f },{UnitEnum.Unit120m,2f },{ UnitEnum.Unit1d,1f}, };
 
@@ -40,7 +40,7 @@ namespace Stock.JQData
 
 
         //队列中最大后台任务的个数
-        public static readonly int MaxQueueCnt = 1;
+        public static readonly int MaxQueueCnt = 5;
 
 
 

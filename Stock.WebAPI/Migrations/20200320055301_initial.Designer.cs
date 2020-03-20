@@ -9,8 +9,8 @@ using Stock.Data;
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    [Migration("20200319121652_add_xr_xd")]
-    partial class add_xr_xd
+    [Migration("20200320055301_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,6 +167,10 @@ namespace Stock.WebAPI.Migrations
                     b.Property<DateTime>("AXrDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("BonusType")
+                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
+                        .HasMaxLength(10);
+
                     b.Property<double>("BonusRatioRmb")
                         .HasColumnType("double");
 
@@ -176,7 +180,7 @@ namespace Stock.WebAPI.Migrations
                     b.Property<double>("TransferRatio")
                         .HasColumnType("double");
 
-                    b.HasKey("Code");
+                    b.HasKey("Code", "AXrDate", "BonusType");
 
                     b.ToTable("StockXRXD");
                 });
