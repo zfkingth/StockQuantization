@@ -64,7 +64,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         protected class StockArgs : EventArgs
         {
 
-            public string StockId { get; set; }
+            public Securities Stock { get; set; }
         }
 
         protected CancellationTokenSource cts = new CancellationTokenSource();
@@ -126,7 +126,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         /// 获取需要处理的股票或者指数在代码,默认只处理股票
         /// </summary>
         /// <returns></returns>
-        protected virtual List<string> GetCodeList()
+        protected virtual List<Securities> GetSecList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -136,7 +136,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
                 var list = (from i in db.SecuritiesSet
                             where i.Type == SecuritiesEnum.Stock
-                            select i.Code).ToList();
+                            select i).AsNoTracking().ToList();
                 return list;
             }
         }
@@ -158,7 +158,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 {
                     var db = scope.ServiceProvider.GetRequiredService<StockContext>();
 
-                    var list = GetCodeList();
+                    var list = GetSecList();
                     //定义线程取消的一个对象
 
                     int progressCnt = 0;
@@ -176,7 +176,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                     };
 
 
-                    Parallel.ForEach(list, po, (stockId) =>
+                    Parallel.ForEach(list, po, (stock) =>
                    {
                        po.CancellationToken.ThrowIfCancellationRequested();
                        //using (var asyncBridge = AsyncHelper.Wait)
@@ -184,7 +184,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                        //    asyncBridge.Run(stockHandle(new StockArgs() { StockId = stockId }));
                        //}
 
-                       stockHandle(new StockArgs() { StockId = stockId }).Wait();
+                       stockHandle(new StockArgs() { Stock = stock }).Wait();
 
                        Interlocked.Increment(ref progressCnt);
                        //增加1%才更新

@@ -51,6 +51,7 @@ namespace Stock.JQData
         public const string ShangHaiIndex = "000001.XSHG";
         public const string ShenZhenIndex = "399001.XSHE";
         public const string ChuangYeBanIndex = "399006.XSHE";
+        public const string HuShen300Index = "000300.XSHG";
 
         /// <summary>
         /// 需要处理的指数Code
@@ -59,7 +60,8 @@ namespace Stock.JQData
         {
             ShangHaiIndex ,
             ShenZhenIndex,
-            ChuangYeBanIndex
+            ChuangYeBanIndex,
+            HuShen300Index,
        };
     }
 }

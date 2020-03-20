@@ -28,11 +28,11 @@ namespace Stock.WebAPI.ViewModels.Fillers
         async Task F10Filler_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull F10 data : {e.StockId} start  ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull F10 data : {e.Stock} start  ***************************");
             HandleFun hf = new HandleFun();
-            await hf.UpdateStockXrXd(e.StockId);
+            await hf.UpdateStockXrXd(e.Stock.Code);
            
-            System.Diagnostics.Debug.WriteLine($"****************  pull F10 data : {e.StockId} end    ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull F10 data : {e.Stock} end    ***************************");
         }
 
 

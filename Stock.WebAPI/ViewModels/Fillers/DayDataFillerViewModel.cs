@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stock.Data;
 using Stock.JQData;
@@ -27,18 +28,21 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         async Task DayDataFiller_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
+            string code = e.Stock.Code;
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {e.StockId} start  ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {code} start  ***************************");
             HandleFun hf = new HandleFun();
-            await hf.Update_PriceAsync(UnitEnum.Unit30m, e.StockId);
-            await hf.Update_PriceAsync(UnitEnum.Unit120m, e.StockId);
-            await hf.Update_PriceAsync(UnitEnum.Unit1d, e.StockId);
+            if (e.Stock.Type == SecuritiesEnum.Index)
+            {
+                await hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
+                await hf.Update_PriceAsync(UnitEnum.Unit60m, e.Stock.Code);
+                await hf.Update_PriceAsync(UnitEnum.Unit120m, e.Stock.Code);
+            }
+            await hf.Update_PriceAsync(UnitEnum.Unit1d, e.Stock.Code);
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {e.StockId} end    ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {code} end    ***************************");
         }
-
-
-        protected override List<string> GetCodeList()
+        protected override List<Securities> GetSecList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -47,12 +51,13 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
 
                 var list = (from i in db.SecuritiesSet
-                            where i.Type == SecuritiesEnum.Index ||
-                                  i.Type == SecuritiesEnum.Stock
-                            select i.Code).ToList();
+                            where i.Type == SecuritiesEnum.Stock ||
+                            i.Type == SecuritiesEnum.Index
+                            select i).AsNoTracking().ToList();
                 return list;
             }
         }
+
 
 
         /// <summary>
