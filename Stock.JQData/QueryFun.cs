@@ -211,7 +211,7 @@ namespace Stock.JQData
                 method = "run_query",
                 token = MyToken, //token
                 table = "finance.STK_XR_XD",
-                columns = "code,a_xr_date,dividend_ratio,transfer_ratio,bonus_ratio_rmb",
+                columns = "code,a_xr_date,bonus_type,dividend_ratio,transfer_ratio,bonus_ratio_rmb",
                 conditions = $"code#=#{code}&a_xr_date#>=#{Utility.ToDateString(Constants.PriceStartDate)}",
                 count = 1000
             };

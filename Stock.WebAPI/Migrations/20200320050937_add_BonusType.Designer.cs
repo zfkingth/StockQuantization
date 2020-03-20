@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock.Data;
 
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    partial class StockContextModelSnapshot : ModelSnapshot
+    [Migration("20200320050937_add_BonusType")]
+    partial class add_BonusType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,12 +167,12 @@ namespace Stock.WebAPI.Migrations
                     b.Property<DateTime>("AXrDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<double>("BonusRatioRmb")
+                        .HasColumnType("double");
+
                     b.Property<string>("BonusType")
                         .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
                         .HasMaxLength(10);
-
-                    b.Property<double>("BonusRatioRmb")
-                        .HasColumnType("double");
 
                     b.Property<double>("DividendRatio")
                         .HasColumnType("double");
@@ -178,7 +180,7 @@ namespace Stock.WebAPI.Migrations
                     b.Property<double>("TransferRatio")
                         .HasColumnType("double");
 
-                    b.HasKey("Code", "AXrDate", "BonusType");
+                    b.HasKey("Code", "AXrDate");
 
                     b.ToTable("StockXRXD");
                 });

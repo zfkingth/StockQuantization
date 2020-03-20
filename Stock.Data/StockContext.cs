@@ -53,7 +53,8 @@ namespace Stock.Data
             modelBuilder.Entity<StockXRXD>().HasKey(t => new
             {
                 t.Code,
-                t.AXrDate
+                t.AXrDate,
+                t.BonusType
             });
 
 

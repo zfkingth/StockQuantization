@@ -58,9 +58,10 @@ namespace Stock.JQData
                         {
                             Code = code,
                             AXrDate = Utility.ParseDateString(words[1], UnitEnum.Unit1d),
-                            DividendRatio = Convert.ToDouble("0" + words[2]),
-                            TransferRatio = Convert.ToDouble("0" + words[3]),
-                            BonusRatioRmb = Convert.ToDouble("0" + words[4]),
+                            BonusType = words[2],
+                            DividendRatio = Convert.ToDouble("0" + words[3]),
+                            TransferRatio = Convert.ToDouble("0" + words[4]),
+                            BonusRatioRmb = Convert.ToDouble("0" + words[5]),
                         };
                         var exsit = db.StockXRXD.Any(s => s.Code == newItem.Code
                                 && s.AXrDate == newItem.AXrDate);
