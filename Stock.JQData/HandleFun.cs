@@ -88,7 +88,7 @@ namespace Stock.JQData
         /// </summary>
         public async Task UpdateMainIndexAsync()
         {
-            await Update_PriceAsync(UnitEnum.Unit30m, Constants.ShangHaiIndex);
+            await Update_PriceAsync(UnitEnum.Unit30m, Constants.IndexShangHai);
         }
 
         public async Task Update_PriceAsync(UnitEnum unit, string secCode)
