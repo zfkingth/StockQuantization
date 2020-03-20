@@ -271,6 +271,7 @@ namespace Stock.JQData
 
             StringContent bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
 
+            System.Diagnostics.Debug.WriteLine(content);
             //POST请求并等待结果
             var result = await client.PostAsync("apis", bodyContent);
 

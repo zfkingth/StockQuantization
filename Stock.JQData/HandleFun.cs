@@ -102,7 +102,7 @@ namespace Stock.JQData
                             where p.Unit == unit && p.Code == secCode
                             orderby p.Date descending
                             select p.Date;
-                var dateInPrice = query.FirstOrDefault();
+                var dateInPrice =await query.FirstOrDefaultAsync();
                 if (dateInPrice == default)
                 {
                     dateInPrice = Constants.PriceStartDate;
