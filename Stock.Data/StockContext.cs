@@ -21,6 +21,7 @@ namespace Stock.Data
         public DbSet<StockEvent> StockEvents { get; set; }
         public DbSet<SearchResult> SearchResultSet { get; set; }
         public DbSet<TradeDay> TradeDays { get; set; }
+        public DbSet<MarginTotal> MarginTotal { get; set; }
 
 
 
@@ -55,6 +56,11 @@ namespace Stock.Data
                 t.Code,
                 t.AXrDate,
                 t.BonusType
+            });
+            modelBuilder.Entity<MarginTotal>().HasKey(t => new
+            {
+                t.Date,
+                t.ExchangeCde,
             });
 
 

@@ -24,7 +24,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         internal async Task PullAll()
         {
-            await setStartDate();
+            await setStartDate(Constants.EventPullStockNames);
 
             JQData.HandleFun hf = new JQData.HandleFun();
 
@@ -35,40 +35,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             var res = hf.Update_allStock_Names();
 
-            await setFinishedDate();
+            await setFinishedDate(Constants.EventPullStockNames);
 
-        }
-
-        private async Task setStartDate()
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<StockContext>();
-
-                var record = db.StockEvents.First(s => s.EventName == Constants.EventPullStockNames);
-
-                record.LastAriseStartDate = DateTime.Now;
-                record.Status = EventStatusEnum.Running;
-                await db.SaveChangesAsync();
-
-            }
-        }
-
-        private async Task setFinishedDate()
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<StockContext>();
-
-                var record = db.StockEvents.First(s => s.EventName == Constants.EventPullStockNames);
-
-                record.LastAriseEndDate = DateTime.Now;
-                record.Status = EventStatusEnum.Idle;
-                await db.SaveChangesAsync();
-
-            }
         }
 
     }
