@@ -66,7 +66,10 @@ namespace Stock.JQData
                     {
                         //分段操作
 
-                        var nextDate = qf.AddTradDays(startDate, 200);//每次增加200个交易日 
+                        int tempDaysCnt = 200;
+                        if (daysCnt < tempDaysCnt) tempDaysCnt = daysCnt;
+
+                        var nextDate = qf.AddTradDays(startDate, daysCnt);//每次增加200个交易日 
 
 
                         string res = await qf.Get_MarginAsync(startDate, nextDate);
