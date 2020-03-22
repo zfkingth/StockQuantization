@@ -23,7 +23,7 @@ namespace Stock.JQData
         {{ SecuritiesEnum.Stock,"stock"},{ SecuritiesEnum.Index,"index"}};
 
 
-  
+
         public static readonly TimeSpan IdleTimeStartSpan = new TimeSpan(0);
         public static readonly TimeSpan IdleTimeEndSpan = new TimeSpan(6, 30, 0);
 
@@ -48,6 +48,7 @@ namespace Stock.JQData
         public const string IndexShenZhen = "399001.XSHE";
         public const string IndexChuangYeBan = "399006.XSHE";
         public const string IndexHuShen300 = "000300.XSHG";
+        public const string IndexZhongZheng500 = "000905.XSHG";
 
         /// <summary>
         /// 需要处理的指数Code
@@ -58,11 +59,13 @@ namespace Stock.JQData
             IndexShenZhen,
             IndexChuangYeBan,
             IndexHuShen300,
+            IndexZhongZheng500,
        };
 
-        /// <summary>
-        /// 融资市场code的个数
-        /// </summary>
-        public const int MarginCodeCnt= 2;
+
+        public const string ExchangeCodeShangHai = "XSHG";
+
+        public const string ExchangeCodeShenZhen = "XSHE";
+
     }
 }

@@ -34,9 +34,10 @@ namespace Stock.WebAPI.ViewModels.Fillers
             HandleFun hf = new HandleFun();
             if (e.Stock.Type == SecuritiesEnum.Index)
             {
-                await hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
-                await hf.Update_PriceAsync(UnitEnum.Unit60m, e.Stock.Code);
-                await hf.Update_PriceAsync(UnitEnum.Unit120m, e.Stock.Code);
+                var t1 = hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
+                var t2 = hf.Update_PriceAsync(UnitEnum.Unit60m, e.Stock.Code);
+                var t3 = hf.Update_PriceAsync(UnitEnum.Unit120m, e.Stock.Code);
+                Task.WaitAll(t1, t2, t3);
             }
             await hf.Update_PriceAsync(UnitEnum.Unit1d, e.Stock.Code);
 
@@ -81,7 +82,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
             System.Diagnostics.Debug.WriteLine("end pull all day data");
         }
 
-  
+
 
 
 
