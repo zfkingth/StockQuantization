@@ -181,6 +181,29 @@ namespace BackgroundTasksSample.Services
             }
         }
 
+        internal async Task JudgePullMarginDataAsync()
+        {
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+                var se =await db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PulMarginData);
+                if (se.LastAriseEndDate == null)
+                {
+                    EnquePullMarginData();
+
+                }
+                else
+                {
+                    if (!IsTradingTime(DateTime.Now))
+                        EnquePullMarginData();
+                }
+            }
+        }
+
+
         internal void JudgePullF10()
         {
 

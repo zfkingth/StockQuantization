@@ -65,12 +65,12 @@ namespace BackgroundTasksSample.Services
 
         private void DoWorkForLongPeriod(object state)
         {
-            _logger.LogInformation("Timed Background Service is working. for timer1");
+            _logger.LogInformation("Timed Background Service is working. for long period");
 
             _util.JudgePullStockNames();
             _util.JudgePullF10();
             _util.JudgePullDailyData();
-            Task.Run(async () => await _util.JudgeEraseRealTimeData());
+            _util.JudgeEraseRealTimeData().Wait();
 
 
         }
@@ -78,9 +78,10 @@ namespace BackgroundTasksSample.Services
 
         private void DoWorkForShortPeriod(object state)
         {
-            _logger.LogInformation("Timed Background Service is working. for timer2");
+            _logger.LogInformation("Timed Background Service is working. for short period");
 
-            Task.Run(async () => await _util.JudgePullRealTimeDataAsync());
+            _util.JudgePullRealTimeDataAsync().Wait();
+            _util.JudgePullMarginDataAsync().Wait();
         }
 
 
