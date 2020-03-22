@@ -23,11 +23,7 @@ namespace Stock.JQData
         {{ SecuritiesEnum.Stock,"stock"},{ SecuritiesEnum.Index,"index"}};
 
 
-        public static readonly string EventPullStockNames = "pullStockNames";
-        public static readonly string EventPullF10 = "pullF10";
-        public static readonly string EventPullDailyData = "pullDaily";
-        public static readonly string EventPullReadTimeData = "pullRealTime";
-
+  
         public static readonly TimeSpan IdleTimeStartSpan = new TimeSpan(0);
         public static readonly TimeSpan IdleTimeEndSpan = new TimeSpan(6, 30, 0);
 

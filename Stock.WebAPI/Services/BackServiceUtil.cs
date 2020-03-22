@@ -79,7 +79,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = await db.StockEvents.FirstAsync(s => s.EventName == Constants.EventPullReadTimeData);
+                var se = await db.StockEvents.FirstAsync(s => s.EventName == SystemEvents.EventPullReadTimeData);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquepullRealTimeDataTask();
@@ -147,7 +147,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == Constants.EventPullDailyData);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.EventPullDailyData);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullDayDataTask();
@@ -169,7 +169,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == Constants.EventPullF10);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.EventPullF10);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullF10Task();
@@ -242,7 +242,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == Constants.EventPullStockNames);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.EventPullStockNames);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullAllStockNamesTask();

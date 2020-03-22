@@ -90,7 +90,7 @@ namespace Blog.API.Controllers
         [HttpPost("pullRealTimeData")]
         public async Task<ActionResult> pullRealTimeDataAsync()
         {
-            var item = await _db.StockEvents.FirstOrDefaultAsync(s => s.EventName == Constants.EventPullReadTimeData);
+            var item = await _db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.EventPullReadTimeData);
 
             if (item.LastAriseEndDate == null)
             {
