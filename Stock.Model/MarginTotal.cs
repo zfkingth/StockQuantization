@@ -12,13 +12,13 @@ namespace Stock.Model
         /// 交易市场
         /// </summary>
         [MaxLength(12)]
-        public string ExchangeCde { get; set; }
+        public string ExchangeCode { get; set; }
 
 
         /// <summary>
         /// 融资余额（元）
         /// /// </summary>
-        public double Finvalue { get; set; }
+        public double FinValue { get; set; }
 
         /// <summary>
         /// 融资买入额（元）

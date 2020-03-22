@@ -60,7 +60,7 @@ namespace Stock.Data
             modelBuilder.Entity<MarginTotal>().HasKey(t => new
             {
                 t.Date,
-                t.ExchangeCde,
+                t.ExchangeCode,
             });
 
 

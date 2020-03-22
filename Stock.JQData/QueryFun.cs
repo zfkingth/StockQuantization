@@ -88,6 +88,25 @@ namespace Stock.JQData
         }
         );
 
+        internal async Task<string> Get_MarginAsync(DateTime startDate, DateTime nextDate)
+        {
+
+            //查询所有股票代码
+            var body = new
+            {
+                method = "run_query",
+                token = MyToken, //token
+                table = "finance.STK_MT_TOTAL",
+                columns = "date,exchange_code,fin_value,fin_buy_value,sec_volume,sec_value,sec_sell_volume,fin_sec_value",
+                conditions = $"date#>#{Utility.ToDateString(startDate)}&date#<=#{Utility.ToDateString(nextDate)}",
+                count =2000
+            };
+            string info = await QueryInfoAsync(body);
+
+            return info;
+
+        }
+
         public async Task RefreshAllTradeDays()
         {
             System.Diagnostics.Debug.WriteLine("**************  refresh all trade days start     **************");
@@ -129,6 +148,12 @@ namespace Stock.JQData
             System.Diagnostics.Debug.WriteLine("**************  refresh all trade days end   **************");
         }
 
+        /// <summary>
+        /// 增加多少个交易日
+        /// </summary>
+        /// <param name="endDate"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         internal DateTime AddTradDays(DateTime endDate, double offset)
         {
             int index = AllTradeDays.IndexOf(endDate);
@@ -213,7 +238,7 @@ namespace Stock.JQData
                 table = "finance.STK_XR_XD",
                 columns = "code,a_xr_date,bonus_type,dividend_ratio,transfer_ratio,bonus_ratio_rmb",
                 conditions = $"code#=#{code}&a_xr_date#>=#{Utility.ToDateString(Constants.PriceStartDate)}",
-                count = 1000
+                count = 2000
             };
             string info = await QueryInfoAsync(body);
 

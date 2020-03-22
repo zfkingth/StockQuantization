@@ -59,5 +59,10 @@ namespace Stock.JQData
             IndexChuangYeBan,
             IndexHuShen300,
        };
+
+        /// <summary>
+        /// 融资市场code的个数
+        /// </summary>
+        public const int MarginCodeCnt= 2;
     }
 }

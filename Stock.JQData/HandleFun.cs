@@ -37,9 +37,95 @@ namespace Stock.JQData
 
         }
 
-        public Task Update_margin_data()
+        public async Task Update_margin_data()
         {
-            throw new NotImplementedException();
+            using (StockContext db = new StockContext())
+            {
+
+                QueryFun qf = new QueryFun();
+                //获取数据库中最新的时间
+                var query = from p in db.MarginTotal
+                            orderby p.Date descending
+                            select p.Date;
+                var dateInDb = await query.FirstOrDefaultAsync();
+                if (dateInDb == default)
+                {
+                    dateInDb = Constants.PriceStartDate.AddDays(-1);//方便比较
+                }
+
+                DateTime uptoDate = qf.GetUptoDate();
+
+                //都去掉小时和分钟，
+                var startDate = new DateTime(dateInDb.Year, dateInDb.Month, dateInDb.Day);
+
+                int daysCnt = qf.getTradeDaysCntBetween(startDate, uptoDate);
+                if (daysCnt > 0)
+                {
+
+                    while (startDate < uptoDate)
+                    {
+                        //分段操作
+
+                        var nextDate = qf.AddTradDays(startDate, 200);//每次增加200个交易日 
+
+
+                        string res = await qf.Get_MarginAsync(startDate, nextDate);
+                        await Parse_WriteDb_MarginAsync(res);
+
+                        startDate = nextDate;
+
+                    }
+                }
+            }
+
+
+        }
+
+        private async Task Parse_WriteDb_MarginAsync(string res)
+        {
+
+
+            QueryFun qf = new QueryFun();
+
+            try
+            {
+                using (StockContext db = new StockContext())
+                {
+                    var records = res.Split('\r', '\n');
+                    //跳过第一行
+                    for (int i = 1; i < records.Length; i++)
+                    {
+                        var ss = records[i];
+                        var words = ss.Split(',');
+                        Stock.Model.MarginTotal newItem = new MarginTotal
+                        {
+                            Date = Utility.ParseDateString(words[0], UnitEnum.Unit1d),
+                            ExchangeCode = words[1],
+                            FinValue = Convert.ToDouble("0" + words[2]),
+                            FinBuyValue = Convert.ToDouble("0" + words[3]),
+                            SecVolume = Convert.ToInt32("0" + words[4]),
+                            SecValue = Convert.ToDouble("0" + words[5]),
+                            SecSellVolume = Convert.ToInt32("0" + words[6]),
+                            FinSecValue = Convert.ToDouble("0" + words[7]),
+                        };
+                        var exsit = db.MarginTotal.Any(s => s.ExchangeCode == newItem.ExchangeCode
+                                && s.Date == newItem.Date);
+                        if (exsit == false)
+                        {
+                            db.MarginTotal.Add(newItem);
+                        }
+
+
+                    }
+                    await db.SaveChangesAsync();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         //更新分红除权数据
@@ -107,7 +193,7 @@ namespace Stock.JQData
                             where p.Unit == unit && p.Code == secCode
                             orderby p.Date descending
                             select p.Date;
-                var dateInPrice =await query.FirstOrDefaultAsync();
+                var dateInPrice = await query.FirstOrDefaultAsync();
                 if (dateInPrice == default)
                 {
                     dateInPrice = Constants.PriceStartDate;
