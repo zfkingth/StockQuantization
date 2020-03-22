@@ -28,7 +28,7 @@ namespace Stock.Model
         /// <summary>
         /// 融券余量（股）
         /// </summary>
-        public int SecVolume { get; set; }
+        public long SecVolume { get; set; }
 
         /// <summary>
         /// 融券余量金额（元）
@@ -39,7 +39,7 @@ namespace Stock.Model
         /// <summary>
         /// 融券卖出量（股）
         /// </summary>
-        public int SecSellVolume { get; set; }
+        public long SecSellVolume { get; set; }
 
 
         /// <summary>

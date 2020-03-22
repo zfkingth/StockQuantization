@@ -101,9 +101,9 @@ namespace Stock.JQData
                         ExchangeCode = words[1],
                         FinValue = Convert.ToDouble("0" + words[2]),
                         FinBuyValue = Convert.ToDouble("0" + words[3]),
-                        SecVolume = Convert.ToInt32("0" + words[4]),
+                        SecVolume = Convert.ToInt64("0" + words[4]),
                         SecValue = Convert.ToDouble("0" + words[5]),
-                        SecSellVolume = Convert.ToInt32("0" + words[6]),
+                        SecSellVolume = Convert.ToInt64("0" + words[6]),
                         FinSecValue = Convert.ToDouble("0" + words[7]),
                     };
                     var exsit = db.MarginTotal.Any(s => s.ExchangeCode == newItem.ExchangeCode
