@@ -50,7 +50,7 @@ namespace Stock.JQData
                 var dateInDb = await query.FirstOrDefaultAsync();
                 if (dateInDb == default)
                 {
-                    dateInDb = Constants.PriceStartDate.AddDays(-1);//方便比较
+                    dateInDb = Constants.PriceStartDate;
                 }
 
                 DateTime uptoDate = qf.GetUptoDate();
@@ -87,43 +87,35 @@ namespace Stock.JQData
 
             QueryFun qf = new QueryFun();
 
-            try
+            using (StockContext db = new StockContext())
             {
-                using (StockContext db = new StockContext())
+                var records = res.Split('\r', '\n');
+                //跳过第一行
+                for (int i = 1; i < records.Length; i++)
                 {
-                    var records = res.Split('\r', '\n');
-                    //跳过第一行
-                    for (int i = 1; i < records.Length; i++)
+                    var ss = records[i];
+                    var words = ss.Split(',');
+                    Stock.Model.MarginTotal newItem = new MarginTotal
                     {
-                        var ss = records[i];
-                        var words = ss.Split(',');
-                        Stock.Model.MarginTotal newItem = new MarginTotal
-                        {
-                            Date = Utility.ParseDateString(words[0], UnitEnum.Unit1d),
-                            ExchangeCode = words[1],
-                            FinValue = Convert.ToDouble("0" + words[2]),
-                            FinBuyValue = Convert.ToDouble("0" + words[3]),
-                            SecVolume = Convert.ToInt32("0" + words[4]),
-                            SecValue = Convert.ToDouble("0" + words[5]),
-                            SecSellVolume = Convert.ToInt32("0" + words[6]),
-                            FinSecValue = Convert.ToDouble("0" + words[7]),
-                        };
-                        var exsit = db.MarginTotal.Any(s => s.ExchangeCode == newItem.ExchangeCode
-                                && s.Date == newItem.Date);
-                        if (exsit == false)
-                        {
-                            db.MarginTotal.Add(newItem);
-                        }
-
-
+                        Date = Utility.ParseDateString(words[0], UnitEnum.Unit1d),
+                        ExchangeCode = words[1],
+                        FinValue = Convert.ToDouble("0" + words[2]),
+                        FinBuyValue = Convert.ToDouble("0" + words[3]),
+                        SecVolume = Convert.ToInt32("0" + words[4]),
+                        SecValue = Convert.ToDouble("0" + words[5]),
+                        SecSellVolume = Convert.ToInt32("0" + words[6]),
+                        FinSecValue = Convert.ToDouble("0" + words[7]),
+                    };
+                    var exsit = db.MarginTotal.Any(s => s.ExchangeCode == newItem.ExchangeCode
+                            && s.Date == newItem.Date);
+                    if (exsit == false)
+                    {
+                        db.MarginTotal.Add(newItem);
                     }
-                    await db.SaveChangesAsync();
-                }
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+
+                }
+                await db.SaveChangesAsync();
             }
 
         }

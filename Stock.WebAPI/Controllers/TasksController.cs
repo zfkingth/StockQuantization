@@ -78,6 +78,14 @@ namespace Blog.API.Controllers
             return NoContent();
         }
 
+        [HttpPost("pullMarginData")]
+        public ActionResult pullMarginData()
+        {
+            _util.EnquePullMarginData();
+            return NoContent();
+        }
+
+
         [HttpPost("pulBasicData")]
         public ActionResult pulBasicData()
         {

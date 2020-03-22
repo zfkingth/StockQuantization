@@ -97,6 +97,26 @@ namespace BackgroundTasksSample.Services
             }
         }
 
+        internal void EnquePullMarginData()
+        {
+            if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
+            _logger.LogInformation("enque pull margin data task.");
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var puller = scopedServices.GetRequiredService<PullMarginDataViewModel>();
+
+                    await puller.PullAll();
+                }
+
+            });
+
+
+        }
+
         /// <summary>
         /// The time between two operations meets the requirements
         /// </summary>
