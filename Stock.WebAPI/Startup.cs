@@ -123,6 +123,7 @@ namespace Stock.WebAPI
             services.AddScoped<F10FHPGFillerViewModel>();
             services.AddScoped<DayDataFillerViewModel>();
             services.AddScoped<RealTimeDataFillerViewModel>();
+            services.AddScoped<PullMarginDataViewModel>();
 
 
         }

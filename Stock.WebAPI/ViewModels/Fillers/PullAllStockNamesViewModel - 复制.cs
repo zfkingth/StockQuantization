@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Stock.WebAPI.ViewModels.Fillers
 {
-    public class PullAllStockNamesViewModel : BaseDoWorkViewModel
+    public class PullMarginDataViewModel : BaseDoWorkViewModel
     {
         private readonly ILogger _logger;
-        public PullAllStockNamesViewModel(IServiceScopeFactory serviceScopeFactory,
+        public PullMarginDataViewModel(IServiceScopeFactory serviceScopeFactory,
 
             ILogger<PullAllStockNamesViewModel> logger) : base(serviceScopeFactory)
         {
@@ -24,18 +24,12 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullStockNames);
+            await setStartDate(SystemEvents.PulMarginData);
 
-            JQData.HandleFun hf = new JQData.HandleFun();
+            HandleFun hf = new HandleFun();
+            await hf.Update_margin_data();
 
-            //在这里负责刷新token
-            JQData.QueryFun qf = new QueryFun();
-            await qf.RefreshTokenAsync();
-            await qf.RefreshAllTradeDays();
-
-            var res = hf.Update_allStock_Names();
-
-            await setFinishedDate(SystemEvents.PullStockNames);
+            await setFinishedDate(SystemEvents.PulMarginData);
 
         }
 

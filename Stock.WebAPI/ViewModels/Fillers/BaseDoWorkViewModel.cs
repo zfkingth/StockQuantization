@@ -252,7 +252,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var stockEvent = await db.StockEvents.FindAsync(SystemEvents.EventPullReadTimeData);
+                var stockEvent = await db.StockEvents.FindAsync(SystemEvents.PullReadTimeData);
                 if (stockEvent.Status == EventStatusEnum.Running)
                 {
                     return true;

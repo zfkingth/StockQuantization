@@ -39,14 +39,14 @@ namespace Stock.WebAPI.ViewModels.Fillers
   
         public async Task PullAll()
         {
-            await setStartDate(SystemEvents.EventPullF10);
+            await setStartDate(SystemEvents.PullF10);
             System.Diagnostics.Debug.WriteLine("start pull  all F10 data");
 
 
             base.DoWork();
 
 
-            await setFinishedDate(SystemEvents.EventPullF10);
+            await setFinishedDate(SystemEvents.PullF10);
 
             System.Diagnostics.Debug.WriteLine("end pull  all F10 data");
         }

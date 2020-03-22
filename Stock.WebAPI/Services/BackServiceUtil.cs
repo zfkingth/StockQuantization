@@ -79,7 +79,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = await db.StockEvents.FirstAsync(s => s.EventName == SystemEvents.EventPullReadTimeData);
+                var se = await db.StockEvents.FirstAsync(s => s.EventName == SystemEvents.PullReadTimeData);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquepullRealTimeDataTask();
@@ -147,7 +147,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == SystemEvents.EventPullDailyData);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullDailyData);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullDayDataTask();
@@ -169,7 +169,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == SystemEvents.EventPullF10);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullF10);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullF10Task();
@@ -242,7 +242,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == SystemEvents.EventPullStockNames);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullStockNames);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullAllStockNamesTask();

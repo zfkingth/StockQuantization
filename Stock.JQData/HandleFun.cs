@@ -37,6 +37,11 @@ namespace Stock.JQData
 
         }
 
+        public Task Update_margin_data()
+        {
+            throw new NotImplementedException();
+        }
+
         //更新分红除权数据
         public async Task UpdateStockXrXd(string code)
         {

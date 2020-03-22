@@ -6,11 +6,11 @@ namespace Stock.JQData
 {
     public class SystemEvents
     {
-        public const string EventPullStockNames = "pullStockNames";
-        public const string EventPullF10 = "pullF10";
-        public const string EventPullDailyData = "pullDaily";
-        public const string EventPullReadTimeData = "pullRealTime";
-        public const string EventPulMarginData = "pullmargin";
+        public const string PullStockNames = "pullStockNames";
+        public const string PullF10 = "pullF10";
+        public const string PullDailyData = "pullDaily";
+        public const string PullReadTimeData = "pullRealTime";
+        public const string PulMarginData = "pullmargin";
 
     }
 }
