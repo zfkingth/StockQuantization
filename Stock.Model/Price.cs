@@ -7,9 +7,9 @@ namespace Stock.Model
 {
     public class Price
     {
-        public UnitEnum Unit { get; set; }
         [MaxLength(15)]
         public string Code { get; set; }
+        public UnitEnum Unit { get; set; }
 
 
         public DateTime Date { get; set; }

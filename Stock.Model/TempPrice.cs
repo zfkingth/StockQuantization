@@ -7,10 +7,11 @@ namespace Stock.Model
 {
     public class TempPrice
     {
-        public UnitEnum Unit { get; set; }
         [MaxLength(15)]
         public string Code { get; set; }
 
+        public UnitEnum Unit { get; set; }
+     
 
         public DateTime Date { get; set; }
         public double Open { get; set; }

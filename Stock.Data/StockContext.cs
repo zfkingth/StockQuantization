@@ -46,8 +46,8 @@ namespace Stock.Data
             //获取历史数据时，以单个股票为单位。
             modelBuilder.Entity<Price>().HasKey(t => new
             {
-                t.Unit,
                 t.Code,
+                t.Unit,
                 t.Date
             });
 
@@ -66,8 +66,8 @@ namespace Stock.Data
 
             modelBuilder.Entity<TempPrice>().HasKey(t => new
             {
-                t.Unit,
                 t.Code,
+                t.Unit,
                 t.Date
             });
 
