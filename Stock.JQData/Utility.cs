@@ -33,5 +33,39 @@ namespace Stock.JQData
                 return true;
             return false;
         }
+
+        public static bool IsTradingTime(DateTime time)
+        {
+
+
+            if (time.DayOfWeek == DayOfWeek.Saturday || time.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return false;
+            }
+            else
+            {
+
+                var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
+                if (sp >= Constants.StockStartSpan && sp <= Constants.StockEndSpan)
+                {
+                    return true;
+                }
+
+                return false;
+
+            }
+        }
+
+        public static bool IsAfterMarketEnd(DateTime time)
+        {
+
+            var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
+            if (sp >= Constants.StockEndSpan)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

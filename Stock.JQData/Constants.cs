@@ -10,7 +10,7 @@ namespace Stock.JQData
         public const string ShortDateFormat = "yyyy-MM-dd";
         public const string MiddleDateFormat = "yyyy-MM-dd HH:mm";
         public const string LongDateFormat = "yyyy-MM-dd HH:mm:ss";
-        public static readonly DateTime PriceStartDate = new DateTime(2015, 1, 1);
+        public static readonly DateTime PriceStartDate = new DateTime(2014, 1, 1);
         public static readonly Dictionary<UnitEnum, string> UnitParamDic = new Dictionary<UnitEnum, string>
         {{ UnitEnum.Unit1d,"1d"},{ UnitEnum.Unit30m,"30m"},{UnitEnum.Unit60m,"60m" },{UnitEnum.Unit120m,"120m" } };
 

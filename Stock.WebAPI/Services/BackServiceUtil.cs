@@ -49,27 +49,6 @@ namespace BackgroundTasksSample.Services
             return false;
         }
 
-        public bool IsTradingTime(DateTime time)
-        {
-
-
-            if (time.DayOfWeek == DayOfWeek.Saturday || time.DayOfWeek == DayOfWeek.Sunday)
-            {
-                return false;
-            }
-            else
-            {
-
-                var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
-                if (sp >= Constants.StockStartSpan && sp <= Constants.StockEndSpan)
-                {
-                    return true;
-                }
-
-                return false;
-
-            }
-        }
 
         internal async Task JudgePullRealTimeDataAsync()
         {
@@ -88,7 +67,7 @@ namespace BackgroundTasksSample.Services
                 {
                     //交易时间执行频率由appsettings.json文件里的ShortPeriodCycle来，定义。
                     //每次执行成功后，会更新LastAriseStartDate，所以不会有太多的执行次数
-                    if (IsTradingTime(DateTime.Now))
+                    if (Utility.IsTradingTime(DateTime.Now))
                     {
 
                         EnquepullRealTimeDataTask();
@@ -189,7 +168,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se =await db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PulMarginData);
+                var se = await db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PulMarginData);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullMarginData();
@@ -197,7 +176,7 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    if (!IsTradingTime(DateTime.Now))
+                    if (Utility.IsAfterMarketEnd(DateTime.Now))
                         EnquePullMarginData();
                 }
             }
