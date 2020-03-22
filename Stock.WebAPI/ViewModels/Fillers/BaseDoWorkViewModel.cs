@@ -110,17 +110,6 @@ namespace Stock.WebAPI.ViewModels.Fillers
             }
         }
 
-        protected bool IsToday(DateTime updatedDate)
-        {
-            double nowDays = TimeSpan.FromTicks(DateTime.Now.Ticks).TotalDays;
-            double updateDays = TimeSpan.FromTicks(updatedDate.Ticks).TotalDays;
-
-            double l1 = Math.Floor(nowDays);
-            double l2 = Math.Floor(updateDays);
-
-            return l1 == l2;
-        }
-
 
         /// <summary>
         /// 获取需要处理的股票或者指数在代码,默认只处理股票

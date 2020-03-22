@@ -86,7 +86,7 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    //交易时间执行频率由appsettings.json文件里的FetchRealTimeDataCycle来，定义。
+                    //交易时间执行频率由appsettings.json文件里的ShortPeriodCycle来，定义。
                     //每次执行成功后，会更新LastAriseStartDate，所以不会有太多的执行次数
                     if (IsTradingTime(DateTime.Now))
                     {
@@ -104,7 +104,7 @@ namespace BackgroundTasksSample.Services
         /// <returns></returns>
         //private bool IsMeet(DateTime date)
         //{
-        //    int seconds = _configuration.GetValue<int>("FetchRealTimeDataCycle");
+        //    int seconds = _configuration.GetValue<int>("ShortPeriodCycle");
 
         //    TimeSpan ts = DateTime.Now - date;
         //    TimeSpan tsRequire = new TimeSpan(0, 0, seconds);

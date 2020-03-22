@@ -27,26 +27,26 @@ namespace BackgroundTasksSample.Services
             _logger.LogInformation("Timed Background Service is starting.");
             System.Diagnostics.Debug.WriteLine("Timed Background Service is starting.");
 
-            setTimerForPullBasicData();
+            setTimerForLongPeriod();
 
-            setTimerForPullRealTimeData();
+            setTimerForShortPeriod();
 
         }
 
-        private void setTimerForPullBasicData()
+        private void setTimerForLongPeriod()
         {
-            int secondsCnt = _configuration.GetValue<int>("FetchBasicInfoCycle");
+            int secondsCnt = _configuration.GetValue<int>("LongPeriodCycle");
             int delaySecond = _configuration.GetValue<int>("BackgroundServiceStartDelay");
 
-            _timer1 = new Timer(DoWork1, null, TimeSpan.FromSeconds(delaySecond),
+            _timer1 = new Timer(DoWorkForLongPeriod, null, TimeSpan.FromSeconds(delaySecond),
                 TimeSpan.FromSeconds(secondsCnt));
         }
 
-        private void setTimerForPullRealTimeData()
+        private void setTimerForShortPeriod()
         {
-            int secondsCnt = _configuration.GetValue<int>("FetchRealTimeDataCycle");
+            int secondsCnt = _configuration.GetValue<int>("ShortPeriodCycle");
             int delaySecond = secondsCnt;// _configuration.GetValue<int>("BackgroundServiceStartDelay");
-            _timer2 = new Timer(DoWork2, null, TimeSpan.FromSeconds(delaySecond),
+            _timer2 = new Timer(DoWorkForShortPeriod, null, TimeSpan.FromSeconds(delaySecond),
           TimeSpan.FromSeconds(secondsCnt));
         }
 
@@ -59,11 +59,11 @@ namespace BackgroundTasksSample.Services
                 _timer2.Change(Timeout.Infinite, Timeout.Infinite);
                 _timer2.Dispose();
 
-                setTimerForPullRealTimeData();
+                setTimerForShortPeriod();
             }
         }
 
-        private void DoWork1(object state)
+        private void DoWorkForLongPeriod(object state)
         {
             _logger.LogInformation("Timed Background Service is working. for timer1");
 
@@ -76,7 +76,7 @@ namespace BackgroundTasksSample.Services
         }
 
 
-        private void DoWork2(object state)
+        private void DoWorkForShortPeriod(object state)
         {
             _logger.LogInformation("Timed Background Service is working. for timer2");
 

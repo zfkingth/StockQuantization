@@ -34,7 +34,7 @@ namespace Stock.JQData
         public static readonly TimeSpan StockStartSpan = new TimeSpan(9, 15, 0);
 
         /// <summary>
-        /// 把交易时间延长了半小时，appsettings.json里的FetchRealTimeDataCycle 不要超过1800秒，不然有会导致取不到最后一次实时数据
+        /// 把交易时间延长了半小时，appsettings.json里的ShortPeriodCycle 不要超过1800秒，不然有会导致取不到最后一次实时数据
         /// </summary>
         public static readonly TimeSpan StockEndSpan = new TimeSpan(15, 25, 0);
 

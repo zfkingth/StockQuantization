@@ -69,51 +69,19 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         public async Task PullAll()
         {
-            await setStartDate();
+            await setStartDate(Constants.EventPullDailyData);
             System.Diagnostics.Debug.WriteLine("start pull all day data");
 
 
             base.DoWork();
 
 
-            await setFinishedDate();
+            await setFinishedDate(Constants.EventPullDailyData);
 
             System.Diagnostics.Debug.WriteLine("end pull all day data");
         }
 
-        private async Task setStartDate()
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<StockContext>();
-
-                var record = db.StockEvents.First(s => s.EventName == Constants.EventPullDailyData);
-
-                record.LastAriseStartDate = DateTime.Now;
-                record.Status = EventStatusEnum.Running;
-                await db.SaveChangesAsync();
-
-            }
-        }
-
-        private async Task setFinishedDate()
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<StockContext>();
-
-                var record = db.StockEvents.First(s => s.EventName == Constants.EventPullDailyData);
-
-                record.LastAriseEndDate = DateTime.Now;
-                record.Status = EventStatusEnum.Idle;
-                await db.SaveChangesAsync();
-
-            }
-        }
-
-
+  
 
 
 
