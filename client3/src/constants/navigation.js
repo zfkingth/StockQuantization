@@ -1,0 +1,1 @@
+export const PAGES_WITHOUT_NAVBAR = ['login','register'];
