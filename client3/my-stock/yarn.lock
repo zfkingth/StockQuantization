@@ -957,38 +957,38 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@devexpress/dx-core@2.5.1", "@devexpress/dx-core@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-2.5.1.tgz#c65f81e73c4572f1a2907514a9e22c398b955553"
-  integrity sha512-cZ2SIhuG6k6LGugUooH4O9vmHtAUMrvYUH5zxUNWR5KkmqexP9UQFD0wzYZVYynCzH0sFeexkc55CvVPVxThIA==
+"@devexpress/dx-core@2.6.0", "@devexpress/dx-core@^2.5.1":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-2.6.0.tgz#90b55d0a7d141694e5d8a22dd3e23ef73d45cce8"
+  integrity sha512-QnZCEF05IxRSizHYrsZXea85pzbVFjIfxf9EUqksqTd7goc4wOOMvT8ImTlIYOjyQntbGGeDgQOV31nOXrxAnQ==
 
-"@devexpress/dx-grid-core@2.5.1", "@devexpress/dx-grid-core@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-grid-core/-/dx-grid-core-2.5.1.tgz#4727efe85d101be60473ed3d06d3a860ce988fe1"
-  integrity sha512-ELuHRfzYsS6OscQ/60ZwSpgkwkZHcwo4JSjpGOPFknfLVLG6UT94Oz+zBiZ5hLI9SqddcIw9aBm4b9ylApLNmQ==
+"@devexpress/dx-grid-core@2.6.0", "@devexpress/dx-grid-core@^2.5.1":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-grid-core/-/dx-grid-core-2.6.0.tgz#b2731da007ab020670d8d76adc8471aef66692e9"
+  integrity sha512-9JMpKvqyyLyMo7qfyLg0h1wuZLQYheepFlZAq+j5h6dZs+wCl0i9fx6N/rMZttmbRva5vPfcghCU17Cu/VQQdA==
 
 "@devexpress/dx-react-core@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-2.5.1.tgz#cda66065696300f1146717fe9244aaa7d2c05f25"
-  integrity sha512-pTkW29LveXIXGva8pLdU5gkRQ5AU5C5TyBsA7Daao9odYdPnPkdkBvkkl/JvrfCnll8tjrITy6+009/PPY6i+w==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-2.6.0.tgz#12e991ae2282f72ae97a7d94cd8508f390f26a94"
+  integrity sha512-Cw7uCmViqopmsvyhznI6W2VYji1F19qWJm18v0aCyYgK+WDhemoUbWYLEB3CZrbUJpIwZPUU/MEPPpvRUSIASw==
   dependencies:
-    "@devexpress/dx-core" "2.5.1"
+    "@devexpress/dx-core" "2.6.0"
     prop-types "^15.7.2"
 
 "@devexpress/dx-react-grid-material-ui@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid-material-ui/-/dx-react-grid-material-ui-2.5.1.tgz#1f752444a6aeb16d157176218b056387b778c348"
-  integrity sha512-BxZZmmf1ki4J/tlaYLeCAhl3mPscoGxj1hlFO6BgNLIjpJxK0avcbM49upowXBPph7IMwZB+YDCRWTjEQxGWrw==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid-material-ui/-/dx-react-grid-material-ui-2.6.0.tgz#2ea302ab786aed9e9a0451b3d2e8fe4f67951a89"
+  integrity sha512-BfzKHuzNW71xa2t/7ceY9fXJ9VbRDoYf8LrDpJ8pfBa6TUCrSnYRvcqoBd7E+sytNZprCjmBkGbb5iNz8yXdzw==
   dependencies:
     clsx "^1.0.4"
     prop-types "^15.7.2"
 
 "@devexpress/dx-react-grid@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid/-/dx-react-grid-2.5.1.tgz#f7b4b735a3515b0b4ea28d68ce54eca1b055dad3"
-  integrity sha512-sfkxXhx1kmtn++QAG17oyrXbkMvMThVDpfpomkFwJW7ZXd7zMCdg++qrvdunDx+T6gne6GDxg1ds10aIF/Rf6w==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid/-/dx-react-grid-2.6.0.tgz#f9f37df91e127b99adc79f39aae6281a17a13273"
+  integrity sha512-nUzxybMJH//DB1Q6LmNNg+zWrjdV9I8cSpUfUJJ9Hz5ZDMUfUe4twD4ESSyV0JXi9mO4DwjzbYZTDQ5v2G6XxA==
   dependencies:
-    "@devexpress/dx-grid-core" "2.5.1"
+    "@devexpress/dx-grid-core" "2.6.0"
 
 "@emotion/hash@^0.8.0":
   version "0.8.0"
@@ -1613,9 +1613,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "12.12.31"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.31.tgz#d6b4f9645fee17f11319b508fb1001797425da51"
-  integrity sha512-T+wnJno8uh27G9c+1T+a1/WYCHzLeDqtsGJkoEdSp2X8RTh3oOCZQcUnjAx90CS8cmmADX51O0FI/tu9s0yssg==
+  version "13.9.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.5.tgz#59738bf30b31aea1faa2df7f4a5f55613750cf00"
+  integrity sha512-hkzMMD3xu6BrJpGVLeQ3htQQNAcOrJjX7WFmtK8zWQpz2UJf13LCFF2ALA7c9OVdvc2vQJeDdjfR35M0sBCxvw==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -1640,9 +1640,9 @@
     "@types/react" "*"
 
 "@types/react-native@*":
-  version "0.61.23"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.61.23.tgz#bff4e0311c229a5203eb37aacd4febf59f3e2980"
-  integrity sha512-upHmySsrVBDBokWWhYIKkKnpvadsHdioSjbBTu4xl7fjN0yb94KR5ngUOBXsyqAYqQzF+hP6qpvobG9M7Jr6hw==
+  version "0.62.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.0.tgz#d3e69ea279cd3452616933672dcaa389ca1fb15a"
+  integrity sha512-EOuX8I9XGeVOl9f9wvSGF97dwi8sOhj6fsXUsvyG3H+QW3FlOIeKwSsFyJF8KrdCOQf6idECtDRK6+AHgWKs+w==
   dependencies:
     "@types/react" "*"
 
@@ -4033,9 +4033,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.380:
-  version "1.3.387"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.387.tgz#420677629c9791b5d36fc8847c8cc11c0934a6cb"
-  integrity sha512-jjQ6WkxrOu0rtGqY9/74Z+UEVQ7YmJU2rCX6kH4eidKP0ZK0VKB3/i1avXQ+EDwJAABKGaOAbJrcyz18P8E3aA==
+  version "1.3.388"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.388.tgz#d3be2b7afc42c64c81f204755975b78547775301"
+  integrity sha512-/FNHDmNmI4IR/qY+uuAVq8OET5S9J7d5QfQUnAz0edkhl02BjtOflF2H0RXKapVtJfMgaFthKBzeYJAzOaW8PA==
 
 elliptic@^6.0.0:
   version "6.5.2"
@@ -5274,9 +5274,9 @@ html-entities@^1.2.1:
   integrity sha1-DfKTUfByEWNRXfueVUPl9u7VFi8=
 
 html-escaper@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.1.tgz#beed86b5d2b921e92533aa11bce6d8e3b583dee7"
-  integrity sha512-hNX23TjWwD3q56HpWjUHOKj1+4KKlnjv9PcmBUYKVpga+2cnb9nDx/B1o0yO4n+RZXZdiNxzx6B24C9aNMTkkQ==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.2.tgz#dfd60027da36a36dfcbe236262c00a5822681453"
+  integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
 html-minifier-terser@^5.0.1:
   version "5.0.5"
