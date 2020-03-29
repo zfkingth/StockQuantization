@@ -45,10 +45,12 @@ const createOption = stockData => {
 
 
     let stockOptions = {
+
         chart: {
             // height: (9 / 16 * 100) + '%' // 16:9 ratio
-            height: '40%' // 16:9 ratio
+            height: 900 // 16:9 ratio
         },
+
 
         rangeSelector: {
             selected: 1,
@@ -58,7 +60,6 @@ const createOption = stockData => {
             text: '平安银行历史股价'
         },
         xAxis: {
-            type: 'logarithmic',
             dateTimeLabelFormats: {
                 millisecond: '%H:%M:%S.%L',
                 second: '%H:%M:%S',
@@ -135,15 +136,14 @@ const createOption = stockData => {
 
 
 
-class HighStockDemo extends React.Component {
+class HighStockDemo extends React.PureComponent {
     render() {
         return (
-
-            <HighchartsReact 
-                highcharts={Highcharts}
-                constructorType={'stockChart'}
-                options={createOption(pinganData)}
-            />
+                <HighchartsReact
+                    highcharts={Highcharts}
+                    constructorType={'stockChart'}
+                    options={createOption(pinganData)}
+                />
         );
     }
 }
