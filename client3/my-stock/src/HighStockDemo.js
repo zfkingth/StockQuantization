@@ -45,6 +45,10 @@ const createOption = stockData => {
 
 
     let stockOptions = {
+        chart: {
+            // height: (9 / 16 * 100) + '%' // 16:9 ratio
+            height: '40%' // 16:9 ratio
+        },
 
         rangeSelector: {
             selected: 1,
@@ -79,7 +83,7 @@ const createOption = stockData => {
             title: {
                 text: '股价'
             },
-            height: '85%',
+            height: '90%',
             resize: {
                 enabled: true
             },
@@ -92,8 +96,8 @@ const createOption = stockData => {
             title: {
                 text: '成交量'
             },
-            top: '85%',
-            height: '15%',
+            top: '90%',
+            height: '10%',
             offset: 0,
             lineWidth: 2
         }],
@@ -135,7 +139,7 @@ class HighStockDemo extends React.Component {
     render() {
         return (
 
-            <HighchartsReact
+            <HighchartsReact 
                 highcharts={Highcharts}
                 constructorType={'stockChart'}
                 options={createOption(pinganData)}
