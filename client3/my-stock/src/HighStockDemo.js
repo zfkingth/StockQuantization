@@ -17,6 +17,9 @@ import pinganData from './pinganData'
 
 const createOption = stockData => {
     let data = stockData.data;
+    const maset = [5, 20, 60];
+    let ma = [];
+
     let ohlc = [],
         volume = [],
         dataLength = data.length,
@@ -27,9 +30,9 @@ const createOption = stockData => {
         ], [
             'month',
             [1, 2, 3, 4, 6]
-        ]],
-        i = 0;
-    for (i; i < dataLength; i += 1) {
+        ]];
+
+    for (let i = 0; i < dataLength; i += 1) {
         ohlc.push([
             data[i][0], // the date
             data[i][1], // open
@@ -41,6 +44,26 @@ const createOption = stockData => {
             data[i][0], // the date
             data[i][5] // the volume
         ]);
+
+        for (let index = 0; index < maset.length; index++) {
+
+            let value = maset[index];
+            if (typeof ma['ma' + value] == "undefined") {
+                ma['ma' + value] = [];
+            }
+            if (typeof ma[value + 'total'] == "undefined") {
+                ma[value + 'total'] = 0;
+            }
+            if (i < value) {
+                ma[value + 'total'] += data[i][4];
+                ma['ma' + value].push([data[i][0], null]);
+            } else {
+                ma[value + 'total'] += (data[i][4] - data[i - value][4]);
+                ma['ma' + value].push([data[i][0], ma[value + 'total'] / value]);
+            }
+
+
+        }
     }
 
 
@@ -120,6 +143,15 @@ const createOption = stockData => {
             },
             id: 'sz'
         }, {
+            type: 'line',
+            name: 'ma5',
+            data: ma['ma5'],
+            color: "green",
+            yAxis: 0
+
+        },
+
+        {
             type: 'column',
             data: volume,
             yAxis: 1,
@@ -139,11 +171,11 @@ const createOption = stockData => {
 class HighStockDemo extends React.PureComponent {
     render() {
         return (
-                <HighchartsReact
-                    highcharts={Highcharts}
-                    constructorType={'stockChart'}
-                    options={createOption(pinganData)}
-                />
+            <HighchartsReact
+                highcharts={Highcharts}
+                constructorType={'stockChart'}
+                options={createOption(pinganData)}
+            />
         );
     }
 }
