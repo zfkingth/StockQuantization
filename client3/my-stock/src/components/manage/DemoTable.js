@@ -31,9 +31,9 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
     lookupEditCell: {
-        paddingTop: theme.spacing.unit * 0.875,
-        paddingRight: theme.spacing.unit,
-        paddingLeft: theme.spacing.unit,
+        paddingTop: theme.spacing(0.875),
+        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
     },
     dialog: {
         width: 'calc(100% - 16px)',
@@ -70,19 +70,19 @@ const DeleteButton = ({ onExecute }) => (
         }}
         title="Delete row"
     >
-       Delete
+        Delete
     </Button>
 );
 
 const CommitButton = ({ onExecute }) => (
     <Button onClick={onExecute} title="Save changes">
-      Save
+        Save
     </Button>
 );
 
 const CancelButton = ({ onExecute }) => (
     <Button color="secondary" onClick={onExecute} title="Cancel changes">
-       Cancel
+        Cancel
     </Button>
 );
 
@@ -131,7 +131,7 @@ const LookupEditCellBase = ({
 export const LookupEditCell = withStyles(styles, { name: 'ControlledModeDemo' })(LookupEditCellBase);
 
 const Cell = (props) => {
-  
+
     return <Table.Cell {...props} />;
 };
 
