@@ -20,8 +20,8 @@ const authSaga = (url, thanGoTo) =>
     }
   }
 
-export const submitLogin = authSaga(LOGIN, 'filterCloseBreak');
-export const submitRegister = authSaga(REGISTER, 'filterCloseBreak');
+export const submitLogin = authSaga(LOGIN, 'mainIndex');
+export const submitRegister = authSaga(REGISTER, 'mainIndex');
 
 
 

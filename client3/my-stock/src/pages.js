@@ -16,6 +16,8 @@ export { default as errorPage } from './components/ErrorPage'
 export { default as manage } from './components/manage'
 export { default as systemStatus } from './components/manage/SystemStatus'
 export { default as systemInfo } from './components/About'
+// default page
+export { default as mainIndex } from './components/MyIndex'
 
 
 const filterUpwardGap = () => { return stockTemplate(FormUpwardGap); };
@@ -23,7 +25,6 @@ export { filterUpwardGap };
 
 
 
-// default page
 const filterCloseBreak = () => { return stockTemplate(FormCloseBreakSearcher); };
 export { filterCloseBreak  };
 

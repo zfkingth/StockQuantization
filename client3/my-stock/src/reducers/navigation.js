@@ -26,6 +26,6 @@ export default _ =>
     },
     getDefaultState(process.env.REACT_APP_MOCK
       ? undefined
-      : loggedIn() ? 'filterCloseBreak' : 'login'
+      : loggedIn() ? 'mainIndex' : 'login'
     )
   )
