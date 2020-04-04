@@ -39,9 +39,7 @@ class MainLayout extends React.Component {
           <NavMenu />
         }
         <Page></Page>
-        <BeianDiv>
-          <p><a href="http://www.beian.miit.gov.cn" target="_blank" rel="noopener noreferrer">蜀ICP备19018884号</a>  Copyright © 2019 Zhang Feng All Rights Reserved</p>
-        </BeianDiv>
+
       </Layout>
     )
   }

@@ -10,7 +10,7 @@ const MulRowsWrap = styled.div`
   flex-direction:column;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
 `
 
 

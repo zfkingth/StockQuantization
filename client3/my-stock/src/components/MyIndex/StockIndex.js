@@ -1,6 +1,7 @@
 
 
 import React from 'react';
+import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -59,7 +60,8 @@ const createOption = stockData => {
                 ma['ma' + value].push([data[i][0], null]);
             } else {
                 ma[value + 'total'] += (data[i][4] - data[i - value][4]);
-                ma['ma' + value].push([data[i][0], ma[value + 'total'] / value]);
+                let average = (ma[value + 'total'] / value);
+                ma['ma' + value].push([data[i][0], _.round(average, 2)]);
             }
 
 
@@ -71,7 +73,7 @@ const createOption = stockData => {
 
         chart: {
             // height: (9 / 16 * 100) + '%' // 16:9 ratio
-            height: 900 // 16:9 ratio
+            height: (9 / 16 * 100) + '%'  // 16:9 ratio
         },
 
 
@@ -144,15 +146,32 @@ const createOption = stockData => {
             id: 'sz'
         }, {
             type: 'line',
-            name: 'ma5',
+            name: '5日线',
             data: ma['ma5'],
             color: "green",
+            yAxis: 0
+
+        },
+        {
+            type: 'line',
+            name: '20日线',
+            data: ma['ma20'],
+            color: "blue",
+            yAxis: 0
+
+        },
+        {
+            type: 'line',
+            name: '60日线',
+            data: ma['ma60'],
+            color: "red",
             yAxis: 0
 
         },
 
         {
             type: 'column',
+            name: '成交量',
             data: volume,
             yAxis: 1,
             dataGrouping: {
