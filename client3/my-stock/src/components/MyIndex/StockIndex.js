@@ -168,7 +168,7 @@ const createOption = stockData => {
 
 
 
-class HighStockDemo extends React.PureComponent {
+class StockIndex extends React.PureComponent {
     render() {
         return (
             <HighchartsReact
@@ -179,4 +179,4 @@ class HighStockDemo extends React.PureComponent {
         );
     }
 }
-export default HighStockDemo;
+export default StockIndex;

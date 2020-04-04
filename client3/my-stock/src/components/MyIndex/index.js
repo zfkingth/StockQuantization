@@ -3,7 +3,7 @@ import React from "react";
 
 import styled from 'styled-components'
 
-
+import StockIndex from './StockIndex'
 
 const MulRowsWrap = styled.div`
  
@@ -19,8 +19,7 @@ export default class tempcontrol extends React.PureComponent {
   render() {
     return (
       <MulRowsWrap>
-        <p>指标主页面</p>
-
+        <StockIndex />
       </MulRowsWrap >
     )
   }
