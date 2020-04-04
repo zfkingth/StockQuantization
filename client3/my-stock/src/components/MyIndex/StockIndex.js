@@ -23,15 +23,8 @@ const createOption = stockData => {
 
     let ohlc = [],
         volume = [],
-        dataLength = data.length,
+        dataLength = data.length;
         // set the allowed units for data grouping
-        groupingUnits = [[
-            'week',                         // unit name
-            [1]                             // allowed multiples
-        ], [
-            'month',
-            [1, 2, 3, 4, 6]
-        ]];
 
     for (let i = 0; i < dataLength; i += 1) {
         ohlc.push([
@@ -75,8 +68,6 @@ const createOption = stockData => {
             // height: (9 / 16 * 100) + '%' // 16:9 ratio
             height: (9 / 16 * 100) + '%'  // 16:9 ratio
         },
-
-
         rangeSelector: {
             selected: 1,
             inputDateFormat: '%Y-%m-%d'
@@ -97,8 +88,13 @@ const createOption = stockData => {
             }
         },
         tooltip: {
-            split: false,
             shared: true,
+			crosshairs: true,
+            split: false,
+			// 时间格式化字符
+			dateTimeLabelFormats: {
+				day: '%Y-%m-%d'
+			}
         },
         yAxis: [{
             type: 'logarithmic',
@@ -134,16 +130,13 @@ const createOption = stockData => {
             lineColor: 'green',
             upColor: 'red',
             upLineColor: 'red',
-            tooltip: {
-            },
+
             navigatorOptions: {
                 color: Highcharts.getOptions().colors[0]
             },
             data: ohlc,
-            dataGrouping: {
-                units: groupingUnits
-            },
-            id: 'sz'
+        
+         
         }, {
             type: 'line',
             name: '5日线',
@@ -174,9 +167,7 @@ const createOption = stockData => {
             name: '成交量',
             data: volume,
             yAxis: 1,
-            dataGrouping: {
-                units: groupingUnits
-            }
+           
         }]
 
 
