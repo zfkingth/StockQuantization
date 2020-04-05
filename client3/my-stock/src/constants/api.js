@@ -16,6 +16,11 @@ export const NRISEOPEN = `${SEARCH}NRiseOpen`
 export const VOLUMEDECREASE = `${SEARCH}VolumeDecrease`
 export const VOLUMEBREAK = `${SEARCH}VolumeBreak`
 
+//获取数据api
+
+const VALUES = `${BACKEND}Values/`
+export const GETVALUES = id=> `${VALUES}${id}`
+
 
 
 const MANAGE = `${BACKEND}system/`

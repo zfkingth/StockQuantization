@@ -38,13 +38,13 @@ export default class tempcontrol extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.getDataAsync();
 
 
   }
 
 
-  fetchData = async function () {
+  getDataAsync = async function () {
     try {
       const data = await fetchData(get, URL.GETSYSTEMINFO);
       console.log("received data is : " + data);
