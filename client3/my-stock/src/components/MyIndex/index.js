@@ -12,7 +12,6 @@ import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
-import testData from './MyData'
 
 const MulRowsWrap = styled.div`
  
@@ -211,7 +210,7 @@ export default class tempcontrol extends React.PureComponent {
   }
 
   componentDidMount() {
-    // this.getDataAsync('399006.XSHE');
+    this.getDataAsync('399006.XSHE');
 
 
   }
@@ -234,19 +233,29 @@ export default class tempcontrol extends React.PureComponent {
   }
 
 
-
+  
   render() {
-    return (
+    return this.state.error ?
+      (
+        <StyleError>错误：{this.state.error}</StyleError>
+      ) :
+      this.state.received ? (
 
-      <MulRowsWrap>
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={'stockChart'}
-          options={createOption(testData)}
-        />
-      </MulRowsWrap>
+        <MulRowsWrap>
+          <HighchartsReact
+            highcharts={Highcharts}
+            constructorType={'stockChart'}
+            options={this.state.options}
+          />
+        </MulRowsWrap>
+      ) :
+        (
+          <Loading>
+            <CircularProgress />
+          </Loading>
+        )
 
-    )
   }
+
 }
 
