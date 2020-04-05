@@ -35,6 +35,7 @@ color:red;
 
 
 const createOption = stockData => {
+ 
   let data = stockData;
   const maset = [5, 20, 60];
   let ma = [];
@@ -46,7 +47,7 @@ const createOption = stockData => {
 
   for (let i = 0; i < dataLength; i += 1) {
     let price = data[i];
-    let currentDate=new Date(price.date).getTime();
+    let currentDate=new Date(price.date).getTime()+8*3600*1000;
     ohlc.push([
       currentDate,
       price.open,
