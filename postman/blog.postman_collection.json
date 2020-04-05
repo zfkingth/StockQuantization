@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "e3e28808-25b6-4cc0-a0d2-cef472543e20",
-		"name": "blog",
+		"_postman_id": "ff13f7b7-7859-49fb-9e40-c7b0a27bb34b",
+		"name": "stock webapi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -44,12 +44,12 @@
 					"raw": "{\n\t\"email\":\"hammergo@163.com\",\n\t\"password\":\"dragon\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/Auth/login",
+					"raw": "http://localhost:53791/api/Auth/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "53791",
 					"path": [
 						"api",
 						"Auth",
@@ -86,12 +86,12 @@
 					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/search/UpwardGap",
+					"raw": "http://localhost:53791/api/search/UpwardGap",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "53791",
 					"path": [
 						"api",
 						"search",
@@ -102,7 +102,52 @@
 			"response": []
 		},
 		{
-			"name": "send pull all stock names request",
+			"name": "test get values",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/Values/399006.XSHE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"Values",
+						"399006.XSHE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pull day data task",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -128,16 +173,58 @@
 					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/search/UpwardGap",
+					"raw": "http://localhost:53791/api/search/UpwardGap",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "53791",
 					"path": [
 						"api",
 						"search",
 						"UpwardGap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pull all stock names task",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/Tasks/pullAllStockNames",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"Tasks",
+						"pullAllStockNames"
 					]
 				}
 			},
@@ -170,12 +257,12 @@
 					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:49713/api/tasks/pullF10",
+					"raw": "http://localhost:53791/api/tasks/pullF10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "49713",
+					"port": "53791",
 					"path": [
 						"api",
 						"tasks",
@@ -212,16 +299,112 @@
 					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:49713/api/tasks/pullDayData",
+					"raw": "http://localhost:53791/api/tasks/pullDayData",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "49713",
+					"port": "53791",
 					"path": [
 						"api",
 						"tasks",
 						"pullDayData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send pull margin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/pullDayData",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"pullDayData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb285e1e-a247-4598-be87-bebdd946a9b5",
+						"exec": [
+							"var data =pm.response.json();\r",
+							"console.log(data);\r",
+							"if (data.token) {  \r",
+							"      tests[\"Body has token\"] = true;  \r",
+							"\r",
+							"   \r",
+							"     pm.environment.set(\"access_token\", data.token);  \r",
+							"}  \r",
+							"else {  \r",
+							"  tests[\"Body has token\"] = false;  \r",
+							"} "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"hammer\",\n\t\"email\":\"hammergo@163.com\",\n\t\"password\":\"dragon\"\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/Auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"Auth",
+						"register"
 					]
 				}
 			},

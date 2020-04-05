@@ -14,7 +14,7 @@ using Stock.Data;
 using Stock.JQData;
 using Stock.Model;
 
-namespace Blog.API.Controllers
+namespace Stock.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
