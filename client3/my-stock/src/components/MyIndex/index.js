@@ -77,14 +77,16 @@ const prepareHistoryData = (historyData) => {
   for (let i = 0; i < historyData.length; i += 1) {
     let price = historyData[i];
     let currentDate = new Date(price.date).getTime() + shicha;
-    ohlc.push([
-      currentDate,
-      price.open,
-      price.high,
-      price.low,
-      price.close,
+    ohlc.push({
+      x: currentDate,
 
-    ]);
+      open: price.open,
+      high: price.high,
+      low: price.low,
+      close: price.close,
+      preclose: price.preclose,
+
+    });
     money.push([
       currentDate,
       _.round(price.money / 10 ** 8, 2)
@@ -159,8 +161,16 @@ const createOption = (stockInfo, historyData, marginData) => {
       // 时间格式化字符
       dateTimeLabelFormats: {
         day: '%Y-%m-%d'
-      }
+      },
+
+      formatter: function () {
+        return this.points.reduce(function (s, point) {
+          return s + '<br/>' + point.series.name + ': ' +
+            point.y;
+        }, '<b>' + this.x + '</b>');
+      },
     },
+
     yAxis: [{
       type: 'logarithmic',
       labels: {
@@ -188,7 +198,6 @@ const createOption = (stockInfo, historyData, marginData) => {
       offset: 0,
       lineWidth: 2
     }, {
-      type: 'logarithmic',
       labels: {
         align: 'right',
         x: -3
@@ -204,6 +213,7 @@ const createOption = (stockInfo, historyData, marginData) => {
     ],
     series: [{
       type: 'candlestick',
+      turboThreshold: 10000,
       name: stockInfo.displayname,
       color: 'green',
       lineColor: 'green',
