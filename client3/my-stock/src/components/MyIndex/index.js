@@ -32,21 +32,41 @@ color:red;
 `
 
 
+const shicha = 8 * 3600 * 1000;
 
-const createOption = stockData => {
 
-  let data = stockData;
-  const maset = [5, 20, 60];
-  let ma = [];
+function handleMarginData(marginArray) {
+  let myMap = new Map();
+  for (let i = 0; i < marginArray.length; i += 1) {
+    let item = marginArray[i];
+    let currentDate = new Date(item.date).getTime() + shicha;
+    let val = myMap.get(currentDate);
+    if (!val) {
+      val = 0;
+    }
+    val += item.finValue;
+    myMap.set(currentDate, val);
+  }
+  let marginForChart = [];
+  for (let [key, val] of myMap) {
+    marginForChart.push([
+      key,
+      _.round(val / 10 ** 8, 2)
+    ]);
+  }
 
-  let ohlc = [],
-    volume = [],
-    dataLength = data.length;
-  // set the allowed units for data grouping
+  return marginForChart;
+}
 
-  for (let i = 0; i < dataLength; i += 1) {
-    let price = data[i];
-    let currentDate = new Date(price.date).getTime() + 8 * 3600 * 1000;
+
+const maset = [5, 20, 60];
+const prepareHistoryData = (historyData) => {
+
+
+  let ma = [], ohlc = [], volume = [];
+  for (let i = 0; i < historyData.length; i += 1) {
+    let price = historyData[i];
+    let currentDate = new Date(price.date).getTime() + shicha;
     ohlc.push([
       currentDate,
       price.open,
@@ -71,10 +91,10 @@ const createOption = stockData => {
         ma[maNum + 'total'] = 0;
       }
       if (i < maNum) {
-        ma[maNum + 'total'] += data[i].close;
+        ma[maNum + 'total'] += historyData[i].close;
         ma['ma' + maNum].push([currentDate, null]);
       } else {
-        ma[maNum + 'total'] += (data[i].close - data[i - maNum].close);
+        ma[maNum + 'total'] += (historyData[i].close - historyData[i - maNum].close);
         let average = (ma[maNum + 'total'] / maNum);
         ma['ma' + maNum].push([currentDate, _.round(average, 2)]);
       }
@@ -82,6 +102,20 @@ const createOption = stockData => {
 
     }
   }
+  return { ohlc, volume, ma };
+}
+
+
+const createOption = (stockInfo, historyData, marginData) => {
+
+
+
+  let marginForChart = handleMarginData(marginData);
+
+  let rt = prepareHistoryData(historyData);
+  let ohlc = rt.ohlc, volume = rt.volume, ma = rt.ma;
+  // set the allowed units for data grouping
+
 
 
   let stockOptions = {
@@ -95,7 +129,7 @@ const createOption = stockData => {
       inputDateFormat: '%Y-%m-%d'
     },
     title: {
-      text: '创业板指数'
+      text: stockInfo.displayname
     },
     xAxis: {
       dateTimeLabelFormats: {
@@ -147,7 +181,7 @@ const createOption = stockData => {
     }],
     series: [{
       type: 'candlestick',
-      name: data[0].code,
+      name: stockInfo.displayname,
       color: 'green',
       lineColor: 'green',
       upColor: 'red',
@@ -218,12 +252,14 @@ export default class tempcontrol extends React.PureComponent {
 
   getDataAsync = async function (stockId) {
     try {
+      //不能更改这个顺序，是通过索引使用
+      const p0 = fetchData(get, URL.GETSTOCK(stockId));
       const p1 = fetchData(get, URL.GETVALUES(stockId));
-      const p2 = fetchData(get, URL.GETSTOCK(stockId));
+      const p2 = fetchData(get, URL.GETMARGIN);
 
-      const pd = await Promise.all([p1, p2]);
+      const result = await Promise.all([p0, p1, p2]);
 
-      let opt = createOption(pd[0]);
+      let opt = createOption(result[0], result[1], result[2]);
 
 
       this.setState({ received: true, options: opt });
@@ -261,4 +297,3 @@ export default class tempcontrol extends React.PureComponent {
   }
 
 }
-

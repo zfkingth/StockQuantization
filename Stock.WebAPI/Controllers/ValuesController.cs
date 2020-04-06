@@ -53,7 +53,7 @@ namespace Stock.WebAPI.Controllers
         }
 
         [HttpGet("GetStock")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> GetStock(string id)
+        public async Task<ActionResult<Stock.Model.Securities>> GetStock(string id)
         {
             var item = await (from i in _db.SecuritiesSet
                               where i.Code == id
@@ -65,8 +65,23 @@ namespace Stock.WebAPI.Controllers
             return Ok(item);
         }
 
- ///////////
- 
+
+
+        [HttpGet("GetMargin")]
+        public async Task<ActionResult<List<Stock.Model.Price>>> GetMargin()
+        {
+            //var item = await (from i in _db.MarginTotal
+            //                  group new { i.Date, i.FinValue } by i.Date into gp
+            //                  orderby gp.Key ascending
+            //                  select gp
+            //                 ).ToListAsync();
+            var item = await (from i in _db.MarginTotal
+                              select new { i.Date, i.FinValue }
+            ).ToListAsync();
+
+            return Ok(item);
+        }
+
 
         // POST api/<controller>
         [HttpPost]

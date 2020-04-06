@@ -21,6 +21,7 @@ export const VOLUMEBREAK = `${SEARCH}VolumeBreak`
 const VALUES = `${BACKEND}Values/`
 export const GETVALUES = id=> `${VALUES}${id}`
 export const GETSTOCK = id=> `${VALUES}GetStock?id=${id}`
+export const GETMARGIN = `${VALUES}GetMargin`
 
 
 
