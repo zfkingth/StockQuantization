@@ -165,8 +165,23 @@ const createOption = (stockInfo, historyData, marginData) => {
 
       formatter: function () {
         return this.points.reduce(function (s, point) {
-          return s + '<br/>' + point.series.name + ': ' +
-            point.y;
+
+          let con = point.series.name + ': ' + point.y;
+          if (point.series.type === 'candlestick') {
+            const ppt = point.point.options;
+            const zhangdiefu = _.round((ppt.close - ppt.preclose) / ppt.preclose * 100, 2);
+            con = ''
+              + '涨幅：' + zhangdiefu + '%<br/>'
+              + '开盘：' + ppt.open + '<br/>'
+              + "最低：" + ppt.low + '<br/>'
+              + "最高：" + ppt.high + '<br/>'
+              + "收盘：" + ppt.close + '<br/>'
+              ;
+          }
+
+          const rt = s + '<br/>' + con;
+
+          return rt;
         }, '<b>' + this.x + '</b>');
       },
     },
