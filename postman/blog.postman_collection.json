@@ -147,6 +147,51 @@
 			"response": []
 		},
 		{
+			"name": "test get get stock",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/Values/399006.XSHE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"Values",
+						"399006.XSHE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "pull day data task",
 			"request": {
 				"auth": {

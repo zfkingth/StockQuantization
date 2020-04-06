@@ -34,7 +34,7 @@ color:red;
 
 
 const createOption = stockData => {
- 
+
   let data = stockData;
   const maset = [5, 20, 60];
   let ma = [];
@@ -46,7 +46,7 @@ const createOption = stockData => {
 
   for (let i = 0; i < dataLength; i += 1) {
     let price = data[i];
-    let currentDate=new Date(price.date).getTime()+8*3600*1000;
+    let currentDate = new Date(price.date).getTime() + 8 * 3600 * 1000;
     ohlc.push([
       currentDate,
       price.open,
@@ -218,9 +218,12 @@ export default class tempcontrol extends React.PureComponent {
 
   getDataAsync = async function (stockId) {
     try {
-      const data = await fetchData(get, URL.GETVALUES(stockId));
+      const p1 = fetchData(get, URL.GETVALUES(stockId));
+      const p2 = fetchData(get, URL.GETSTOCK(stockId));
 
-      let opt = createOption(data);
+      const pd = await Promise.all([p1, p2]);
+
+      let opt = createOption(pd[0]);
 
 
       this.setState({ received: true, options: opt });
@@ -233,7 +236,7 @@ export default class tempcontrol extends React.PureComponent {
   }
 
 
-  
+
   render() {
     return this.state.error ?
       (

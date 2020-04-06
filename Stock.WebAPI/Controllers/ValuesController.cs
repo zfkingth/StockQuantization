@@ -52,6 +52,22 @@ namespace Stock.WebAPI.Controllers
             return Ok(list);
         }
 
+        [HttpGet("GetStock")]
+        public async Task<ActionResult<List<Stock.Model.Price>>> GetStock(string id)
+        {
+            var item = await (from i in _db.SecuritiesSet
+                              where i.Code == id
+                              select i
+                             )
+                           .FirstOrDefaultAsync();
+
+
+            return Ok(item);
+        }
+
+ ///////////
+ 
+
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]string value)
