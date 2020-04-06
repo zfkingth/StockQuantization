@@ -37,7 +37,7 @@ const shicha = 8 * 3600 * 1000;
 
 function handleMarginData(marginArray) {
   let myMap = new Map();
-  for (let i = 0; i < marginArray.length; i += 1) {
+  for (let i = 0; i < marginArray.length; i++) {
     let item = marginArray[i];
     let currentDate = new Date(item.date).getTime() + shicha;
     let val = myMap.get(currentDate);
@@ -48,12 +48,22 @@ function handleMarginData(marginArray) {
     myMap.set(currentDate, val);
   }
   let marginForChart = [];
-  for (let [key, val] of myMap) {
-    marginForChart.push([
-      key,
-      _.round(val / 10 ** 8, 2)
-    ]);
+
+  let preVal = undefined;
+  for (const [key, val] of myMap) {
+    if (preVal !== undefined) {
+      let change = val - preVal;
+
+      marginForChart.push([
+        key,
+        _.round(change / 10 ** 8, 2)
+      ]);
+
+
+    }
+    preVal = val;
   }
+
 
   return marginForChart;
 }
@@ -63,7 +73,7 @@ const maset = [5, 20, 60];
 const prepareHistoryData = (historyData) => {
 
 
-  let ma = [], ohlc = [], volume = [];
+  let ma = [], ohlc = [], money = [];
   for (let i = 0; i < historyData.length; i += 1) {
     let price = historyData[i];
     let currentDate = new Date(price.date).getTime() + shicha;
@@ -75,10 +85,9 @@ const prepareHistoryData = (historyData) => {
       price.close,
 
     ]);
-    volume.push([
+    money.push([
       currentDate,
-      price.volume
-
+      _.round(price.money / 10 ** 8, 2)
     ]);
 
     for (let index = 0; index < maset.length; index++) {
@@ -102,7 +111,7 @@ const prepareHistoryData = (historyData) => {
 
     }
   }
-  return { ohlc, volume, ma };
+  return { ohlc, money, ma };
 }
 
 
@@ -113,7 +122,7 @@ const createOption = (stockInfo, historyData, marginData) => {
   let marginForChart = handleMarginData(marginData);
 
   let rt = prepareHistoryData(historyData);
-  let ohlc = rt.ohlc, volume = rt.volume, ma = rt.ma;
+  let ohlc = rt.ohlc, money = rt.money, ma = rt.ma;
   // set the allowed units for data grouping
 
 
@@ -161,7 +170,7 @@ const createOption = (stockInfo, historyData, marginData) => {
       title: {
         text: '股价'
       },
-      height: '90%',
+      height: '80%',
       resize: {
         enabled: true
       },
@@ -172,13 +181,27 @@ const createOption = (stockInfo, historyData, marginData) => {
         x: -3
       },
       title: {
-        text: '成交量'
+        text: '成交额'
+      },
+      top: '80%',
+      height: '10%',
+      offset: 0,
+      lineWidth: 2
+    }, {
+      type: 'logarithmic',
+      labels: {
+        align: 'right',
+        x: -3
+      },
+      title: {
+        text: '融资'
       },
       top: '90%',
       height: '10%',
       offset: 0,
       lineWidth: 2
-    }],
+    }
+    ],
     series: [{
       type: 'candlestick',
       name: stockInfo.displayname,
@@ -220,11 +243,21 @@ const createOption = (stockInfo, historyData, marginData) => {
 
     {
       type: 'column',
-      name: '成交量',
-      data: volume,
+      name: '成交金额',
+      data: money,
       yAxis: 1,
 
-    }]
+    },
+    {
+      type: 'column',
+      name: '融资变化',
+      data: marginForChart,
+      color: "blue",
+      yAxis: 2
+
+    },
+
+    ]
 
 
   }
