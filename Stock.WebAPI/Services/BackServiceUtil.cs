@@ -76,6 +76,26 @@ namespace BackgroundTasksSample.Services
             }
         }
 
+        internal void EnquePullMarketDealData()
+        {
+            if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
+            _logger.LogInformation("enque pull market deal task.");
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var puller = scopedServices.GetRequiredService<PullMarketDealDataViewModel>();
+
+                    await puller.PullAll();
+                }
+
+            });
+
+
+        }
+
         internal void EnquePullMarginData()
         {
             if (_taskQueue.Count >= Constants.MaxQueueCnt) return;

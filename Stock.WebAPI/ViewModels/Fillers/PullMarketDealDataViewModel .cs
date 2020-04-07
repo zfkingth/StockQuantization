@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Stock.WebAPI.ViewModels.Fillers
 {
-    public class PullMarginDataViewModel : BaseDoWorkViewModel
+    public class PullMarketDealDataViewModel : BaseDoWorkViewModel
     {
         private readonly ILogger _logger;
-        public PullMarginDataViewModel(IServiceScopeFactory serviceScopeFactory,
+        public PullMarketDealDataViewModel(IServiceScopeFactory serviceScopeFactory,
 
-            ILogger<PullMarginDataViewModel> logger) : base(serviceScopeFactory)
+            ILogger<PullMarketDealDataViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
         }
@@ -24,12 +24,12 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullMarketDealData);
+            await setStartDate(SystemEvents.PulMarginData);
 
             HandleFun hf = new HandleFun();
-            await hf.Update_margin_data();
+            await hf.Update_MarketDeal_data();
 
-            await setFinishedDate(SystemEvents.PullMarketDealData);
+            await setFinishedDate(SystemEvents.PulMarginData);
 
         }
 

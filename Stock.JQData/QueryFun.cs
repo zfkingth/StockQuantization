@@ -99,13 +99,34 @@ namespace Stock.JQData
                 table = "finance.STK_MT_TOTAL",
                 columns = "date,exchange_code,fin_value,fin_buy_value,sec_volume,sec_value,sec_sell_volume,fin_sec_value",
                 conditions = $"date#>#{Utility.ToDateString(startDate)}&date#<=#{Utility.ToDateString(nextDate)}",
-                count =2000
+                count = 2000
             };
             string info = await QueryInfoAsync(body);
 
             return info;
 
         }
+
+
+        internal async Task<string> Get_MarketDealAsync(DateTime startDate, DateTime nextDate)
+        {
+
+            //查询所有股票代码
+            var body = new
+            {
+                method = "run_query",
+                token = MyToken, //token
+                table = "finance.STK_ML_QUOTA",
+                columns = "day,link_id,link_name,buy_amount,sell_amount",
+                conditions = $"day#>#{Utility.ToDateString(startDate)}&day#<=#{Utility.ToDateString(nextDate)}",
+                count = 1000
+            };
+            string info = await QueryInfoAsync(body);
+
+            return info;
+
+        }
+
 
         public async Task RefreshAllTradeDays()
         {
@@ -149,7 +170,7 @@ namespace Stock.JQData
         }
 
         /// <summary>
-        /// 增加多少个交易日
+        /// 增加多少个交易日,会进行范围检查，保证最大不越界
         /// </summary>
         /// <param name="endDate"></param>
         /// <param name="offset"></param>
@@ -157,7 +178,13 @@ namespace Stock.JQData
         internal DateTime AddTradDays(DateTime endDate, double offset)
         {
             int index = AllTradeDays.IndexOf(endDate);
-            var date = AllTradeDays[index + (int)offset];
+            int newIndex = index + (int)offset;
+            if (newIndex > AllTradeDays.Count() - 1)
+            {
+                //越界了
+                newIndex = AllTradeDays.Count() - 1;
+            }
+            var date = AllTradeDays[newIndex];
             return date;
         }
 

@@ -84,7 +84,15 @@ namespace Stock.WebAPI.Controllers
             _util.EnquePullMarginData();
             return NoContent();
         }
+        
 
+
+        [HttpPost("pullMarketDealData")]
+        public ActionResult pullMarketDealData()
+        {
+            _util.EnquePullMarketDealData();
+            return NoContent();
+        }
 
         [HttpPost("pulBasicData")]
         public ActionResult pulBasicData()

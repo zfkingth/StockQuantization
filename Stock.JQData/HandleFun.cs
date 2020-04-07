@@ -69,7 +69,7 @@ namespace Stock.JQData
                         int tempDaysCnt = 200;
                         if (daysCnt < tempDaysCnt) tempDaysCnt = daysCnt;
 
-                        var nextDate = qf.AddTradDays(startDate, daysCnt);//每次增加200个交易日 
+                        var nextDate = qf.AddTradDays(startDate, tempDaysCnt);//每次增加200个交易日 
 
 
                         string res = await qf.Get_MarginAsync(startDate, nextDate);
@@ -83,6 +83,9 @@ namespace Stock.JQData
 
 
         }
+
+
+
 
         private async Task Parse_WriteDb_MarginAsync(string res)
         {
@@ -114,6 +117,91 @@ namespace Stock.JQData
                     if (exsit == false)
                     {
                         db.MarginTotal.Add(newItem);
+                    }
+
+
+                }
+                await db.SaveChangesAsync();
+            }
+
+        }
+
+
+        public async Task Update_MarketDeal_data()
+        {
+            using (StockContext db = new StockContext())
+            {
+
+                QueryFun qf = new QueryFun();
+                //获取数据库中最新的时间
+                var query = from p in db.MarketDeal
+                            orderby p.Day descending
+                            select p.Day;
+                var dateInDb = await query.FirstOrDefaultAsync();
+                if (dateInDb == default)
+                {
+                    dateInDb = Constants.PriceStartDate;
+                }
+
+                DateTime uptoDate = qf.GetUptoDate();
+
+                //都去掉小时和分钟，
+                var startDate = new DateTime(dateInDb.Year, dateInDb.Month, dateInDb.Day);
+
+                int daysCnt = qf.getTradeDaysCntBetween(startDate, uptoDate);
+                if (daysCnt > 0)
+                {
+
+                    while (startDate < uptoDate)
+                    {
+                        //分段操作
+
+                        int tempDaysCnt = 200;
+                        if (tempDaysCnt > daysCnt) tempDaysCnt = daysCnt;
+
+
+                        var nextDate = qf.AddTradDays(startDate, tempDaysCnt);//每次增加200个交易日 
+
+
+                        string res = await qf.Get_MarketDealAsync(startDate, nextDate);
+                        await Parse_WriteDb_MarketDealAsync(res);
+
+                        startDate = nextDate;
+
+                    }
+                }
+            }
+
+
+        }
+
+        private async Task Parse_WriteDb_MarketDealAsync(string res)
+        {
+
+
+            QueryFun qf = new QueryFun();
+
+            using (StockContext db = new StockContext())
+            {
+                var records = res.Split('\r', '\n');
+                //跳过第一行
+                for (int i = 1; i < records.Length; i++)
+                {
+                    var ss = records[i];
+                    var words = ss.Split(',');
+                    Stock.Model.MarketDeal newItem = new MarketDeal
+                    {
+                        Day = Utility.ParseDateString(words[0], UnitEnum.Unit1d),
+                        LinkId = Convert.ToInt32("0" + words[1]),
+                        LinkName = words[2],
+                        BuyAmount = Convert.ToDouble("0" + words[3]),
+                        SellAmount = Convert.ToDouble("0" + words[4]),
+                    };
+                    var exsit = db.MarketDeal.Any(s => s.LinkId == newItem.LinkId
+                            && s.Day == newItem.Day);
+                    if (exsit == false)
+                    {
+                        db.MarketDeal.Add(newItem);
                     }
 
 

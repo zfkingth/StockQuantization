@@ -124,6 +124,7 @@ namespace Stock.WebAPI
             services.AddScoped<DayDataFillerViewModel>();
             services.AddScoped<RealTimeDataFillerViewModel>();
             services.AddScoped<PullMarginDataViewModel>();
+            services.AddScoped<PullMarketDealDataViewModel>();
 
 
         }

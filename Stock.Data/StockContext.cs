@@ -22,6 +22,7 @@ namespace Stock.Data
         public DbSet<SearchResult> SearchResultSet { get; set; }
         public DbSet<TradeDay> TradeDays { get; set; }
         public DbSet<MarginTotal> MarginTotal { get; set; }
+        public DbSet<MarketDeal> MarketDeal { get; set; }
 
 
 
@@ -87,6 +88,12 @@ namespace Stock.Data
                 t.ActionName,
                 t.ActionParams,
                 t.ActionDate,
+            });
+
+            modelBuilder.Entity<MarketDeal>().HasKey(t => new
+            {
+                t.Day,
+                t.LinkId
             });
 
 
