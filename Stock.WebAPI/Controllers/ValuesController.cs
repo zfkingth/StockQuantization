@@ -92,9 +92,9 @@ namespace Stock.WebAPI.Controllers
             //                  orderby gp.Key ascending
             //                  select gp
             //                 ).ToListAsync();
-            var item =await (from i in _db.MarketDeal
-                        where Constants.LinkIds.Contains(i.LinkId)
-                        select new { i.Day, i.LinkId, i.BuyAmount, i.SellAmount }
+            var item = await (from i in _db.MarketDeal
+                              where Constants.LinkIds.Contains(i.LinkId)
+                              select new { Date = i.Day, i.LinkId, i.BuyAmount, i.SellAmount }
                         ).ToListAsync();
 
 

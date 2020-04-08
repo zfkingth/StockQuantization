@@ -79,6 +79,33 @@ function handleMarginData(marginArray) {
   return marginForChart;
 }
 
+const prepareMarketDeal = mk => {
+  let myMap = new Map();
+  for (let i = 0; i < mk.length; i++) {
+    let item = mk[i];
+    let currentDate = new Date(item.date).getTime() + shicha;
+    let val = myMap.get(currentDate);
+    if (!val) {
+      val = 0;
+    }
+    val += item.buyAmount - item.sellAmount;
+    myMap.set(currentDate, val);
+  }
+  let dataForChart = [];
+
+  for (const [key, val] of myMap) {
+
+    dataForChart.push([
+      key,
+      _.round(val, 2)
+    ]);
+
+
+  }
+
+
+  return dataForChart;
+}
 
 const maset = [5, 20, 60];
 const prepareHistoryData = (historyData) => {
@@ -128,11 +155,13 @@ const prepareHistoryData = (historyData) => {
 }
 
 
-const createOption = (stockInfo, historyData, marginData) => {
+const createOption = (comporiseData) => {
 
+  const { stockInfo, historyData, marginData, marketDeal } = comporiseData;
 
+  const marginForChart = handleMarginData(marginData);
+  const marketForChart = prepareMarketDeal(marketDeal);
 
-  let marginForChart = handleMarginData(marginData);
 
   let rt = prepareHistoryData(historyData);
   let ohlc = rt.ohlc, money = rt.money, ma = rt.ma;
@@ -197,45 +226,61 @@ const createOption = (stockInfo, historyData, marginData) => {
       },
     },
 
-    yAxis: [{
-      type: 'logarithmic',
-      labels: {
-        align: 'right',
-        x: -3
+    yAxis: [
+      {
+        type: 'logarithmic',
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: '股价'
+        },
+        height: '70%',
+        resize: {
+          enabled: true
+        },
+        lineWidth: 2
       },
-      title: {
-        text: '股价'
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: '成交额'
+        },
+        top: '70%',
+        height: '10%',
+        offset: 0,
+        lineWidth: 2
       },
-      height: '80%',
-      resize: {
-        enabled: true
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: '融资'
+        },
+        top: '80%',
+        height: '10%',
+        offset: 0,
+        lineWidth: 2
       },
-      lineWidth: 2
-    }, {
-      labels: {
-        align: 'right',
-        x: -3
-      },
-      title: {
-        text: '成交额'
-      },
-      top: '80%',
-      height: '10%',
-      offset: 0,
-      lineWidth: 2
-    }, {
-      labels: {
-        align: 'right',
-        x: -3
-      },
-      title: {
-        text: '融资'
-      },
-      top: '90%',
-      height: '10%',
-      offset: 0,
-      lineWidth: 2
-    }
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: '沪深港通流入'
+        },
+        top: '90%',
+        height: '10%',
+        offset: 0,
+        lineWidth: 2
+      }
     ],
     series: [{
       type: 'candlestick',
@@ -293,6 +338,16 @@ const createOption = (stockInfo, historyData, marginData) => {
 
     },
 
+    {
+      type: 'column',
+      name: '沪深港通流入',
+      data: marketForChart,
+      color: "blue",
+      yAxis: 3
+
+    },
+
+
     ]
 
 
@@ -325,10 +380,19 @@ export default class tempcontrol extends React.PureComponent {
       const p0 = fetchData(get, URL.GETSTOCK(stockId));
       const p1 = fetchData(get, URL.GETVALUES(stockId));
       const p2 = fetchData(get, URL.GETMARGIN);
+      const p3 = fetchData(get, URL.GETMARKETDEAL);
 
-      const result = await Promise.all([p0, p1, p2]);
+      const result = await Promise.all([p0, p1, p2, p3]);
 
-      let opt = createOption(result[0], result[1], result[2]);
+      const comporiseData =
+      {
+        stockInfo: result[0],
+        historyData: result[1],
+        marginData: result[2],
+        marketDeal: result[3]
+      };
+
+      let opt = createOption(comporiseData);
 
 
       this.setState({ received: true, options: opt });
