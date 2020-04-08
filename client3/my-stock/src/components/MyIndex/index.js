@@ -236,7 +236,7 @@ const createOption = (comporiseData) => {
         title: {
           text: '股价'
         },
-        height: '70%',
+        height: '60%',
         resize: {
           enabled: true
         },
@@ -250,7 +250,7 @@ const createOption = (comporiseData) => {
         title: {
           text: '成交额'
         },
-        top: '70%',
+        top: '60%',
         height: '10%',
         offset: 0,
         lineWidth: 2
@@ -263,8 +263,8 @@ const createOption = (comporiseData) => {
         title: {
           text: '融资'
         },
-        top: '80%',
-        height: '10%',
+        top: '70%',
+        height: '15%',
         offset: 0,
         lineWidth: 2
       },
@@ -276,10 +276,11 @@ const createOption = (comporiseData) => {
         title: {
           text: '沪深港通流入'
         },
-        top: '90%',
-        height: '10%',
+        top: '85%',
+        height: '15%',
         offset: 0,
-        lineWidth: 2
+        lineWidth: 2,
+      
       }
     ],
     series: [{
@@ -333,8 +334,17 @@ const createOption = (comporiseData) => {
       type: 'column',
       name: '融资变化',
       data: marginForChart,
-      color: "blue",
-      yAxis: 2
+      yAxis: 2,
+
+
+      
+      color: 'red', // 默认颜色
+      zones: [{
+        // 小于0显示 'green',大于0的则使用默认颜色 'red'
+        value: 0,
+        color: 'green',
+      }]
+
 
     },
 
@@ -342,8 +352,14 @@ const createOption = (comporiseData) => {
       type: 'column',
       name: '沪深港通流入',
       data: marketForChart,
-      color: "blue",
-      yAxis: 3
+      yAxis: 3,
+
+      color: 'red', // 默认颜色
+      zones: [{
+        // 小于0显示 'green',大于0的则使用默认颜色 'red'
+        value: 0,
+        color: 'green',
+      }]
 
     },
 
