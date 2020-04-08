@@ -92,8 +92,8 @@ namespace Stock.Data
 
             modelBuilder.Entity<MarketDeal>().HasKey(t => new
             {
+                t.LinkId,
                 t.Day,
-                t.LinkId
             });
 
 

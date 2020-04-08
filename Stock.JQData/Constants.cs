@@ -62,6 +62,26 @@ namespace Stock.JQData
             IndexZhongZheng500,
        };
 
+        /// <summary>
+        /// 沪港通id
+        /// </summary>
+        public const int LinkIdShangHai = 310001;
+
+        /// <summary>
+        /// 深港通id
+        /// </summary>
+        public const int LinkIdShengZhen = 310002;
+
+
+        /// <summary>
+        /// 沪深港通id
+        /// </summary>
+        public static readonly int[] LinkIds = new int[]
+          {
+            LinkIdShangHai ,
+            LinkIdShengZhen,
+          };
+
 
         public const string ExchangeCodeShangHai = "XSHG";
 
