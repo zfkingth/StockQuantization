@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Stock.Data;
+using Stock.JQData;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -81,6 +82,25 @@ namespace Stock.WebAPI.Controllers
 
             return Ok(item);
         }
+
+
+        [HttpGet("GetMarketDeal")]
+        public async Task<ActionResult<List<Stock.Model.MarketDeal>>> GetMarketDeal()
+        {
+            //var item = await (from i in _db.MarginTotal
+            //                  group new { i.Date, i.FinValue } by i.Date into gp
+            //                  orderby gp.Key ascending
+            //                  select gp
+            //                 ).ToListAsync();
+            var item =await (from i in _db.MarketDeal
+                        where Constants.LinkIds.Contains(i.LinkId)
+                        select new { i.Day, i.LinkId, i.BuyAmount, i.SellAmount }
+                        ).ToListAsync();
+
+
+            return Ok(item);
+        }
+
 
 
         // POST api/<controller>

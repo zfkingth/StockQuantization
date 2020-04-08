@@ -135,6 +135,7 @@ namespace Stock.JQData
                 QueryFun qf = new QueryFun();
                 //获取数据库中最新的时间
                 var query = from p in db.MarketDeal
+                            where p.LinkId==Constants.LinkIdShangHai
                             orderby p.Day descending
                             select p.Day;
                 var dateInDb = await query.FirstOrDefaultAsync();
