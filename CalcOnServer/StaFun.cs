@@ -94,27 +94,36 @@ namespace Stock.CalcOnServer
 
                         var price = priceList.FirstOrDefault(s => s.Code == stock.Code);
 
-
-                        if (price.Close == price.Highlimit)
+                        if (price != null)
                         {
-                            staItem.HighlimitNum++;
-                        }
-                        else if (price.Close == price.Lowlimit)
-                        {
-                            staItem.LowlimitNum++;
-                        }
-                        else if (price.High == price.Highlimit && price.Close < price.Highlimit)
-                        {
-                            staItem.FailNum++;
+                            if (price.Close == price.Highlimit)
+                            {
+                                staItem.HighlimitNum++;
+                            }
+                            else if (price.Close == price.Lowlimit)
+                            {
+                                staItem.LowlimitNum++;
+                            }
+                            else if (price.High == price.Highlimit && price.Close < price.Highlimit)
+                            {
+                                staItem.FailNum++;
+                            }
                         }
 
 
                     }
                 }
 
-                await db.SaveChangesAsync();
+                //解决出数据
 
-                System.Diagnostics.Debug.WriteLine($"****************  write sta price : {currentDate} end  ***************************");
+                //如果都是0就不写入
+
+                if (staItem.HighlimitNum + staItem.LowlimitNum + staItem.FailNum > 0)
+                {
+                    await db.SaveChangesAsync();
+
+                    System.Diagnostics.Debug.WriteLine($"****************  write sta price : {currentDate} end  ***************************");
+                }
             }
 
         }
