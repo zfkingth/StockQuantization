@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stock.Data;
 
 namespace Stock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    partial class StockContextModelSnapshot : ModelSnapshot
+    [Migration("20200409013832_addStaPrice")]
+    partial class addStaPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,9 +193,12 @@ namespace Stock.WebAPI.Migrations
 
             modelBuilder.Entity("Stock.Model.StaPrice", b =>
                 {
-                    b.Property<int>("Unit")
-                        .HasColumnType("int")
+                    b.Property<string>("Code")
+                        .HasColumnType("varchar(15) CHARACTER SET utf8mb4")
                         .HasMaxLength(15);
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
@@ -207,7 +212,7 @@ namespace Stock.WebAPI.Migrations
                     b.Property<int>("LowlimitNum")
                         .HasColumnType("int");
 
-                    b.HasKey("Unit", "Date");
+                    b.HasKey("Code", "Unit", "Date");
 
                     b.ToTable("StaPrice");
                 });

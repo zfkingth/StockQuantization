@@ -46,7 +46,7 @@ namespace Stock.WebAPI.Controllers
             var list = await (from i in _db.PriceSet
                               where i.Code == id && i.Unit == Model.UnitEnum.Unit1d
                               select i
-                             )
+                             ).AsNoTracking()
                            .ToListAsync();
 
 
@@ -59,7 +59,7 @@ namespace Stock.WebAPI.Controllers
             var item = await (from i in _db.SecuritiesSet
                               where i.Code == id
                               select i
-                             )
+                             ).AsNoTracking()
                            .FirstOrDefaultAsync();
 
 
@@ -78,7 +78,7 @@ namespace Stock.WebAPI.Controllers
             //                 ).ToListAsync();
             var item = await (from i in _db.MarginTotal
                               select new { i.Date, i.FinValue }
-            ).ToListAsync();
+            ).AsNoTracking().ToListAsync();
 
             return Ok(item);
         }
@@ -95,7 +95,7 @@ namespace Stock.WebAPI.Controllers
             var item = await (from i in _db.MarketDeal
                               where Constants.LinkIds.Contains(i.LinkId)
                               select new { Date = i.Day, i.LinkId, i.BuyAmount, i.SellAmount }
-                        ).ToListAsync();
+                        ).AsNoTracking().ToListAsync();
 
 
             return Ok(item);

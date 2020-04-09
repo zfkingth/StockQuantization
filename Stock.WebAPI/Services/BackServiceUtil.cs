@@ -96,6 +96,26 @@ namespace BackgroundTasksSample.Services
 
         }
 
+        internal void EnqueCalcLimitNum()
+        {
+            if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
+            _logger.LogInformation("enque calc limit numtask.");
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var puller = scopedServices.GetRequiredService<CalcLimitNumViewModel>();
+
+                    await puller.PullAll();
+                }
+
+            });
+
+
+        }
+
         internal void EnquePullMarginData()
         {
             if (_taskQueue.Count >= Constants.MaxQueueCnt) return;

@@ -12,6 +12,7 @@ namespace Stock.JQData
         public const string PullReadTimeData = "pullRealTime";
         public const string PulMarginData = "pullmargin";
         public const string PullMarketDealData= "PullMarketDealData";
+        public const string CalcLimitNum= "CalcLimitNum";
 
     }
 }

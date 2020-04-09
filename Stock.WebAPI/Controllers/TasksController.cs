@@ -84,7 +84,7 @@ namespace Stock.WebAPI.Controllers
             _util.EnquePullMarginData();
             return NoContent();
         }
-        
+
 
 
         [HttpPost("pullMarketDealData")]
@@ -93,6 +93,15 @@ namespace Stock.WebAPI.Controllers
             _util.EnquePullMarketDealData();
             return NoContent();
         }
+
+
+        [HttpPost("calcLimitNum")]
+        public ActionResult calcLimitNum()
+        {
+            _util.EnqueCalcLimitNum();
+            return NoContent();
+        }
+
 
         [HttpPost("pulBasicData")]
         public ActionResult pulBasicData()

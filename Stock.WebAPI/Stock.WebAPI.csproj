@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CalcOnServer\Stock.CalcOnServer.csproj" />
     <ProjectReference Include="..\Stock.Data\Stock.Data.csproj" />
     <ProjectReference Include="..\Stock.JQData\Stock.JQData.csproj" />
     <ProjectReference Include="..\Stock.Model\Stock.Model.csproj" />

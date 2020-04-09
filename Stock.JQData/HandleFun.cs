@@ -37,6 +37,10 @@ namespace Stock.JQData
 
         }
 
+
+   
+
+
         public async Task Update_margin_data()
         {
             using (StockContext db = new StockContext())

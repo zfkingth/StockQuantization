@@ -23,6 +23,7 @@ namespace Stock.Data
         public DbSet<TradeDay> TradeDays { get; set; }
         public DbSet<MarginTotal> MarginTotal { get; set; }
         public DbSet<MarketDeal> MarketDeal { get; set; }
+        public DbSet<StaPrice> StaPrice { get; set; }
 
 
 
@@ -51,6 +52,13 @@ namespace Stock.Data
                 t.Unit,
                 t.Date
             });
+
+            modelBuilder.Entity<StaPrice>().HasKey(t => new
+            {
+                t.Unit,
+                t.Date
+            });
+
 
             modelBuilder.Entity<StockXRXD>().HasKey(t => new
             {
