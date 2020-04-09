@@ -136,25 +136,22 @@ const calcCCI = (historyData, n) => {
       maForTp.push([currentDate, average]);
 
 
-      if (i >= 2 * Num) {
-        //calc cci
-        let TP = getTp(historyData, i);
-        //绝对差
-        let jdc = 0;
-        for (let j = 0; j < Num; j++) {
-          jdc += Math.abs(getTp(historyData, i - j) - average);
-        }
 
-        //平均绝对误差
-        let mad = jdc / Num;
-
-
-        let currentCci = (TP - average) / mad / 0.015;
-        cci.push([currentDate, _.round(currentCci, 2)]);
-
-      } else {
-        cci.push([currentDate, null]);
+      //calc cci
+      let TP = getTp(historyData, i);
+      //绝对差
+      let jdc = 0;
+      for (let j = 0; j < Num; j++) {
+        jdc += Math.abs(getTp(historyData, i - j) - average);
       }
+
+      //平均绝对误差
+      let mad = jdc / Num;
+
+
+      let currentCci = (TP - average) / mad / 0.015;
+      cci.push([currentDate, _.round(currentCci, 2)]);
+
 
     }
 
