@@ -64,6 +64,15 @@ namespace Stock.CalcOnServer
                 staItem.LowlimitNum = 0;
                 staItem.FailNum = 0;
 
+
+                //一次查询指定所有股票的的数据
+                var query2 = from p in db.PriceSet
+                             where p.Unit == UnitEnum.Unit1d && p.Date == currentDate
+                             select p;
+
+                var priceList = await query2.AsNoTracking().ToListAsync();
+
+
                 foreach (var stock in secList)
                 {
                     //30个交易日的新股不统计
@@ -83,13 +92,8 @@ namespace Stock.CalcOnServer
                         //查询已有的统计
                         //有可能已经存在
 
+                        var price = priceList.FirstOrDefault(s => s.Code == stock.Code);
 
-
-                        var query2 = from p in db.PriceSet
-                                     where p.Code == stock.Code && p.Unit == UnitEnum.Unit1d && p.Date == currentDate
-                                     select p;
-
-                        var price = await query2.AsNoTracking().FirstOrDefaultAsync();
 
                         if (price.Close == price.Highlimit)
                         {
