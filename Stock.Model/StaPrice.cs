@@ -28,5 +28,12 @@ namespace Stock.Model
         /// </summary>
         public int FailNum { get; set; }
 
+
+
+        /// <summary>
+        /// 是否是转折点
+        /// </summary>
+        public TurnEnum Turn { get; set; } = TurnEnum.Normal;
+
     }
 }
