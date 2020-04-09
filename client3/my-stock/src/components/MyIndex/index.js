@@ -11,6 +11,7 @@ import { transformError } from '../../utils/api'
 import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
+import { prettyDOM } from "@testing-library/react";
 
 
 const MulRowsWrap = styled.div`
@@ -107,6 +108,64 @@ const prepareMarketDeal = mk => {
   return dataForChart;
 }
 
+const calcCCI = (historyData, n) => {
+
+  const getTp = (historyData, index) => {
+    let price = historyData[index];
+    let tp = (price.high + price.low + price.close) / 3;
+    return tp;
+
+  }
+
+  //tp 是中价
+  let maForTp = [], cci = [], tpSum = 0;
+  let Num = n;
+
+  for (let i = 0; i < historyData.length; i += 1) {
+    let price = historyData[i];
+    let currentDate = new Date(price.date).getTime() + shicha;
+
+
+    if (i < Num) {
+      tpSum += getTp(historyData, i)
+      maForTp.push([currentDate, null]);
+      cci.push([currentDate, null]);
+    } else {
+      tpSum += getTp(historyData, i) - getTp(historyData, i - Num);
+      let average = tpSum / Num;
+      maForTp.push([currentDate, average]);
+
+
+      if (i >= 2 * Num) {
+        //calc cci
+        let TP = getTp(historyData, i);
+        //绝对差
+        let jdc = 0;
+        for (let j = 0; j < Num; j++) {
+          jdc += Math.abs(getTp(historyData, i - j) - average);
+        }
+
+        //平均绝对误差
+        let mad = jdc / Num;
+
+
+        let currentCci = (TP - average) / mad / 0.015;
+        cci.push([currentDate, _.round(currentCci, 2)]);
+
+      } else {
+        cci.push([currentDate, null]);
+      }
+
+    }
+
+
+  }
+
+  return cci['cci' + Num];
+
+
+}
+
 const maset = [5, 20, 60];
 const prepareHistoryData = (historyData) => {
 
@@ -167,6 +226,7 @@ const createOption = (comporiseData) => {
   let ohlc = rt.ohlc, money = rt.money, ma = rt.ma;
   // set the allowed units for data grouping
 
+  let cci = calcCCI(historyData, 14);
 
 
   let stockOptions = {
@@ -280,7 +340,7 @@ const createOption = (comporiseData) => {
         height: '15%',
         offset: 0,
         lineWidth: 2,
-      
+
       }
     ],
     series: [{
@@ -337,7 +397,7 @@ const createOption = (comporiseData) => {
       yAxis: 2,
 
 
-      
+
       color: 'red', // 默认颜色
       zones: [{
         // 小于0显示 'green',大于0的则使用默认颜色 'red'
