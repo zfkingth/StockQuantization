@@ -53,6 +53,14 @@ namespace Stock.Data
                 t.Date
             });
 
+
+            modelBuilder.Entity<Price>().HasIndex(t => new
+            {
+                t.Unit,
+                t.Date
+            });
+
+
             modelBuilder.Entity<StaPrice>().HasKey(t => new
             {
                 t.Unit,
