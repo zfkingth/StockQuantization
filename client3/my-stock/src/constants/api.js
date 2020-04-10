@@ -23,6 +23,7 @@ export const GETVALUES = id=> `${VALUES}${id}`
 export const GETSTOCK = id=> `${VALUES}GetStock?id=${id}`
 export const GETMARGIN = `${VALUES}GetMargin`
 export const GETMARKETDEAL = `${VALUES}GetMarketDeal`
+export const GetStaPrice = `${VALUES}GetStaPrice`
 
 
 

@@ -102,6 +102,19 @@ namespace Stock.WebAPI.Controllers
         }
 
 
+        [HttpGet("GetStaPrice")]
+        public async Task<ActionResult<List<Stock.Model.StaPrice>>> GetStaPrice()
+        {
+            var query = from i in _db.StaPrice
+                        select i;
+
+            var rt = await query.AsNoTracking().ToListAsync();
+
+
+            return Ok(rt);
+        }
+
+
 
         // POST api/<controller>
         [HttpPost]

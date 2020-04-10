@@ -158,7 +158,7 @@ const calcCCI = (historyData, n) => {
 
   }
 
-  return cci['cci' + Num];
+  return cci;
 
 
 }
@@ -211,19 +211,40 @@ const prepareHistoryData = (historyData) => {
 }
 
 
+const prepareStaData = (staPrice) => {
+
+  let highData = [], lowData = [], failData = [];
+
+  for (let i = 0; i < staPrice.length; i += 1) {
+    let sta = staPrice[i];
+    let currentDate = new Date(sta.date).getTime() + shicha;
+
+    highData.push([currentDate, sta.highlimitNum]);
+    lowData.push([currentDate, -sta.lowlimitNum]);
+    failData.push([currentDate, -sta.failNum]);
+
+  }
+
+  return { highData, lowData, failData }
+
+}
+
 const createOption = (comporiseData) => {
 
-  const { stockInfo, historyData, marginData, marketDeal } = comporiseData;
+  const { stockInfo, historyData, marginData, marketDeal, staPrice } = comporiseData;
 
   const marginForChart = handleMarginData(marginData);
   const marketForChart = prepareMarketDeal(marketDeal);
 
+  const staForChart = prepareStaData(staPrice);
 
   let rt = prepareHistoryData(historyData);
   let ohlc = rt.ohlc, money = rt.money, ma = rt.ma;
   // set the allowed units for data grouping
 
-  let cci = calcCCI(historyData, 14);
+  let cciData = calcCCI(historyData, 14);
+
+
 
 
   let stockOptions = {
@@ -265,7 +286,7 @@ const createOption = (comporiseData) => {
 
           let con = point.series.name + ': ' + point.y;
           if (point.series.type === 'candlestick') {
-            const ppt = point.point.options;
+            const ppt = point.point;//.point.options;
             const zhangdiefu = _.round((ppt.close - ppt.preclose) / ppt.preclose * 100, 2);
             con = ''
               + '涨幅：' + zhangdiefu + '%<br/>'
@@ -293,7 +314,7 @@ const createOption = (comporiseData) => {
         title: {
           text: '股价'
         },
-        height: '60%',
+        height: '40%',
         resize: {
           enabled: true
         },
@@ -307,8 +328,8 @@ const createOption = (comporiseData) => {
         title: {
           text: '成交额'
         },
-        top: '60%',
-        height: '10%',
+        top: '40%',
+        height: '5%',
         offset: 0,
         lineWidth: 2
       },
@@ -320,7 +341,7 @@ const createOption = (comporiseData) => {
         title: {
           text: '融资'
         },
-        top: '70%',
+        top: '45%',
         height: '15%',
         offset: 0,
         lineWidth: 2
@@ -331,7 +352,35 @@ const createOption = (comporiseData) => {
           x: -3
         },
         title: {
-          text: '沪深港通流入'
+          text: '陆股通流入'
+        },
+        top: '60%',
+        height: '15%',
+        offset: 0,
+        lineWidth: 2,
+
+      },
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: 'CCI'
+        },
+        top: '75%',
+        height: '10%',
+        offset: 0,
+        lineWidth: 2,
+
+      },
+      {
+        labels: {
+          align: 'right',
+          x: -3
+        },
+        title: {
+          text: '涨跌停'
         },
         top: '85%',
         height: '15%',
@@ -407,7 +456,7 @@ const createOption = (comporiseData) => {
 
     {
       type: 'column',
-      name: '沪深港通流入',
+      name: '陆股通流入',
       data: marketForChart,
       yAxis: 3,
 
@@ -420,6 +469,49 @@ const createOption = (comporiseData) => {
 
     },
 
+
+    {
+      type: 'line',
+      name: 'CCI',
+      data: cciData,
+      yAxis: 4,
+
+      color: 'brown', // 默认颜色
+
+    },
+
+
+    {
+      type: 'column',
+      name: '涨停个数',
+      data: staForChart.highData,
+      yAxis: 5,
+
+      color: 'red', // 默认颜色
+
+    },
+
+
+    {
+      type: 'column',
+      name: '跌停个数',
+      data: staForChart.lowData,
+      yAxis: 5,
+
+      color: 'green', // 默认颜色
+
+    },
+
+
+      // {
+      //   type: 'column',
+      //   name: '炸板个数',
+      //   data: staForChart.failData,
+      //   yAxis: 5,
+
+      //   color: 'blue', // 默认颜色
+
+      // },
 
     ]
 
@@ -454,15 +546,17 @@ export default class tempcontrol extends React.PureComponent {
       const p1 = fetchData(get, URL.GETVALUES(stockId));
       const p2 = fetchData(get, URL.GETMARGIN);
       const p3 = fetchData(get, URL.GETMARKETDEAL);
+      const p4 = fetchData(get, URL.GetStaPrice);
 
-      const result = await Promise.all([p0, p1, p2, p3]);
+      const result = await Promise.all([p0, p1, p2, p3, p4]);
 
       const comporiseData =
       {
         stockInfo: result[0],
         historyData: result[1],
         marginData: result[2],
-        marketDeal: result[3]
+        marketDeal: result[3],
+        staPrice: result[4],
       };
 
       let opt = createOption(comporiseData);
