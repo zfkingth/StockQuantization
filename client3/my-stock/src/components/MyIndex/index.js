@@ -251,7 +251,7 @@ const createOption = (comporiseData) => {
 
     chart: {
       // height: (9 / 16 * 100) + '%' // 16:9 ratio
-      height: (9 / 16 * 100) + '%'  // 16:9 ratio
+      height: (9 / 16 * 100) * 1.2 + '%'  // 16:9 ratio
     },
     rangeSelector: {
       selected: 1,

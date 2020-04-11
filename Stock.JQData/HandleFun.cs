@@ -38,7 +38,7 @@ namespace Stock.JQData
         }
 
 
-   
+
 
 
         public async Task Update_margin_data()
@@ -139,7 +139,7 @@ namespace Stock.JQData
                 QueryFun qf = new QueryFun();
                 //获取数据库中最新的时间
                 var query = from p in db.MarketDeal
-                            where p.LinkId==Constants.LinkIdShangHai
+                            where p.LinkId == Constants.LinkIdShangHai
                             orderby p.Day descending
                             select p.Day;
                 var dateInDb = await query.FirstOrDefaultAsync();
@@ -147,6 +147,21 @@ namespace Stock.JQData
                 {
                     dateInDb = Constants.PriceStartDate;
                 }
+
+                var query2 = from p in db.MarketDeal
+                             where p.LinkId == Constants.LinkIdShengZhen
+                             orderby p.Day descending
+                             select p.Day;
+                var dateInDb2 = await query.FirstOrDefaultAsync();
+                if (dateInDb2 == default)
+                {
+                    dateInDb2 = Constants.PriceStartDate;
+                }
+
+                //找出小的。
+                if (dateInDb > dateInDb2) dateInDb = dateInDb2;
+
+
 
                 DateTime uptoDate = qf.GetUptoDate();
 
