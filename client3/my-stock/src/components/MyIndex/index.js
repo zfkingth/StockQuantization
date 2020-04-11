@@ -229,9 +229,9 @@ const prepareStaData = (staPrice) => {
 
 }
 
-const createOption = (comporiseData) => {
+const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice ) => {
 
-  const { stockInfo, historyData, marginData, marketDeal, staPrice } = comporiseData;
+  
 
   const marginForChart = handleMarginData(marginData);
   const marketForChart = prepareMarketDeal(marketDeal);
@@ -565,18 +565,11 @@ class Basecontrol extends React.PureComponent {
       const p3 = fetchData(get, URL.GETMARKETDEAL);
       const p4 = fetchData(get, URL.GetStaPrice);
 
-      const result = await Promise.all([p0, p1, p2, p3, p4]);
+      const allData= await Promise.all([p0, p1, p2, p3, p4]);
 
-      const comporiseData =
-      {
-        stockInfo: result[0],
-        historyData: result[1],
-        marginData: result[2],
-        marketDeal: result[3],
-        staPrice: result[4],
-      };
+    
 
-      let opt = createOption(comporiseData);
+      let opt = createOption(...allData);
 
 
       this.setState({ received: true, options: opt });
