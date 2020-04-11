@@ -35,9 +35,10 @@ namespace Stock.WebAPI.ViewModels.Fillers
             if (e.Stock.Type == SecuritiesEnum.Index)
             {
                 var t1 = hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
-                var t2 = hf.Update_PriceAsync(UnitEnum.Unit60m, e.Stock.Code);
-                var t3 = hf.Update_PriceAsync(UnitEnum.Unit120m, e.Stock.Code);
-                Task.WaitAll(t1, t2, t3);
+                //var t2 = hf.Update_PriceAsync(UnitEnum.Unit60m, e.Stock.Code);
+                //var t3 = hf.Update_PriceAsync(UnitEnum.Unit120m, e.Stock.Code);
+                //Task.WaitAll(t1, t2, t3);
+                Task.WaitAll(t1);
             }
             await hf.Update_PriceAsync(UnitEnum.Unit1d, e.Stock.Code);
 

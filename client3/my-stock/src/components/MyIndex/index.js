@@ -522,7 +522,9 @@ const createOption = (comporiseData) => {
 }
 
 
-export default class tempcontrol extends React.PureComponent {
+
+
+class Basecontrol extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -533,7 +535,7 @@ export default class tempcontrol extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.getDataAsync('399006.XSHE');
+    this.getDataAsync(this.props.stockId);
 
 
   }
@@ -597,3 +599,23 @@ export default class tempcontrol extends React.PureComponent {
   }
 
 }
+
+
+
+
+const IndexCyb = (props) => {
+  return <Basecontrol stockId="399006.XSHE" />;
+}
+
+const IndexHS300 = (props) => {
+  return <Basecontrol stockId="000300.XSHG" />;
+}
+
+
+
+const IndexSZCZ = (props) => {
+  return <Basecontrol stockId="399001.XSHE" />;
+}
+
+
+export { IndexCyb, IndexHS300,IndexSZCZ };

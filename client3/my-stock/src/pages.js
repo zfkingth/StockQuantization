@@ -17,7 +17,7 @@ export { default as manage } from './components/manage'
 export { default as systemStatus } from './components/manage/SystemStatus'
 export { default as systemInfo } from './components/About'
 // default page
-export { default as mainIndex } from './components/MyIndex'
+export { IndexCyb as mainIndex, IndexHS300 ,IndexSZCZ} from './components/MyIndex'
 
 
 const filterUpwardGap = () => { return stockTemplate(FormUpwardGap); };
@@ -26,7 +26,7 @@ export { filterUpwardGap };
 
 
 const filterCloseBreak = () => { return stockTemplate(FormCloseBreakSearcher); };
-export { filterCloseBreak  };
+export { filterCloseBreak };
 
 
 const filterUpMA = () => { return stockTemplate(FormUpMASearcher); };
