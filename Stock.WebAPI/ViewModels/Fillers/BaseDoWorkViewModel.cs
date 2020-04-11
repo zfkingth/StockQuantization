@@ -596,7 +596,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         {
             DateTime date = await (from i in db.TempPrice
                                    where i.Unit == UnitEnum.Unit1d &&
-                                   i.Code == Constants.IndexShangHai
+                                   i.Code == Constants.IndexShangZhengZhishu
                                    orderby i.Date descending
                                    select i.Date).FirstOrDefaultAsync();
 

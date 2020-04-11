@@ -44,22 +44,26 @@ namespace Stock.JQData
 
 
 
-        public const string IndexShangHai = "000001.XSHG";
-        public const string IndexShenZhen = "399001.XSHE";
+        public const string IndexShangZhengZhishu = "000001.XSHG";
+        public const string IndexShenZhengChengZhi = "399001.XSHE";
         public const string IndexChuangYeBan = "399006.XSHE";
         public const string IndexHuShen300 = "000300.XSHG";
         public const string IndexZhongZheng500 = "000905.XSHG";
+        public const string IndexShenZhengZongZhi = "399106.XSHE";
+
+
+      
 
         /// <summary>
         /// 需要处理的指数Code
         /// </summary>
         public static readonly string[] IndexsCode = new string[]
         {
-            IndexShangHai ,
-            IndexShenZhen,
+            IndexShangZhengZhishu ,
+            IndexShenZhengChengZhi,
             IndexChuangYeBan,
             IndexHuShen300,
-            IndexZhongZheng500,
+            IndexShenZhengZongZhi,
        };
 
         /// <summary>

@@ -142,7 +142,7 @@ namespace Stock.JQData
                 {
                     method = "get_trade_days",
                     token = MyToken,
-                    code = Constants.IndexShangHai,
+                    code = Constants.IndexShangZhengZhishu,
                     date = Utility.ToDateString(lastDate),
                     end_date = Utility.ToDateString(DateTime.Now)
                 };

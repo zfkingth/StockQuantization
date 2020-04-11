@@ -478,6 +478,21 @@ const createOption = (comporiseData) => {
 
       color: 'brown', // 默认颜色
 
+      zones: [
+        {
+          value: -100,
+          color: 'green',
+        },
+        {
+          value: 100,
+          color: '#7cb5ec',
+          dashStyle: 'dot'
+        },
+        {
+          color: 'red'
+        }
+      ]
+
     },
 
 
@@ -617,5 +632,8 @@ const IndexSZCZ = (props) => {
   return <Basecontrol stockId="399001.XSHE" />;
 }
 
+const IndexSZZZ = (props) => {
+  return <Basecontrol stockId="399106.XSHE" />;
+}
 
-export { IndexCyb, IndexHS300,IndexSZCZ };
+export { IndexCyb, IndexHS300, IndexSZCZ, IndexSZZZ };
