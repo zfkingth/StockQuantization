@@ -17,9 +17,9 @@ const menufun = ({ to, unauthorizeUser, loadManage, loadSystemStatus, }) => {
                     <li><button>常用指标</button>
                         <ul >
 
-                            <li><button onClick={() => to('mainIndex')}> 创业板</button></li>
-                            <li><button onClick={() => to('IndexHS300')}> 沪深300</button></li>
                             <li><button onClick={() => to('IndexSZCZ')}> 深证成指</button></li>
+                            <li><button onClick={() => to('IndexCyb')}> 创业板</button></li>
+                            <li><button onClick={() => to('IndexHS300')}> 沪深300</button></li>
 
                         </ul></li>
                     <li><button>常规筛选</button>
