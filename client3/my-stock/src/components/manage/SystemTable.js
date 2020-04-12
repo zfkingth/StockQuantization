@@ -39,7 +39,7 @@ const columns = [
     { name: 'status', title: '状态' },
 ];
 const tableColumnExtensions = [
-    { columnName: 'eventName', width: 120 },
+    { columnName: 'eventName', width: 180 },
     { columnName: 'lastAriseStartDate', width: 180 },
     { columnName: 'lastAriseEndDate', width: 180 },
     { columnName: 'status', width: 80 },
