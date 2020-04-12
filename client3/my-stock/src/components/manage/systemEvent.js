@@ -8,35 +8,30 @@ class App extends React.Component {
     super(props);
     this.state = { employees: service.getEmployees() };
     this.states = service.getStates();
-    this.allowDeleting = this.allowDeleting.bind(this);
-    this.onRowValidating = this.onRowValidating.bind(this);
-    this.onEditorPreparing = this.onEditorPreparing.bind(this);
-    this.isCloneIconVisible = this.isCloneIconVisible.bind(this);
-    this.cloneIconClick = this.cloneIconClick.bind(this);
   }
-  isChief(position) {
+  isChief = (position) => {
     return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
   }
-  allowDeleting(e) {
+  allowDeleting = (e) => {
     return !this.isChief(e.row.data.Position);
   }
-  onRowValidating(e) {
+  onRowValidating = (e) => {
     var position = e.newData.Position;
 
-    if(this.isChief(position)) {
-      e.errorText = `The company can have only one ${ position.toUpperCase() }. Please choose another position.`;
+    if (this.isChief(position)) {
+      e.errorText = `The company can have only one ${position.toUpperCase()}. Please choose another position.`;
       e.isValid = false;
     }
   }
-  onEditorPreparing(e) {
-    if(e.parentType === 'dataRow' && e.dataField === 'Position') {
+  onEditorPreparing = (e) => {
+    if (e.parentType === 'dataRow' && e.dataField === 'Position') {
       e.editorOptions.readOnly = this.isChief(e.value);
     }
   }
-  isCloneIconVisible(e) {
+  isCloneIconVisible = (e) => {
     return !e.row.isEditing && !this.isChief(e.row.data.Position);
   }
-  cloneIconClick(e) {
+  cloneIconClick = (e) => {
     var employees = this.state.employees.slice(),
       clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
 
