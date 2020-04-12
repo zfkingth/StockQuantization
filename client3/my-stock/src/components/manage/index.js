@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 
 
-import UserTable from './DemoTable'
+import UserTable from './ManageUsersTable'
 
 
 const MulRowsWrap = styled.div`

@@ -142,7 +142,7 @@ const EditCell = (props) => {
 
 const getRowId = row => row.tempid;
 
-class DemoBase extends React.PureComponent {
+class UsersTable extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -343,12 +343,12 @@ class DemoBase extends React.PureComponent {
     }
 }
 
-const tempcontrol = withStyles(styles, { name: 'ControlledModeDemo' })(DemoBase);
+const TempControl = withStyles(styles, { name: 'ControlledModeDemo' })(UsersTable);
 
 export default connectTo(
     state => ({
         stateRows: state.manage.userList,
     }),
     { updateUser, goToErrorPage, deleteUser },
-    tempcontrol
+    TempControl
 );
