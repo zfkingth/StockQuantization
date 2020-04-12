@@ -1,77 +1,89 @@
 import React from 'react';
-import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
+import Button from 'devextreme-react/button';
+import DataGrid, { Column, Editing, Paging, Lookup } from 'devextreme-react/data-grid';
 
-import service from './data.js';
+import { employees, states } from './data.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { employees: service.getEmployees() };
-    this.states = service.getStates();
-  }
-  isChief = (position) => {
-    return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
-  }
-  allowDeleting = (e) => {
-    return !this.isChief(e.row.data.Position);
-  }
-  onRowValidating = (e) => {
-    var position = e.newData.Position;
+    this.state = { events: [] };
+    this.logEvent = this.logEvent.bind(this);
+    this.onEditingStart = this.logEvent.bind(this, 'EditingStart');
+    this.onInitNewRow = this.logEvent.bind(this, 'InitNewRow');
+    this.onRowInserting = this.logEvent.bind(this, 'RowInserting');
+    this.onRowInserted = this.logEvent.bind(this, 'RowInserted');
+    this.onRowUpdating = this.logEvent.bind(this, 'RowUpdating');
+    this.onRowUpdated = this.logEvent.bind(this, 'RowUpdated');
+    this.onRowRemoving = this.logEvent.bind(this, 'RowRemoving');
+    this.onRowRemoved = this.logEvent.bind(this, 'RowRemoved');
 
-    if (this.isChief(position)) {
-      e.errorText = `The company can have only one ${position.toUpperCase()}. Please choose another position.`;
-      e.isValid = false;
-    }
+    this.clearEvents = this.clearEvents.bind(this);
   }
-  onEditorPreparing = (e) => {
-    if (e.parentType === 'dataRow' && e.dataField === 'Position') {
-      e.editorOptions.readOnly = this.isChief(e.value);
-    }
-  }
-  isCloneIconVisible = (e) => {
-    return !e.row.isEditing && !this.isChief(e.row.data.Position);
-  }
-  cloneIconClick = (e) => {
-    var employees = this.state.employees.slice(),
-      clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
 
-    employees.splice(e.row.rowIndex, 0, clonedItem);
-    this.setState({ employees: employees });
-    e.event.preventDefault();
+  logEvent(eventName) {
+    this.setState((state) => {
+      return { events: [eventName].concat(state.events) };
+    });
   }
+
+  clearEvents() {
+    this.setState({ events: [] });
+  }
+
   render() {
     return (
-      <DataGrid
-        id="gridContainer"
-        dataSource={this.state.employees}
-        keyExpr="ID"
-        showBorders={true}
-        onRowValidating={this.onRowValidating}
-        onEditorPreparing={this.onEditorPreparing}>
-        <Editing
-          mode="row"
-          useIcons={true}
-          allowUpdating={true}
-          allowDeleting={this.allowDeleting} />
-        <Column type="buttons" width={110}
-          buttons={['edit', 'delete', {
-            hint: 'Clone',
-            icon: 'repeat',
-            visible: this.isCloneIconVisible,
-            onClick: this.cloneIconClick
-          }]} />
-        <Column dataField="Prefix" caption="Title" />
-        <Column dataField="FirstName" />
-        <Column dataField="LastName" />
-        <Column dataField="Position" width={130} />
-        <Column dataField="StateID" caption="State" width={125}
-          lookup={{
-            dataSource: this.states,
-            displayExpr: 'Name',
-            valueExpr: 'ID'
-          }} />
-        <Column dataField="BirthDate" dataType="date" width={125} />
-      </DataGrid>
+      <React.Fragment>
+        <DataGrid
+          id="gridContainer"
+          dataSource={employees}
+          keyExpr="ID"
+          allowColumnReordering={true}
+          showBorders={true}
+          onEditingStart={this.onEditingStart}
+          onInitNewRow={this.onInitNewRow}
+          onRowInserting={this.onRowInserting}
+          onRowInserted={this.onRowInserted}
+          onRowUpdating={this.onRowUpdating}
+          onRowUpdated={this.onRowUpdated}
+          onRowRemoving={this.onRowRemoving}
+          onRowRemoved={this.onRowRemoved}>
+
+          <Paging enabled={true} />
+          <Editing
+            mode="row"
+            allowUpdating={true}
+            allowDeleting={true}
+            allowAdding={true} />
+
+          <Column dataField="Prefix" caption="Title" />
+          <Column dataField="FirstName" />
+          <Column dataField="LastName" />
+          <Column dataField="Position" width={130} />
+          <Column
+            dataField="StateID"
+            caption="State"
+            width={125}
+          >
+            <Lookup dataSource={states} displayExpr="Name" valueExpr="ID" />
+          </Column>
+          <Column
+            dataField="BirthDate"
+            width={125}
+            dataType="date" />
+        </DataGrid>
+
+        <div id="events">
+          <div>
+
+            <div className="caption">Fired events</div>
+            <Button id="clear" text="Clear" onClick={this.clearEvents} />
+          </div>
+          <ul>
+            {this.state.events.map((event, index) => <li key={index}>{event}</li>)}
+          </ul>
+        </div>
+      </React.Fragment>
     );
   }
 }
