@@ -45,6 +45,7 @@ const menufun = ({ to, unauthorizeUser, loadManage, loadSystemStatus, }) => {
                     <li><button>帐户管理</button>
                         <ul>
                             <li><button onClick={() => loadSystemStatus()}>系统状态</button></li>
+                            <li><button onClick={() => to('systemEventPage')}>系统状态2</button></li>
                             <li>
                                 <button onClick={() => loadManage()}>用户管理</button>
                             </li>

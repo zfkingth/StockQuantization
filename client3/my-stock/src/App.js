@@ -14,6 +14,9 @@ import { receiveMockState } from './actions/mock'
 import { loggedIn } from './utils/auth'
 import { startApp } from './actions/generic'
 
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.css';
+
 
 const App = () => {
   return (

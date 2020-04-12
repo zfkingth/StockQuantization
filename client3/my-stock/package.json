@@ -18,6 +18,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/styled-components": "^5.0.1",
+    "devextreme": "^19.2.7",
+    "devextreme-react": "^19.2.7",
     "highcharts": "^8.0.4",
     "highcharts-react-official": "^3.0.0",
     "immutable": "^4.0.0-rc.12",
