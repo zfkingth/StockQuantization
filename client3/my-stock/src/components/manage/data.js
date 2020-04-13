@@ -1,4 +1,4 @@
-export const employees = [{
+const employees = [{
   'ID': 1,
   'FirstName': 'John',
   'LastName': 'Heart',
@@ -11,17 +11,6 @@ export const employees = [{
   'StateID': 5
 }, {
   'ID': 2,
-  'FirstName': 'Olivia',
-  'LastName': 'Peyton',
-  'Prefix': 'Mrs.',
-  'Position': 'Sales Assistant',
-  'BirthDate': '1981/06/03',
-  'HireDate': '2012/05/14',
-  'Notes': 'Olivia loves to sell. She has been selling DevAV products since 2012. \r\n\r\nOlivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.',
-  'Address': '807 W Paseo Del Mar',
-  'StateID': 5
-}, {
-  'ID': 3,
   'FirstName': 'Robert',
   'LastName': 'Reagan',
   'Prefix': 'Mr.',
@@ -31,6 +20,17 @@ export const employees = [{
   'Notes': 'Robert was recently voted the CMO of the year by CMO Magazine. He is a proud member of the DevAV Management Team.\r\n\r\nRobert is a championship BBQ chef, so when you get the chance ask him for his secret recipe.',
   'Address': '4 Westmoreland Pl.',
   'StateID': 4
+}, {
+  'ID': 3,
+  'FirstName': 'Olivia',
+  'LastName': 'Peyton',
+  'Prefix': 'Mrs.',
+  'Position': 'Sales Assistant',
+  'BirthDate': '1981/06/03',
+  'HireDate': '2012/05/14',
+  'Notes': 'Olivia loves to sell. She has been selling DevAV products since 2012. \r\n\r\nOlivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.',
+  'Address': '807 W Paseo Del Mar',
+  'StateID': 5
 }, {
   'ID': 4,
   'FirstName': 'Greta',
@@ -154,7 +154,7 @@ export const employees = [{
   'StateID': 13
 }];
 
-export const states = [{
+const states = [{
   'ID': 1,
   'Name': 'Alabama'
 }, {
@@ -308,3 +308,18 @@ export const states = [{
   'ID': 51,
   'Name': 'North Dakota'
 }];
+
+let maxID = employees[employees.length - 1].ID;
+
+export default {
+  getMaxID() {
+    return ++maxID;
+  },
+  getEmployees() {
+    return employees;
+  },
+
+  getStates() {
+    return states;
+  }
+};
