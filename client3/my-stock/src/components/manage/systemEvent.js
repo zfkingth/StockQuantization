@@ -1,14 +1,11 @@
 import React from 'react';
 import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
 
-import service from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { employees: service.getEmployees() };
-    this.states = service.getStates();
-  }
+import { connectTo } from '../../utils/generic';
+
+class DemoBase extends React.PureComponent {
+
   isChief = (position) => {
     return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
   }
@@ -32,19 +29,21 @@ class App extends React.Component {
     return !e.row.isEditing && !this.isChief(e.row.data.Position);
   }
   cloneIconClick = (e) => {
-    var employees = this.state.employees.slice(),
-      clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
+    // var employees = this.state.employees.slice(),
+    //   clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
 
-    employees.splice(e.row.rowIndex, 0, clonedItem);
-    this.setState({ employees: employees });
+    // employees.splice(e.row.rowIndex, 0, clonedItem);
+    // this.setState({ employees: employees });
     e.event.preventDefault();
   }
   render() {
+
+    const { rows, } = this.props;
     return (
       <DataGrid
         id="gridContainer"
-        dataSource={this.state.employees}
-        keyExpr="ID"
+        dataSource={rows}
+        keyExpr="eventName"
         showBorders={true}
         onRowValidating={this.onRowValidating}
         onEditorPreparing={this.onEditorPreparing}>
@@ -60,20 +59,20 @@ class App extends React.Component {
             visible: this.isCloneIconVisible,
             onClick: this.cloneIconClick
           }]} />
-        <Column dataField="Prefix" caption="Title" />
-        <Column dataField="FirstName" />
-        <Column dataField="LastName" />
-        <Column dataField="Position" width={130} />
-        <Column dataField="StateID" caption="State" width={125}
-          lookup={{
-            dataSource: this.states,
-            displayExpr: 'Name',
-            valueExpr: 'ID'
-          }} />
-        <Column dataField="BirthDate" dataType="date" width={125} />
+        <Column dataField="eventName" caption="Title" />
+        <Column dataField="lastAriseStartDate" dataType="date" />
+        <Column dataField="lastAriseEndDate" dataType="date" />
+        <Column dataField="status" />
+
       </DataGrid>
     );
   }
 }
 
-export default App;
+export default connectTo(
+  state => ({
+    rows: state.manage.systemStatus.statusTable,
+  }),
+  {},
+  DemoBase
+);
