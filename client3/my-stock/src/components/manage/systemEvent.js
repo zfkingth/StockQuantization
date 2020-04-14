@@ -82,8 +82,8 @@ class DemoBase extends React.PureComponent {
               onClick: this.cloneIconClick
             }]} />
           <Column dataField="eventName" caption="Title" />
-          <Column dataField="lastAriseStartDate" dataType="date" />
-          <Column dataField="lastAriseEndDate" dataType="date" />
+          <Column dataField="lastAriseStartDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
+          <Column dataField="lastAriseEndDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
           <Column dataField="status" />
 
         </DataGrid>
