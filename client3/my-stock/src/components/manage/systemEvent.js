@@ -4,7 +4,7 @@ import Button from 'devextreme-react/button';
 
 
 import { connectTo } from '../../utils/generic';
-import { ariseSystemEventAction } from '../../actions/manage'
+import { ariseSystemEventAction, clearDateAction } from '../../actions/manage'
 
 class DemoBase extends React.PureComponent {
 
@@ -47,7 +47,7 @@ class DemoBase extends React.PureComponent {
   isCloneIconVisible = (e) => {
     return !e.row.isEditing && !this.isChief(e.row.data.Position);
   }
-  cloneIconClick = (e) => {
+  ariseSystemEvent = (e) => {
     // var employees = this.state.employees.slice(),
     //   clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
 
@@ -58,6 +58,15 @@ class DemoBase extends React.PureComponent {
     this.props.ariseSystemEventAction(eventName);
     e.event.preventDefault();
   }
+
+  clearEventStatus = (e) => {
+
+    const eventName = e.row.data.eventName;
+    this.logEvent(eventName);
+    this.props.clearDateAction(eventName);
+    e.event.preventDefault();
+  }
+
   render() {
 
     const { rows, } = this.props;
@@ -75,12 +84,20 @@ class DemoBase extends React.PureComponent {
             useIcons={true}
           />
           <Column type="buttons" width={110}
-            buttons={[{
-              hint: 'Arise',
-              icon: 'repeat',
+            buttons={[
+              {
+                hint: 'Arise',
+                icon: 'repeat',
 
-              onClick: this.cloneIconClick
-            }]} />
+                onClick: this.ariseSystemEvent
+              },
+              {
+                hint: 'Clear Status',
+                icon: 'clear',
+
+                onClick: this.clearEventStatus
+              }
+            ]} />
           <Column dataField="eventName" caption="Title" />
           <Column dataField="lastAriseStartDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
           <Column dataField="lastAriseEndDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
@@ -106,6 +123,6 @@ export default connectTo(
   state => ({
     rows: state.manage.systemStatus.statusTable,
   }),
-  { ariseSystemEventAction },
+  { ariseSystemEventAction, clearDateAction },
   DemoBase
 );

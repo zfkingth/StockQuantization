@@ -40,6 +40,20 @@ export const ariseSystemEventAction =
     }
   }
 
+export const clearDateAction =
+  function* ({ payload: eventName }) {
+    try {
+
+      yield callWith401_403Handle(post, URL.CLEARDATE, eventName);
+    } catch (err) {
+
+      yield put(goToErrorPage(err));
+    }
+  }
+
+
+
+
 export const loadManage =
   function* () {
     try {
@@ -84,17 +98,6 @@ export const pullRealTimeAction =
     }
   }
 
-
-export const clearDateAction =
-  function* ({ payload: { values, resolve, reject } }) {
-    try {
-      yield callWith401_403Handle(post, URL.CLEARDATE, values);
-      yield call(resolve);
-    } catch (err) {
-
-      yield call(reject, err);
-    }
-  }
 
 
 
