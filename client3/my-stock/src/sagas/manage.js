@@ -58,7 +58,7 @@ export const loadManage =
   function* () {
     try {
       console.log('enter load manage try clause');
-      const data = yield callWith401_403Handle(post, URL.GETUSERS);
+      const data = yield callWith401_403Handle(get, URL.GETUSERS);
       yield put(receiveUserList(data));
       yield put(to('manage'));
     } catch (err) {
