@@ -10,5 +10,6 @@ export const receiveSystemStatusData = createAction('receiveSystemStatusData')
 
 export const pullRealTimeAction = createAction('pullRealTimeAction')
 export const clearDateAction = createAction('clearDateAction')
-export const pulBasicDataAction = createAction('pulBasicDataAction')
+// export const pulBasicDataAction = createAction('pulBasicDataAction')
 export const receiveConnectionAction = createAction('receiveConnectionAction')
+export const ariseSystemEventAction = createAction('ariseSystemEventAction')

@@ -11,7 +11,6 @@ import { transformError } from '../../utils/api'
 import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { prettyDOM } from "@testing-library/react";
 
 
 const MulRowsWrap = styled.div`

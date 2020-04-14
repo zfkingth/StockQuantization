@@ -43,9 +43,15 @@ export const GETDATENFO = `${ABOUT}DateInfo`
 
 //use another server as task control service
 const TASKCONTROL = `${process.env.REACT_APP_Task_API_URL}Tasks/`;
-export const PULLREALTIMEDATA = `${TASKCONTROL}pullRealTimeData`;
+export const calcLimitNum = `${TASKCONTROL}calcLimitNum`;
+export const pullDayData = `${TASKCONTROL}pullDayData`;
+export const pullF10 = `${TASKCONTROL}pullF10`;
+export const pullMarginData = `${TASKCONTROL}pullMarginData`;
+export const pullMarketDealData = `${TASKCONTROL}pullMarketDealData`;
+export const pullRealTimeData = `${TASKCONTROL}pullRealTimeData`;
+export const pullAllStockNames = `${TASKCONTROL}pullAllStockNames`;
+export const pullBasicData = `${TASKCONTROL}pullBasicData`;
 export const CLEARDATE = `${TASKCONTROL}clearDate`;
-export const PULBASICDATA = `${TASKCONTROL}pulBasicData`;
 
 
 

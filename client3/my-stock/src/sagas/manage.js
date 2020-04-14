@@ -1,18 +1,50 @@
 
 
-import { get,post } from '../utils/api'
+import { get, post } from '../utils/api'
 import * as URL from '../constants/api'
 import { callWith401_403Handle } from './api';
-import { put ,call} from 'redux-saga/effects';
+import { put, call } from 'redux-saga/effects';
 import { to, goToErrorPage } from '../actions/navigation'
 import { receiveUserList, receiveSystemStatusData } from '../actions/manage'
 
+
+const relations = [
+  ['CalcLimitNum', URL.calcLimitNum],
+  ['pullDaily', URL.pullDayData],
+  ['pullF10', URL.pullF10],
+  ['pullmargin', URL.pullMarginData],
+  ['PullMarketDealData', URL.pullMarketDealData],
+  ['pullRealTime', URL.pullRealTimeData],
+  ['pullStockNames', URL.pullAllStockNames],
+]
+
+
+export const ariseSystemEventAction =
+  function* ({ payload: eventName }) {
+    try {
+
+      let theUrl;
+      for (const [name, url] of relations) {
+        if (name === eventName) {
+          theUrl = url;
+          break;
+        }
+      }
+
+      console.log("arise fucntion is called")
+
+      yield callWith401_403Handle(post, theUrl);
+    } catch (err) {
+
+      yield put(goToErrorPage(err));
+    }
+  }
 
 export const loadManage =
   function* () {
     try {
       console.log('enter load manage try clause');
-      const data = yield callWith401_403Handle(get, URL.GETUSERS);
+      const data = yield callWith401_403Handle(post, URL.GETUSERS);
       yield put(receiveUserList(data));
       yield put(to('manage'));
     } catch (err) {
@@ -41,40 +73,40 @@ export const loadSystemStatus =
     console.log('exit loadSystemStatus clause');
   }
 
-  export const pullRealTimeAction =
+export const pullRealTimeAction =
   function* ({ payload: { values, resolve, reject } }) {
     try {
-        yield callWith401_403Handle(post, URL.PULLREALTIMEDATA);
-    yield call(resolve);
+      yield callWith401_403Handle(post, URL.pullRealTimeData);
+      yield call(resolve);
     } catch (err) {
 
-     yield call(reject, err);
+      yield call(reject, err);
     }
   }
 
 
-  export const clearDateAction =
+export const clearDateAction =
   function* ({ payload: { values, resolve, reject } }) {
     try {
-        yield callWith401_403Handle(post, URL.CLEARDATE,values);
-    yield call(resolve);
+      yield callWith401_403Handle(post, URL.CLEARDATE, values);
+      yield call(resolve);
     } catch (err) {
 
-     yield call(reject, err);
+      yield call(reject, err);
     }
   }
 
 
 
-  export const pulBasicDataAction =
-  function* ({ payload: { values, resolve, reject } }) {
-    try {
-        yield callWith401_403Handle(post, URL.PULBASICDATA,values);
-    yield call(resolve);
-    } catch (err) {
+// export const pulBasicDataAction =
+//   function* ({ payload: { values, resolve, reject } }) {
+//     try {
+//       yield callWith401_403Handle(post, URL.PULBASICDATA, values);
+//       yield call(resolve);
+//     } catch (err) {
 
-     yield call(reject, err);
-    }
-  }
+//       yield call(reject, err);
+//     }
+//   }
 
 

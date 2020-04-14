@@ -103,8 +103,8 @@ namespace Stock.WebAPI.Controllers
         }
 
 
-        [HttpPost("pulBasicData")]
-        public ActionResult pulBasicData()
+        [HttpPost("pullBasicData")]
+        public ActionResult pullBasicData()
         {
             //_util.EnquePullAllStockNamesTask();
             //_util.EnquePullF10Task();
