@@ -33,7 +33,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
             await qf.RefreshTokenAsync();
             await qf.RefreshAllTradeDays();
 
-            var res = hf.Update_allStock_Names();
+            await hf.Update_allStock_Names();
 
             await setFinishedDate(SystemEvents.PullAllStockNames);
 

@@ -28,13 +28,9 @@ namespace Stock.WebAPI.ViewModels.Fillers
         async Task F10Filler_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
 
-            await setStartDate(SystemEvents.PullStockF10);
-            System.Diagnostics.Debug.WriteLine($"****************  pull F10 data : {e.Stock} start  ***************************");
             HandleFun hf = new HandleFun();
             await hf.UpdateStockXrXd(e.Stock.Code);
            
-            System.Diagnostics.Debug.WriteLine($"****************  pull F10 data : {e.Stock} end    ***************************");
-            await setFinishedDate(SystemEvents.PullStockF10);
         }
 
 
@@ -42,7 +38,6 @@ namespace Stock.WebAPI.ViewModels.Fillers
         public async Task PullAll()
         {
             await setStartDate(SystemEvents.PullStockF10);
-            System.Diagnostics.Debug.WriteLine("start pull  all F10 data");
 
 
             base.DoWork();
@@ -50,7 +45,6 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             await setFinishedDate(SystemEvents.PullStockF10);
 
-            System.Diagnostics.Debug.WriteLine("end pull  all F10 data");
         }
 
      

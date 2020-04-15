@@ -209,6 +209,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 await db.SaveChangesAsync();
 
             }
+            System.Diagnostics.Debug.WriteLine($"event {eventName} start.");
         }
 
         protected async Task setFinishedDate(string eventName)
@@ -225,6 +226,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 await db.SaveChangesAsync();
 
             }
+            System.Diagnostics.Debug.WriteLine($"event {eventName} end.");
         }
 
 

@@ -28,7 +28,6 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         async Task handle(BaseDoWorkViewModel.StockArgs e)
         {
-            await setStartDate(SystemEvents.PullIndex30m);
             string code = e.Stock.Code;
 
             System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {code} start  ***************************");
@@ -36,7 +35,6 @@ namespace Stock.WebAPI.ViewModels.Fillers
             await hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
 
             System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {code} end    ***************************");
-            await setFinishedDate(SystemEvents.PullIndex30m);
         }
         protected override List<Securities> GetSecList()
         {
@@ -64,16 +62,14 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         public async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullStockIndex1d);
-            System.Diagnostics.Debug.WriteLine("start pull all day data");
+            await setStartDate(SystemEvents.PullIndex30m);
 
 
             base.DoWork();
 
 
-            await setFinishedDate(SystemEvents.PullStockIndex1d);
+            await setFinishedDate(SystemEvents.PullIndex30m);
 
-            System.Diagnostics.Debug.WriteLine("end pull all day data");
         }
 
 
