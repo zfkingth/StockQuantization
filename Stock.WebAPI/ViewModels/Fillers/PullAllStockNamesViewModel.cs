@@ -24,7 +24,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullStockNames);
+            await setStartDate(SystemEvents.PullAllStockNames);
 
             JQData.HandleFun hf = new JQData.HandleFun();
 
@@ -35,7 +35,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             var res = hf.Update_allStock_Names();
 
-            await setFinishedDate(SystemEvents.PullStockNames);
+            await setFinishedDate(SystemEvents.PullAllStockNames);
 
         }
 

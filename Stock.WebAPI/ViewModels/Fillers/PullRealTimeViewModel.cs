@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Stock.WebAPI.ViewModels.Fillers
 {
-    public class RealTimeDataFillerViewModel
+    public class PullRealTimeViewModel
     {
         internal Task PullAll()
         {

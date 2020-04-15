@@ -58,7 +58,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = await db.StockEvents.FirstAsync(s => s.EventName == SystemEvents.PullReadTimeData);
+                var se = await db.StockEvents.FirstAsync(s => s.EventName == SystemEvents.PullRealTime);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquepullRealTimeDataTask();
@@ -93,6 +93,25 @@ namespace BackgroundTasksSample.Services
 
             });
 
+
+        }
+
+        internal void EnquePullIndex30mData()
+        {
+            if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
+            _logger.LogInformation("enque pull index 30 m data");
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var puller = scopedServices.GetRequiredService<PullIndex30mViewModel>();
+
+                    await puller.PullAll();
+                }
+
+            });
 
         }
 
@@ -186,7 +205,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullDailyData);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullStockIndex1d);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullDayDataTask();
@@ -231,7 +250,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullF10);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullStockF10);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullF10Task();
@@ -304,7 +323,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullStockNames);
+                var se = db.StockEvents.First(s => s.EventName == SystemEvents.PullAllStockNames);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullAllStockNamesTask();
@@ -358,7 +377,7 @@ namespace BackgroundTasksSample.Services
     using (var scope = _serviceScopeFactory.CreateScope())
     {
         var scopedServices = scope.ServiceProvider;
-        var puller = scopedServices.GetRequiredService<F10FHPGFillerViewModel>();
+        var puller = scopedServices.GetRequiredService<PullStockF10ViewModel>();
 
         await puller.PullAll();
     }
@@ -378,7 +397,7 @@ namespace BackgroundTasksSample.Services
     using (var scope = _serviceScopeFactory.CreateScope())
     {
         var scopedServices = scope.ServiceProvider;
-        var puller = scopedServices.GetRequiredService<DayDataFillerViewModel>();
+        var puller = scopedServices.GetRequiredService<PullStockIndex1dViewModel>();
 
         await puller.PullAll();
     }
@@ -399,7 +418,7 @@ namespace BackgroundTasksSample.Services
     using (var scope = _serviceScopeFactory.CreateScope())
     {
         var scopedServices = scope.ServiceProvider;
-        var puller = scopedServices.GetRequiredService<RealTimeDataFillerViewModel>();
+        var puller = scopedServices.GetRequiredService<PullRealTimeViewModel>();
 
         await puller.PullAll();
     }

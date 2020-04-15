@@ -11,38 +11,32 @@ using System.Threading.Tasks;
 
 namespace Stock.WebAPI.ViewModels.Fillers
 {
-    public class DayDataFillerViewModel : BaseDoWorkViewModel
+    public class PullIndex30mViewModel : BaseDoWorkViewModel
     {
 
 
         private readonly ILogger _logger;
-        public DayDataFillerViewModel(IServiceScopeFactory serviceScopeFactory,
+        public PullIndex30mViewModel(IServiceScopeFactory serviceScopeFactory,
 
-            ILogger<DayDataFillerViewModel> logger) : base(serviceScopeFactory)
+            ILogger<PullIndex30mViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
-            this.stockHandle = DayDataFiller_stockHandle;
+            this.stockHandle = handle;
 
         }
 
 
-        async Task DayDataFiller_stockHandle(BaseDoWorkViewModel.StockArgs e)
+        async Task handle(BaseDoWorkViewModel.StockArgs e)
         {
+            await setStartDate(SystemEvents.PullIndex30m);
             string code = e.Stock.Code;
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {code} start  ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {code} start  ***************************");
             HandleFun hf = new HandleFun();
-            if (e.Stock.Type == SecuritiesEnum.Index)
-            {
-                var t1 = hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
-                //var t2 = hf.Update_PriceAsync(UnitEnum.Unit60m, e.Stock.Code);
-                //var t3 = hf.Update_PriceAsync(UnitEnum.Unit120m, e.Stock.Code);
-                //Task.WaitAll(t1, t2, t3);
-                Task.WaitAll(t1);
-            }
-            await hf.Update_PriceAsync(UnitEnum.Unit1d, e.Stock.Code);
+            await hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {code} end    ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {code} end    ***************************");
+            await setFinishedDate(SystemEvents.PullIndex30m);
         }
         protected override List<Securities> GetSecList()
         {
@@ -53,8 +47,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
 
                 var list = (from i in db.SecuritiesSet
-                            where i.Type == SecuritiesEnum.Stock ||
-                            i.Type == SecuritiesEnum.Index
+                            where i.Type == SecuritiesEnum.Index
                             select i).AsNoTracking().ToList();
                 return list;
             }
@@ -71,14 +64,14 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         public async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullDailyData);
+            await setStartDate(SystemEvents.PullStockIndex1d);
             System.Diagnostics.Debug.WriteLine("start pull all day data");
 
 
             base.DoWork();
 
 
-            await setFinishedDate(SystemEvents.PullDailyData);
+            await setFinishedDate(SystemEvents.PullStockIndex1d);
 
             System.Diagnostics.Debug.WriteLine("end pull all day data");
         }

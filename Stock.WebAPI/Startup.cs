@@ -120,12 +120,13 @@ namespace Stock.WebAPI
 
             services.AddSingleton<BackServiceUtil>();
             services.AddScoped<PullAllStockNamesViewModel>();
-            services.AddScoped<F10FHPGFillerViewModel>();
-            services.AddScoped<DayDataFillerViewModel>();
-            services.AddScoped<RealTimeDataFillerViewModel>();
+            services.AddScoped<PullStockF10ViewModel>();
+            services.AddScoped<PullStockIndex1dViewModel>();
+            services.AddScoped<PullRealTimeViewModel>();
             services.AddScoped<PullMarginDataViewModel>();
             services.AddScoped<PullMarketDealDataViewModel>();
             services.AddScoped<CalcLimitNumViewModel>();
+            services.AddScoped<PullIndex30mViewModel>();
 
 
         }

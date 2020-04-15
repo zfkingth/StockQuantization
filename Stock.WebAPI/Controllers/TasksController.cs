@@ -65,24 +65,25 @@ namespace Stock.WebAPI.Controllers
         {
             switch (model.EventName)
             {
-                case "CalcLimitNum": _util.EnqueCalcLimitNum(); break;
-                case "pullDaily": _util.EnquePullDayDataTask(); break;
-                case "pullF10": _util.EnquePullF10Task(); break;
-                case "pullmargin": _util.EnquePullMarginData(); break;
-                case "PullMarketDealData": _util.EnquePullMarketDealData(); break;
-                case "pullRealTime":
+                case SystemEvents.CalcLimitNum: _util.EnqueCalcLimitNum(); break;
+                case SystemEvents.PullStockIndex1d: _util.EnquePullDayDataTask(); break;
+                case SystemEvents.PullStockF10: _util.EnquePullF10Task(); break;
+                case SystemEvents.PullMarginData: _util.EnquePullMarginData(); break;
+                case SystemEvents.PullMarketDealData: _util.EnquePullMarketDealData(); break;
+                case SystemEvents.PullRealTime:
                     return await handlePullRealtime();
 
-                case "pullStockNames":
+                case SystemEvents.PullAllStockNames:
                     _util.EnquePullAllStockNamesTask();
                     break;
+                case SystemEvents.PullIndex30m: _util.EnquePullIndex30mData(); break;
             }
             return NoContent();
         }
 
         private async Task<ActionResult> handlePullRealtime()
         {
-            var item = await _db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PullReadTimeData);
+            var item = await _db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PullRealTime);
 
             if (item.LastAriseEndDate == null)
             {

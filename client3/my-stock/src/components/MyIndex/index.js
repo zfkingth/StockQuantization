@@ -12,7 +12,10 @@ import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
+import { shicha, calcCCI } from './common'
 
+
+export const maset = [5, 20, 60];
 const MulRowsWrap = styled.div`
  
   flex-direction:column;
@@ -32,7 +35,6 @@ color:red;
 `
 
 
-const shicha = 8 * 3600 * 1000;
 
 function timeStamp2String(time) {
   const datetime = new Date();
@@ -107,62 +109,7 @@ const prepareMarketDeal = mk => {
   return dataForChart;
 }
 
-const calcCCI = (historyData, n) => {
 
-  const getTp = (historyData, index) => {
-    let price = historyData[index];
-    let tp = (price.high + price.low + price.close) / 3;
-    return tp;
-
-  }
-
-  //tp 是中价
-  let maForTp = [], cci = [], tpSum = 0;
-  let Num = n;
-
-  for (let i = 0; i < historyData.length; i += 1) {
-    let price = historyData[i];
-    let currentDate = new Date(price.date).getTime() + shicha;
-
-
-    if (i < Num) {
-      tpSum += getTp(historyData, i)
-      maForTp.push([currentDate, null]);
-      cci.push([currentDate, null]);
-    } else {
-      tpSum += getTp(historyData, i) - getTp(historyData, i - Num);
-      let average = tpSum / Num;
-      maForTp.push([currentDate, average]);
-
-
-
-      //calc cci
-      let TP = getTp(historyData, i);
-      //绝对差
-      let jdc = 0;
-      for (let j = 0; j < Num; j++) {
-        jdc += Math.abs(getTp(historyData, i - j) - average);
-      }
-
-      //平均绝对误差
-      let mad = jdc / Num;
-
-
-      let currentCci = (TP - average) / mad / 0.015;
-      cci.push([currentDate, _.round(currentCci, 2)]);
-
-
-    }
-
-
-  }
-
-  return cci;
-
-
-}
-
-const maset = [5, 20, 60];
 const prepareHistoryData = (historyData) => {
 
 
@@ -228,9 +175,9 @@ const prepareStaData = (staPrice) => {
 
 }
 
-const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice ) => {
+const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) => {
 
-  
+
 
   const marginForChart = handleMarginData(marginData);
   const marketForChart = prepareMarketDeal(marketDeal);
@@ -564,9 +511,9 @@ class Basecontrol extends React.PureComponent {
       const p3 = fetchData(get, URL.GETMARKETDEAL);
       const p4 = fetchData(get, URL.GetStaPrice);
 
-      const allData= await Promise.all([p0, p1, p2, p3, p4]);
+      const allData = await Promise.all([p0, p1, p2, p3, p4]);
 
-    
+
 
       let opt = createOption(...allData);
 
