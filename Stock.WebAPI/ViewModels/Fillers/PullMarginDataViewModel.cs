@@ -24,12 +24,12 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullMarketDealData);
+            await setStartDate(SystemEvents.PullMarginData);
 
             HandleFun hf = new HandleFun();
             await hf.Update_margin_data();
 
-            await setFinishedDate(SystemEvents.PullMarketDealData);
+            await setFinishedDate(SystemEvents.PullMarginData);
 
         }
 

@@ -208,7 +208,7 @@ namespace BackgroundTasksSample.Services
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<StockContext>();
 
-                var se = await db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PulMarginData);
+                var se = await db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PullMarginData);
                 if (se.LastAriseEndDate == null)
                 {
                     EnquePullMarginData();

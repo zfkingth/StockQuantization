@@ -55,7 +55,7 @@ class DemoBase extends React.PureComponent {
     // this.setState({ employees: employees });
     const eventName = e.row.data.eventName;
     this.logEvent(eventName);
-    this.props.ariseSystemEventAction(eventName);
+    this.props.ariseSystemEventAction({eventName});
     e.event.preventDefault();
   }
 

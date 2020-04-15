@@ -8,32 +8,23 @@ import { to, goToErrorPage } from '../actions/navigation'
 import { receiveUserList, receiveSystemStatusData } from '../actions/manage'
 
 
-const relations = [
-  ['CalcLimitNum', URL.calcLimitNum],
-  ['pullDaily', URL.pullDayData],
-  ['pullF10', URL.pullF10],
-  ['pullmargin', URL.pullMarginData],
-  ['PullMarketDealData', URL.pullMarketDealData],
-  ['pullRealTime', URL.pullRealTimeData],
-  ['pullStockNames', URL.pullAllStockNames],
-]
+// const relations = [
+//   ['CalcLimitNum', URL.calcLimitNum],
+//   ['pullDaily', URL.pullDayData],
+//   ['pullF10', URL.pullF10],
+//   ['pullmargin', URL.pullMarginData],
+//   ['PullMarketDealData', URL.pullMarketDealData],
+//   ['pullRealTime', URL.pullRealTimeData],
+//   ['pullStockNames', URL.pullAllStockNames],
+// ]
 
 
 export const ariseSystemEventAction =
-  function* ({ payload: eventName }) {
+  function* ({ payload: { eventName } }) {
     try {
-
-      let theUrl;
-      for (const [name, url] of relations) {
-        if (name === eventName) {
-          theUrl = url;
-          break;
-        }
-      }
-
       console.log("arise fucntion is called")
 
-      yield callWith401_403Handle(post, theUrl);
+      yield callWith401_403Handle(post, URL.ariseSystemEvent, { eventName });
     } catch (err) {
 
       yield put(goToErrorPage(err));
@@ -87,16 +78,16 @@ export const loadSystemStatus =
     console.log('exit loadSystemStatus clause');
   }
 
-export const pullRealTimeAction =
-  function* ({ payload: { values, resolve, reject } }) {
-    try {
-      yield callWith401_403Handle(post, URL.pullRealTimeData);
-      yield call(resolve);
-    } catch (err) {
+// export const pullRealTimeAction =
+//   function* ({ payload: { values, resolve, reject } }) {
+//     try {
+//       yield callWith401_403Handle(post, URL.pullRealTimeData);
+//       yield call(resolve);
+//     } catch (err) {
 
-      yield call(reject, err);
-    }
-  }
+//       yield call(reject, err);
+//     }
+//   }
 
 
 

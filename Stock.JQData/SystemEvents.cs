@@ -10,7 +10,7 @@ namespace Stock.JQData
         public const string PullF10 = "pullF10";
         public const string PullDailyData = "pullDaily";
         public const string PullReadTimeData = "pullRealTime";
-        public const string PulMarginData = "pullmargin";
+        public const string PullMarginData = "pullmargin";
         public const string PullMarketDealData= "PullMarketDealData";
         public const string CalcLimitNum= "CalcLimitNum";
 

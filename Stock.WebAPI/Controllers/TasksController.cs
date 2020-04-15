@@ -16,6 +16,9 @@ using Stock.Model;
 
 namespace Stock.WebAPI.Controllers
 {
+
+
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin")]
@@ -50,70 +53,34 @@ namespace Stock.WebAPI.Controllers
             return "value";
         }
 
-
-
-
-
-
-
-        [HttpPost("pullAllStockNames")]
-        public ActionResult pullAllStockNames()
+        public class ArgAriseSystemEvent
         {
-            _util.EnquePullAllStockNamesTask();
-            return NoContent();
+
+            public string EventName { get; set; }
         }
 
 
-        [HttpPost("pullF10")]
-        public ActionResult pullF10()
+        [HttpPost("ariseSystemEvent")]
+        public async Task<ActionResult> ariseSystemEventAsync([FromBody] ArgAriseSystemEvent model)
         {
-            _util.EnquePullF10Task();
+            switch (model.EventName)
+            {
+                case "CalcLimitNum": _util.EnqueCalcLimitNum(); break;
+                case "pullDaily": _util.EnquePullDayDataTask(); break;
+                case "pullF10": _util.EnquePullF10Task(); break;
+                case "pullmargin": _util.EnquePullMarginData(); break;
+                case "PullMarketDealData": _util.EnquePullMarketDealData(); break;
+                case "pullRealTime":
+                    return await handlePullRealtime();
+
+                case "pullStockNames":
+                    _util.EnquePullAllStockNamesTask();
+                    break;
+            }
             return NoContent();
         }
 
-        [HttpPost("pullDayData")]
-        public ActionResult pullDayData()
-        {
-            _util.EnquePullDayDataTask();
-            return NoContent();
-        }
-
-        [HttpPost("pullMarginData")]
-        public ActionResult pullMarginData()
-        {
-            _util.EnquePullMarginData();
-            return NoContent();
-        }
-
-
-
-        [HttpPost("pullMarketDealData")]
-        public ActionResult pullMarketDealData()
-        {
-            _util.EnquePullMarketDealData();
-            return NoContent();
-        }
-
-
-        [HttpPost("calcLimitNum")]
-        public ActionResult calcLimitNum()
-        {
-            _util.EnqueCalcLimitNum();
-            return NoContent();
-        }
-
-
-        [HttpPost("pullBasicData")]
-        public ActionResult pullBasicData()
-        {
-            //_util.EnquePullAllStockNamesTask();
-            //_util.EnquePullF10Task();
-            _util.EnquePullDayDataTask();
-            //_util.EnqueEraseRealTimeDataTask();
-            return NoContent();
-        }
-        [HttpPost("pullRealTimeData")]
-        public async Task<ActionResult> pullRealTimeDataAsync()
+        private async Task<ActionResult> handlePullRealtime()
         {
             var item = await _db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PullReadTimeData);
 
@@ -148,12 +115,7 @@ namespace Stock.WebAPI.Controllers
                 string mes = $"后台任务正在运行，不能授受此命令。";
                 return BadRequest(mes);
             }
-
-
-
-
         }
-
 
         [HttpPost("clearDate")]
         public async Task<ActionResult> clearDateAsync([FromBody] string eventName)
