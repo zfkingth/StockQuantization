@@ -80,8 +80,11 @@ namespace BackgroundTasksSample.Services
         {
             _logger.LogInformation("Timed Background Service is working. for short period");
 
-            _util.JudgePullRealTimeDataAsync().Wait();
             _util.JudgePullMarginDataAsync().Wait();
+            _util.JudgePullMarketDealDataAsync().Wait();
+
+            _util.JudgePullRealTimeDataAsync().Wait();
+
         }
 
 

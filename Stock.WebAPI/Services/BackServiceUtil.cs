@@ -235,8 +235,30 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    if (Utility.IsAfterMarketEnd(DateTime.Now))
+                    if (Utility.IsBeforeStart(DateTime.Now))
                         EnquePullMarginData();
+                }
+            }
+        }
+
+        internal async Task JudgePullMarketDealDataAsync()
+        {
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+                var se = await db.StockEvents.FirstOrDefaultAsync(s => s.EventName == SystemEvents.PullMarketDealData);
+                if (se.LastAriseEndDate == null)
+                {
+                    EnquePullMarketDealData();
+
+                }
+                else
+                {
+                    if (Utility.IsAfterMarketEnd(DateTime.Now))
+                        EnquePullMarketDealData();
                 }
             }
         }

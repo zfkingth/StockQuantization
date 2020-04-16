@@ -56,11 +56,33 @@ namespace Stock.JQData
             }
         }
 
+        /// <summary>
+        /// 在收盘之后
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public static bool IsAfterMarketEnd(DateTime time)
         {
 
             var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
             if (sp >= Constants.StockEndSpan)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 在开盘之前
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static bool IsBeforeStart(DateTime time)
+        {
+
+            var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
+            if (sp <= Constants.StockStartSpan)
             {
                 return true;
             }
