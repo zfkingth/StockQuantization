@@ -42,15 +42,24 @@ namespace Stock.WebAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> Get(string id, [FromQuery] DateTime startDate)
+
+        DateTime parstTicks(long ticks)
         {
+            DateTime startDate = new DateTime(ticks);
             if (startDate == default)
             {
                 //默认只取1年的数据
                 startDate = DateTime.Now.AddYears(-_defalutYears);
             }
+
+            return startDate;
+        }
+
+        // GET api/<controller>/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<Stock.Model.Price>>> Get(string id, [FromQuery] long start)
+        {
+            DateTime startDate = parstTicks(start);
             var list = await (from i in _db.PriceSet
                               where i.Code == id
                               && i.Unit == Model.UnitEnum.Unit1d
@@ -79,13 +88,10 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetMargin")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> GetMargin([FromQuery] DateTime startDate)
+        public async Task<ActionResult<List<Stock.Model.Price>>> GetMargin([FromQuery] long start)
         {
-            if (startDate == default)
-            {
-                //默认只取1年的数据
-                startDate = DateTime.Now.AddYears(-_defalutYears);
-            }
+
+            DateTime startDate = parstTicks(start);
 
             var item = await (from i in _db.MarginTotal
                               where i.Date >= startDate
@@ -97,15 +103,11 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetMarketDeal")]
-        public async Task<ActionResult<List<Stock.Model.MarketDeal>>> GetMarketDeal([FromQuery] DateTime startDate)
+        public async Task<ActionResult<List<Stock.Model.MarketDeal>>> GetMarketDeal([FromQuery] long start)
 
         {
-            if (startDate == default)
-            {
-                //默认只取1年的数据
-                startDate = DateTime.Now.AddYears(-_defalutYears);
-            }
 
+            DateTime startDate = parstTicks(start);
             var item = await (from i in _db.MarketDeal
                               where Constants.LinkIds.Contains(i.LinkId)
                               && i.Day >= startDate
@@ -118,13 +120,10 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetStaPrice")]
-        public async Task<ActionResult<List<Stock.Model.StaPrice>>> GetStaPrice([FromQuery] DateTime startDate)
+        public async Task<ActionResult<List<Stock.Model.StaPrice>>> GetStaPrice([FromQuery] long start)
         {
-            if (startDate == default)
-            {
-                //默认只取1年的数据
-                startDate = DateTime.Now.AddYears(-_defalutYears);
-            }
+
+            DateTime startDate = parstTicks(start);
 
             var query = from i in _db.StaPrice
                         where i.Date >= startDate
