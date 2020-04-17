@@ -23,6 +23,9 @@ namespace Stock.WebAPI.Controllers
         private readonly ILogger<ValuesController> _logger;
         private readonly StockContext _db;
 
+        //默认数据年度
+        private const int _defalutYears = 1;
+
         public ValuesController(
             ILogger<ValuesController> logger, StockContext db
           )
@@ -41,10 +44,17 @@ namespace Stock.WebAPI.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> Get(string id)
+        public async Task<ActionResult<List<Stock.Model.Price>>> Get(string id, [FromQuery] DateTime startDate)
         {
+            if (startDate == default)
+            {
+                //默认只取1年的数据
+                startDate = DateTime.Now.AddYears(-_defalutYears);
+            }
             var list = await (from i in _db.PriceSet
-                              where i.Code == id && i.Unit == Model.UnitEnum.Unit1d
+                              where i.Code == id
+                              && i.Unit == Model.UnitEnum.Unit1d
+                              && i.Date >= startDate
                               select i
                              ).AsNoTracking()
                            .ToListAsync();
@@ -69,33 +79,38 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetMargin")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> GetMargin()
+        public async Task<ActionResult<List<Stock.Model.Price>>> GetMargin([FromQuery] DateTime startDate)
         {
-            //var item = await (from i in _db.MarginTotal
-            //                  group new { i.Date, i.FinValue } by i.Date into gp
-            //                  orderby gp.Key ascending
-            //                  select gp
-            //                 ).ToListAsync();
+            if (startDate == default)
+            {
+                //默认只取1年的数据
+                startDate = DateTime.Now.AddYears(-_defalutYears);
+            }
+
             var item = await (from i in _db.MarginTotal
+                              where i.Date >= startDate
                               select new { i.Date, i.FinValue }
-            ).AsNoTracking().ToListAsync();
+                 ).AsNoTracking().ToListAsync();
 
             return Ok(item);
         }
 
 
         [HttpGet("GetMarketDeal")]
-        public async Task<ActionResult<List<Stock.Model.MarketDeal>>> GetMarketDeal()
+        public async Task<ActionResult<List<Stock.Model.MarketDeal>>> GetMarketDeal([FromQuery] DateTime startDate)
+
         {
-            //var item = await (from i in _db.MarginTotal
-            //                  group new { i.Date, i.FinValue } by i.Date into gp
-            //                  orderby gp.Key ascending
-            //                  select gp
-            //                 ).ToListAsync();
+            if (startDate == default)
+            {
+                //默认只取1年的数据
+                startDate = DateTime.Now.AddYears(-_defalutYears);
+            }
+
             var item = await (from i in _db.MarketDeal
                               where Constants.LinkIds.Contains(i.LinkId)
+                              && i.Day >= startDate
                               select new { Date = i.Day, i.LinkId, i.BuyAmount, i.SellAmount }
-                        ).AsNoTracking().ToListAsync();
+               ).AsNoTracking().ToListAsync();
 
 
             return Ok(item);
@@ -103,9 +118,16 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetStaPrice")]
-        public async Task<ActionResult<List<Stock.Model.StaPrice>>> GetStaPrice()
+        public async Task<ActionResult<List<Stock.Model.StaPrice>>> GetStaPrice([FromQuery] DateTime startDate)
         {
+            if (startDate == default)
+            {
+                //默认只取1年的数据
+                startDate = DateTime.Now.AddYears(-_defalutYears);
+            }
+
             var query = from i in _db.StaPrice
+                        where i.Date >= startDate
                         select i;
 
             var rt = await query.AsNoTracking().ToListAsync();

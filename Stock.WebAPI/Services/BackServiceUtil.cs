@@ -76,6 +76,33 @@ namespace BackgroundTasksSample.Services
             }
         }
 
+        internal async Task JudgePullIndex30mData()
+        {
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+                var se = await db.StockEvents.FirstAsync(s => s.EventName == SystemEvents.PullIndex30m);
+                if (se.LastAriseEndDate == null)
+                {
+                    EnquePullIndex30mData();
+                }
+                else
+                {
+                    //交易时间执行频率由appsettings.json文件里的ShortPeriodCycle来，定义。
+                    //每次执行成功后，会更新LastAriseStartDate，所以不会有太多的执行次数
+                    if (Utility.IsTradingTime(DateTime.Now))
+                    {
+
+                        EnquePullIndex30mData();
+                    }
+                }
+            }
+        }
+
+
         internal void EnquePullMarketDealData()
         {
             if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
