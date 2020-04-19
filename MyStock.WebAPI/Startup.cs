@@ -42,7 +42,7 @@ namespace MyStock.WebAPI
           .AddDbContext<StockContext>(options =>
               options.UseMySql(
                   Configuration.GetConnectionString("StockContext"),
-                  o => o.MigrationsAssembly("Stock.WebAPI")
+                  o => o.MigrationsAssembly("MyStock.WebAPI")
               )
           );
 

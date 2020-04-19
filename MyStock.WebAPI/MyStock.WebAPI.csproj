@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Migrations\20200419073103_initial.cs" />
+    <Compile Include="Migrations\20200419073103_initial.Designer.cs" />
+    <Compile Include="Migrations\StockContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="EPPlus" Version="5.1.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.23" />
@@ -21,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="ViewModels\Auth\" />
     <Folder Include="Notifications\" />
   </ItemGroup>
