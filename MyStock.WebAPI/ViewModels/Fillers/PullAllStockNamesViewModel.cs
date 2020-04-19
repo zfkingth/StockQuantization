@@ -31,12 +31,11 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
             await setStartDate(SystemEvents.PullAllStockNames);
 
-            HandleFun hf = new HandleFun();
 
             //在这里负责刷新token
-
-            await pullShenzhen();
+            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
             await pullShanghai();
+            await pullShenzhen();
 
             await pullShanghaiKCB();
 
@@ -373,7 +372,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             using (var client = new HttpClient(handler))
             {
                 Stream val = null;
-                client.BaseAddress = new Uri("http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1110&TABKEY=tab1&random=0.19832070121584655");
+                client.BaseAddress = new Uri("http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1110&TABKEY=tab1&random=0.47192251329693735");
 
 
                 client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729)");
