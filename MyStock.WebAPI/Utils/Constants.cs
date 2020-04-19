@@ -19,7 +19,10 @@ namespace MyStock.WebAPI.Utils
 
         public static readonly int MaxQueueCnt = 5;
 
-        public static readonly string SHIndexId = "0000001";
+        /// <summary>
+        /// 深圳成指
+        /// </summary>
+        public static readonly string IndexBase = "1399001";
 
     }
 }

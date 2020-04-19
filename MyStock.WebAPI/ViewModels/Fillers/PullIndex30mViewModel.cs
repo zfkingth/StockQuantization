@@ -36,7 +36,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {id} end    ***************************");
         }
-        protected override List<Stock> GetSecList()
+        protected override List<Stock> GetStockList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {

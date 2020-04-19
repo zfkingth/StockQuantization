@@ -115,7 +115,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// 获取需要处理的股票或者指数在代码,默认只处理股票
         /// </summary>
         /// <returns></returns>
-        protected virtual List<Stock> GetSecList()
+        protected virtual List<Stock> GetStockList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -147,7 +147,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 {
                     var db = scope.ServiceProvider.GetRequiredService<StockContext>();
 
-                    var list = GetSecList();
+                    var list = GetStockList();
                     //定义线程取消的一个对象
 
                     int progressCnt = 0;
@@ -169,7 +169,6 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                    {
                        po.CancellationToken.ThrowIfCancellationRequested();
 
-                       System.Diagnostics.Debug.WriteLine($"foreach handle stock id: {stock.StockId}");
 
                        stockHandle(new StockArgs() { Stock = stock }).Wait();
 
@@ -227,6 +226,144 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             System.Diagnostics.Debug.WriteLine($"event {eventName} end.");
         }
 
+        #region get data from net ease
+
+        private static readonly Lazy<HttpClient> lazy =
+        new Lazy<HttpClient>(
+            () =>
+            {
+                var handler = new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip
+                                      | DecompressionMethods.Deflate
+
+
+                };
+                var client = new HttpClient(handler);
+
+
+
+                client.BaseAddress = new Uri("http://api.money.126.net");
+
+
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/javascript, */*;q=0.8");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.5");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
+                client.DefaultRequestHeaders.ExpectContinue = true;
+
+
+                return client;
+            }
+            );
+
+        public static HttpClient ClientForRealTime { get { return lazy.Value; } }
+
+        /// <summary>
+        /// 从网易获取实时数据
+        /// </summary>
+        /// <param name="stockId"></param>
+        /// <returns></returns>
+        public async Task<List<RealTimeData>> GetStockRealTimeFormNetEase(List<string> stockIds)
+        {
+            List<RealTimeData> list = new List<RealTimeData>();
+
+            var client = ClientForRealTime;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("data/feed/");
+
+            foreach (var id in stockIds)
+            {
+                sb.Append(id);
+                sb.Append(",");
+            }
+
+            sb.Append("money.api");
+
+            string requestUri = sb.ToString();
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stream = await response.Content.ReadAsStreamAsync();
+
+                list = ParseRealData(stream);
+
+            }
+            else
+            {
+                throw new Exception($"从网易获取实时数据时发生通讯错误。Request Uri is:  {  client.BaseAddress }{requestUri} ");
+            }
+
+
+            return list;
+
+
+
+        }
+
+        private List<RealTimeData> ParseRealData(Stream stream)
+        {
+            List<RealTimeData> list = new List<RealTimeData>();
+            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+            {
+                var val = reader.ReadToEnd();
+
+                Regex regex = new Regex(@"{[^{}]+}");
+
+                var matches = regex.Matches(val);
+
+                for (int m = 0; m < matches.Count; m++)
+                {
+                    string ss = matches[m].Value;
+
+
+                    dynamic stuff = Newtonsoft.Json.Linq.JObject.Parse(ss);
+
+                    string stockId = stuff["code"];
+
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine(stockId);
+                    System.Diagnostics.Debug.WriteLine(ss);
+#endif
+
+
+                    DateTime date = ((DateTime)stuff["time"]);
+
+
+                    if (stuff["open"] != null)
+                    {
+                        //每一支股票只保留多个实时数据
+
+                        RealTimeData realItem = new RealTimeData();
+                        realItem.StockId = stockId;
+                        realItem.Date = date;
+
+
+                        realItem.Open = stuff["open"];
+                        realItem.High = stuff["high"];
+                        realItem.Low = stuff["low"];
+                        realItem.Close = stuff["price"];
+                        realItem.ZhangDieFu = stuff["percent"] * 100f;//和历史数据统一为百分比
+                        realItem.Volume = stuff["volume"];
+                        realItem.Amount = stuff["turnover"];
+                        realItem.StockName = stuff["name"];
+
+                        list.Add(realItem);
+                    }
+
+                }
+
+            }
+
+            return list;
+        }
+
+
+        #endregion
 
         #region search clause
 
@@ -594,7 +731,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         private async Task<DateTime> getIndexTradeDateInRealData(StockContext db)
         {
             DateTime date = await (from i in db.RealTimeDataSet
-                                   where i.StockId == Constants.SHIndexId
+                                   where i.StockId == Constants.IndexBase
                                    orderby i.Date descending
                                    select i.Date).FirstOrDefaultAsync();
 

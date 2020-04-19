@@ -446,7 +446,7 @@ namespace BackgroundTasksSample.Services
         var scopedServices = scope.ServiceProvider;
         var puller = scopedServices.GetRequiredService<PullStockIndex1dViewModel>();
 
-        await puller.PullAll();
+        await puller.PullAll(1);
     }
 
 });
