@@ -168,10 +168,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     Parallel.ForEach(list, po, (stock) =>
                    {
                        po.CancellationToken.ThrowIfCancellationRequested();
-                       //using (var asyncBridge = AsyncHelper.Wait)
-                       //{
-                       //    asyncBridge.Run(stockHandle(new StockArgs() { StockId = stockId }));
-                       //}
+
+                       System.Diagnostics.Debug.WriteLine($"foreach handle stock id: {stock.StockId}");
 
                        stockHandle(new StockArgs() { Stock = stock }).Wait();
 
