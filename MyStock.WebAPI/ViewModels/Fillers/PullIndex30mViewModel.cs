@@ -28,7 +28,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         async Task handle(BaseDoWorkViewModel.StockArgs e)
         {
-            string id = e.Stock.StockId;
+            string id = e.StockId;
 
             System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {id} start  ***************************");
             HandleFun hf = new HandleFun();
@@ -36,7 +36,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {id} end    ***************************");
         }
-        protected override List<Stock> GetStockList()
+        protected override List<string> GetStockList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -46,7 +46,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                 var list = (from i in db.StockSet
                             where i.StockType ==StockTypeEnum.Index
-                            select i).AsNoTracking().ToList();
+                            select i.StockId).AsNoTracking().ToList();
                 return list;
             }
         }

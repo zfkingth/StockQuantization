@@ -32,11 +32,11 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         async Task DayDataFiller_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"******************pull daily data : {e.Stock.StockId}***************************");
-            await FillStockDataFormNetEase(e.Stock.StockId, _startDate);
+            System.Diagnostics.Debug.WriteLine($"******************pull daily data : {e.StockId}***************************");
+            await FillStockDataFormNetEase(e.StockId, _startDate);
 
         }
-        protected override List<Stock> GetStockList()
+        protected override List<string> GetStockList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -46,7 +46,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                 var list = (from i in db.StockSet
 
-                            select i).AsNoTracking().ToList();
+                            select i.StockId).AsNoTracking().ToList();
+                list.Add(Constants.IndexBase);
                 return list;
             }
         }
@@ -67,6 +68,18 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             return zdf != null ? true : false;
         }
 
+        private static float? convertToFloat(string numberStr)
+        {
+            float number;
+
+            // The numberStr is the string you want to parse
+            if (float.TryParse(numberStr, out number))
+            {
+                return number;
+            }
+
+            return null;
+        }
 
         private static void setField(DayData item, string[] words)
         {
@@ -82,12 +95,15 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 item.ZhangDieFu = temp;
             }
 
-            item.HuanShouLiu = float.Parse(words[10]);
+
+
+            item.HuanShouLiu = convertToFloat(words[10]);//网易的指数数据没有换手率
+
             item.Volume = float.Parse(words[11]);
             item.Amount = float.Parse(words[12]);
 
-            item.ZongShiZhi = float.Parse(words[13]);
-            item.LiuTongShiZhi = float.Parse(words[14]);
+            item.ZongShiZhi = convertToFloat(words[13]);
+            item.LiuTongShiZhi = convertToFloat(words[14]);
 
             //从excel中获取的历史数据
             item.Type = DayDataType.History;
@@ -116,7 +132,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     {
                         line = reader.ReadLine();
 
-                      //  System.Diagnostics.Debug.WriteLine(line);
+                        //  System.Diagnostics.Debug.WriteLine(line);
 
                         //bypass the first line
                         if (lineInStream != 0)
