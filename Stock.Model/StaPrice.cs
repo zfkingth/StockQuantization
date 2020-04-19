@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Stock.Model
+namespace MyStock.Model
 {
-    public class StaPrice
+   public class StaPrice
     {
-        [MaxLength(15)]
-        public UnitEnum Unit { get; set; }
-
-
+        [Key]
         public DateTime Date { get; set; }
 
         /// <summary>
@@ -30,10 +27,5 @@ namespace Stock.Model
 
 
 
-        /// <summary>
-        /// 是否是转折点
-        /// </summary>
-        public TurnEnum Turn { get; set; } = TurnEnum.Normal;
-
-    }
+      }
 }

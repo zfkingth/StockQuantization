@@ -1,11 +1,11 @@
-using Stock.Model;
+using MyStock.Model;
 using System.Collections.Generic;
 
-namespace Stock.WebAPI.Notifications.Models
+namespace MyStock.WebAPI.Notifications.Models
 {
     public class TaskSuccessPayload
     {
         public string Message { get; set; }
-        public List<TempPrice> ResultList { get; set; }
+        public List<RealTimeData> ResultList { get; set; }
     }
 }

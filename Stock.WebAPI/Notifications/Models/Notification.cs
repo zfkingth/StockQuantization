@@ -1,7 +1,7 @@
 
-using Stock.WebAPI.Notifications.Abstraction;
+using MyStock.WebAPI.Notifications.Abstraction;
 
-namespace Stock.WebAPI.Notifications.Models
+namespace MyStock.WebAPI.Notifications.Models
 {
   public class Notification<T> : INotification
   {

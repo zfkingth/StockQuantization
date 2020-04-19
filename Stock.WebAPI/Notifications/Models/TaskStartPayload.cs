@@ -1,7 +1,7 @@
 
-using Stock.WebAPI.ViewModels;
+using MyStock.WebAPI.ViewModels;
 
-namespace Stock.WebAPI.Notifications.Models
+namespace MyStock.WebAPI.Notifications.Models
 {
     public class TaskStartPayload
     {

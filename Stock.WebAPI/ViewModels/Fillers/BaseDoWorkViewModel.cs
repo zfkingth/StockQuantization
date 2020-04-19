@@ -14,13 +14,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
-using Stock.WebAPI.Notifications;
-using Stock.WebAPI.Notifications.Models;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Notifications;
+using MyStock.WebAPI.Notifications.Models;
+using MyStock.WebAPI.Utils;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class BaseDoWorkViewModel : ViewModelBase
     {
@@ -64,7 +64,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         protected class StockArgs : EventArgs
         {
 
-            public Securities Stock { get; set; }
+            public Stock Stock { get; set; }
         }
 
         protected CancellationTokenSource cts = new CancellationTokenSource();
@@ -115,7 +115,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         /// 获取需要处理的股票或者指数在代码,默认只处理股票
         /// </summary>
         /// <returns></returns>
-        protected virtual List<Securities> GetSecList()
+        protected virtual List<Stock> GetSecList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -123,8 +123,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 var db = scopedServices.GetRequiredService<StockContext>();
 
 
-                var list = (from i in db.SecuritiesSet
-                            where i.Type == SecuritiesEnum.Stock
+                var list = (from i in db.StockSet
+                            where i.StockType == StockTypeEnum.Stock
                             select i).AsNoTracking().ToList();
                 return list;
             }
@@ -390,7 +390,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
             }
         }
 
-        protected virtual void StockTaskSuccess(List<TempPrice> retList)
+        protected virtual void StockTaskSuccess(List<RealTimeData> retList)
         {
 
             string userId = _userId;
@@ -408,7 +408,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         }
 
-        private void notifyTaskSuccess(string userId, StockTaskStatus sts, List<TempPrice> retList)
+        private void notifyTaskSuccess(string userId, StockTaskStatus sts, List<RealTimeData> retList)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -432,7 +432,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
             }
         }
 
-        protected virtual void StockTaskFail(Exception ae, List<TempPrice> retList)
+        protected virtual void StockTaskFail(Exception ae, List<RealTimeData> retList)
         {
             string userId = _userId;
             StockTaskStatus sts;
@@ -453,7 +453,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         }
 
-        private void notifyTaskFail(string userId, StockTaskStatus sts, string message, List<TempPrice> retList)
+        private void notifyTaskFail(string userId, StockTaskStatus sts, string message, List<RealTimeData> retList)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -484,8 +484,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
         /// <param name="handle">处理函数</param>
         /// <param name="retList">返回结果</param>
         private void ProcessDataInParallel(List<string> list,
-            Func<string, Task<TempPrice>> handle,
-              List<TempPrice> retList)
+            Func<string, Task<RealTimeData>> handle,
+              List<RealTimeData> retList)
         {
             // Use ConcurrentQueue to enable safe enqueueing from multiple threads.
             var exceptions = new ConcurrentQueue<Exception>();
@@ -504,7 +504,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
             {
                 po.CancellationToken.ThrowIfCancellationRequested();
 
-                TempPrice real = null;
+                RealTimeData real = null;
                 //using (var asyncBridge = AsyncHelper.Wait)
                 //{
                 //    asyncBridge.Run(handle(item), (callArg) => real = callArg);
@@ -549,7 +549,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         protected string _actionName;
         protected bool _useCahce = false;
         protected bool _needStoreInCache = false;
-        protected virtual async Task<List<TempPrice>> GetResultFromCache()
+        protected virtual async Task<List<RealTimeData>> GetResultFromCache()
         {
 
             using (var scope = _serviceScopeFactory.CreateScope())
@@ -576,7 +576,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 }
                 else
                 {
-                    var list = JsonConvert.DeserializeObject<List<TempPrice>>(item);
+                    var list = JsonConvert.DeserializeObject<List<RealTimeData>>(item);
                     _useCahce = true;
                     return list;
                 }
@@ -585,8 +585,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         private async Task<DateTime> getLastTradeDateInHistoryData(StockContext db)
         {
-            var date = await (from i in db.PriceSet
-                              where i.Unit == UnitEnum.Unit1d
+            var date = await (from i in db.DayDataSet
                               orderby i.Date descending
                               select i.Date
                         ).FirstOrDefaultAsync();
@@ -596,9 +595,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         private async Task<DateTime> getIndexTradeDateInRealData(StockContext db)
         {
-            DateTime date = await (from i in db.TempPrice
-                                   where i.Unit == UnitEnum.Unit1d &&
-                                   i.Code == Constants.IndexShangZhengZhishu
+            DateTime date = await (from i in db.RealTimeDataSet
+                                   where i.StockId == Constants.SHIndexId
                                    orderby i.Date descending
                                    select i.Date).FirstOrDefaultAsync();
 
@@ -606,7 +604,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         }
 
 
-        protected async Task SaveResultToCache(List<TempPrice> list)
+        protected async Task SaveResultToCache(List<RealTimeData> list)
         {
 
             if (_useCahce == false && _needStoreInCache && _actionName != null)
@@ -646,9 +644,9 @@ namespace Stock.WebAPI.ViewModels.Fillers
         /// 已经处理的个数
         /// </summary>
         private int _progressedCnt = 0;
-        protected async Task<List<TempPrice>> DoSearch(List<string> list, Func<string, Task<TempPrice>> handle)
+        protected async Task<List<RealTimeData>> DoSearch(List<string> list, Func<string, Task<RealTimeData>> handle)
         {
-            List<TempPrice> retList = new List<TempPrice>();
+            List<RealTimeData> retList = new List<RealTimeData>();
 
 
             _progressedCnt = 0;
@@ -712,7 +710,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
             TimeSpan.FromSeconds(interval));
         }
 
-        public virtual async Task<List<TempPrice>> Search()
+        public virtual async Task<List<RealTimeData>> Search()
         {
             throw new Exception("Base Class not impletation");
         }

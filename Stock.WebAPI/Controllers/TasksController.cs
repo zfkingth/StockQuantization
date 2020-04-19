@@ -10,11 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
 
-namespace Stock.WebAPI.Controllers
+namespace MyStock.WebAPI.Controllers
 {
 
 

@@ -2,16 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Stock.WebAPI.Utils
+namespace MyStock.WebAPI.Utils
 {
 
     public static class DbInitializer

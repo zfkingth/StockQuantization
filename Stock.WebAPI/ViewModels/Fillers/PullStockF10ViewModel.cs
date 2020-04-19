@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class PullStockF10ViewModel : BaseDoWorkViewModel
     {
@@ -29,7 +29,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
         {
 
             HandleFun hf = new HandleFun();
-            await hf.UpdateStockXrXd(e.Stock.Code);
+            await hf.UpdateStockF10(e.Stock.StockId);
            
         }
 

@@ -16,13 +16,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Stock.Data;
-using Stock.WebAPI.Notifications;
-using Stock.WebAPI.Services;
-using Stock.WebAPI.Services.Abstraction;
-using Stock.WebAPI.ViewModels.Fillers;
+using MyStock.Data;
+using MyStock.WebAPI.Notifications;
+using MyStock.WebAPI.Services;
+using MyStock.WebAPI.Services.Abstraction;
+using MyStock.WebAPI.ViewModels.Fillers;
 
-namespace Stock.WebAPI
+namespace MyStock.WebAPI
 {
     public class Startup
     {

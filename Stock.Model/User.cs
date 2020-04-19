@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Stock.Model
+namespace MyStock.Model
 {
     public class User
     {

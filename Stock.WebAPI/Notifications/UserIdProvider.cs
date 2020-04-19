@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace Stock.WebAPI.Notifications
+namespace MyStock.WebAPI.Notifications
 {
   public class UserIdProvider : IUserIdProvider
   {

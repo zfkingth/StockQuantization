@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
-using Stock.WebAPI.ViewModels.Fillers;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Utils;
+using MyStock.WebAPI.ViewModels.Fillers;
 
 namespace BackgroundTasksSample.Services
 {
@@ -342,8 +342,7 @@ namespace BackgroundTasksSample.Services
         {
 
             DateTime newestDate;
-            var newestItem = await (from i in db.PriceSet
-                                    where i.Unit == UnitEnum.Unit1d
+            var newestItem = await (from i in db.RealTimeDataSet
                                     orderby i.Date descending
                                     select i).FirstOrDefaultAsync();
             if (newestItem == null) return false; //空表，不用truncate操作
@@ -356,8 +355,7 @@ namespace BackgroundTasksSample.Services
             //从网易取得的历史数据只有日期，时间都是00:00:00。
             var handledDate = new DateTime(newestDate.Year, newestDate.Month, newestDate.Day);
 
-            bool existInHistory = await db.PriceSet.AnyAsync(s => s.Unit == UnitEnum.Unit1d &&
-                                             s.Date == handledDate);
+            bool existInHistory = await db.DayDataSet.AnyAsync(s => s.Date == handledDate);
 
             return existInHistory;
 

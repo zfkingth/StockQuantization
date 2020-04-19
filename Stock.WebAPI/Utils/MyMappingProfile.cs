@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Stock.WebAPI
+namespace MyStock.WebAPI
 {
     public class MyMappingProfile : Profile
     {
         public MyMappingProfile()
         {
-            CreateMap<Model.Securities, Model.Securities>();
+            //CreateMap<Model.Securities, Model.Securities>();
              
-            CreateMap<Model.Price, Model.Price>();
+            //CreateMap<Model.Price, Model.Price>();
                   }
     }
 

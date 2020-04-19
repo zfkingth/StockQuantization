@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class PullIndex30mViewModel : BaseDoWorkViewModel
     {
@@ -28,15 +28,15 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         async Task handle(BaseDoWorkViewModel.StockArgs e)
         {
-            string code = e.Stock.Code;
+            string id = e.Stock.StockId;
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {code} start  ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {id} start  ***************************");
             HandleFun hf = new HandleFun();
-            await hf.Update_PriceAsync(UnitEnum.Unit30m, e.Stock.Code);
+            await hf.Update_Price30mAsync(id);
 
-            System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {code} end    ***************************");
+            System.Diagnostics.Debug.WriteLine($"****************  pull 30m data : {id} end    ***************************");
         }
-        protected override List<Securities> GetSecList()
+        protected override List<Stock> GetSecList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -44,8 +44,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 var db = scopedServices.GetRequiredService<StockContext>();
 
 
-                var list = (from i in db.SecuritiesSet
-                            where i.Type == SecuritiesEnum.Index
+                var list = (from i in db.StockSet
+                            where i.StockType ==StockTypeEnum.Index
                             select i).AsNoTracking().ToList();
                 return list;
             }

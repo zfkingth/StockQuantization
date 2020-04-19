@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Stock.WebAPI.ViewModels
+namespace MyStock.WebAPI.ViewModels
 {
     public class StockTaskStatus
     {

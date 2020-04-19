@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Stock.WebAPI.ViewModels
+namespace MyStock.WebAPI.ViewModels
 {
     public class ArgTurnOverRate
     {

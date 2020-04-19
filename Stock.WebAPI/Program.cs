@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Stock.WebAPI
+namespace MyStock.WebAPI
 {
     public class Program
     {

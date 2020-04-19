@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class PullStockIndex1dViewModel : BaseDoWorkViewModel
     {
@@ -28,15 +28,15 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
         async Task DayDataFiller_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
-            string code = e.Stock.Code;
+            string code = e.Stock.StockId;
 
             System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {code} start  ***************************");
             HandleFun hf = new HandleFun();
-            await hf.Update_PriceAsync(UnitEnum.Unit1d, e.Stock.Code);
+            await hf.Update_Price1dAsync(e.Stock.StockId);
 
             System.Diagnostics.Debug.WriteLine($"****************  pull daily data : {code} end    ***************************");
         }
-        protected override List<Securities> GetSecList()
+        protected override List<Stock> GetSecList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -44,9 +44,8 @@ namespace Stock.WebAPI.ViewModels.Fillers
                 var db = scopedServices.GetRequiredService<StockContext>();
 
 
-                var list = (from i in db.SecuritiesSet
-                            where i.Type == SecuritiesEnum.Stock ||
-                            i.Type == SecuritiesEnum.Index
+                var list = (from i in db.StockSet
+
                             select i).AsNoTracking().ToList();
                 return list;
             }

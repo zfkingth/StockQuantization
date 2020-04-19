@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     /// <summary>
     /// Base class for all ViewModel classes in the application.

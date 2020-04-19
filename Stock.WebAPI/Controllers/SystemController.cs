@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.Model;
-using Stock.WebAPI.ViewModels.Fillers;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.ViewModels.Fillers;
 
-namespace Stock.WebAPI.Controllers
+namespace MyStock.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

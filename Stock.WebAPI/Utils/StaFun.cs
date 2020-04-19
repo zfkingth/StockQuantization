@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyStock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.Utils
 {
-    public class PullRealTimeViewModel
+    public class StaFun
     {
-        internal Task PullAll()
+        internal Task CalcLimitNum()
         {
             throw new NotImplementedException();
         }

@@ -1,15 +1,14 @@
-﻿using Stock.CalcOnServer;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MyStock.WebAPI.Utils;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class CalcLimitNumViewModel : BaseDoWorkViewModel
     {
@@ -29,7 +28,7 @@ namespace Stock.WebAPI.ViewModels.Fillers
 
             StaFun st = new StaFun();
 
-            await st.CalcLimitNum(UnitEnum.Unit1d);
+            await st.CalcLimitNum();
 
             await setFinishedDate(SystemEvents.CalcLimitNum);
 

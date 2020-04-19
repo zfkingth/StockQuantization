@@ -1,29 +1,33 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyStock.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Stock.Model;
 using System.Threading.Tasks;
 
-namespace Stock.Data
+namespace MyStock.Data
 {
     public class StockContext : DbContext
     {
 
-        public DbSet<Securities> SecuritiesSet { get; set; }
-        public DbSet<Price> PriceSet { get; set; }
-        public DbSet<TempPrice> TempPrice { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<StockXRXD> StockXRXD { get; set; }
+        public DbSet<Stock> StockSet { get; set; }
+
+        public DbSet<DayData> DayDataSet { get; set; }
 
 
+        public DbSet<Sharing> SharingSet { get; set; }
+        public DbSet<RealTimeData> RealTimeDataSet { get; set; }
+
+        public DbSet<StockNum> StockNumSet { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<StockEvent> StockEvents { get; set; }
         public DbSet<SearchResult> SearchResultSet { get; set; }
-        public DbSet<TradeDay> TradeDays { get; set; }
         public DbSet<MarginTotal> MarginTotal { get; set; }
         public DbSet<MarketDeal> MarketDeal { get; set; }
         public DbSet<StaPrice> StaPrice { get; set; }
+
+
 
 
 
@@ -45,58 +49,30 @@ namespace Stock.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+
             //获取历史数据时，以单个股票为单位。
-            modelBuilder.Entity<Price>().HasKey(t => new
+            modelBuilder.Entity<DayData>().HasKey(t => new
             {
-                t.Code,
-                t.Unit,
+                t.StockId,
                 t.Date
             });
 
-
-            modelBuilder.Entity<Price>().HasIndex(t => new
+            //获取实时数据时，以最新地时间为重点
+            modelBuilder.Entity<RealTimeData>().HasKey(t => new
             {
-                t.Unit,
-                t.Date
-            });
 
-
-            modelBuilder.Entity<StaPrice>().HasKey(t => new
-            {
-                t.Unit,
-                t.Date
-            });
-
-
-            modelBuilder.Entity<StockXRXD>().HasKey(t => new
-            {
-                t.Code,
-                t.AXrDate,
-                t.BonusType
-            });
-            modelBuilder.Entity<MarginTotal>().HasKey(t => new
-            {
+                t.StockId,
                 t.Date,
-                t.ExchangeCode,
             });
-
-
-            modelBuilder.Entity<TempPrice>().HasKey(t => new
+            modelBuilder.Entity<Sharing>().HasKey(t => new
             {
-                t.Code,
-                t.Unit,
+                t.StockId,
+                t.DateGongGao
+            });
+            modelBuilder.Entity<StockNum>().HasKey(t => new
+            {
+                t.StockId,
                 t.Date
-            });
-
-
-            modelBuilder.Entity<Securities>().HasKey(t => new
-            {
-                t.Type,
-                t.Code,
-            });
-            modelBuilder.Entity<Securities>().HasIndex(t => new
-            {
-                t.Code,
             });
 
             modelBuilder.Entity<SearchResult>().HasKey(t => new
@@ -106,21 +82,10 @@ namespace Stock.Data
                 t.ActionDate,
             });
 
-            modelBuilder.Entity<MarketDeal>().HasKey(t => new
-            {
-                t.LinkId,
-                t.Day,
-            });
 
 
-            ConfigureModelBuilderForPrice(modelBuilder);
             ConfigureModelBuilderForUser(modelBuilder);
-        }
 
-        void ConfigureModelBuilderForPrice(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Price>().Property(s => s.Unit).HasConversion<byte>();
-            modelBuilder.Entity<Securities>().Property(s => s.Type).HasConversion<byte>();
         }
 
         void ConfigureModelBuilderForUser(ModelBuilder modelBuilder)
@@ -166,11 +131,11 @@ namespace Stock.Data
                 .HasDefaultValue(null);
         }
 
-        public async Task TruncateRealTimeAndCacheTable()
+         public async Task TruncateRealTimeAndCacheTable()
         {
             //await this.Database.ExecuteSqlCommandAsync("truncate table RealTimeDataSet");
+            await this.Database.ExecuteSqlRawAsync("truncate table RealTimeDataSet");
             await this.Database.ExecuteSqlRawAsync("truncate table SearchResultSet");
-            await this.Database.ExecuteSqlRawAsync("truncate table TempPrice");
 
         }
 

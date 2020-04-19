@@ -1,4 +1,4 @@
-namespace Stock.WebAPI.Notifications.Abstraction
+namespace MyStock.WebAPI.Notifications.Abstraction
 {
     public interface INotification
     {

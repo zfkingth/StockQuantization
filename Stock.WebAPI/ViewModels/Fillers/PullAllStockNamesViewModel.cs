@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
-using Stock.Model;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stock.WebAPI.ViewModels.Fillers
+namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class PullAllStockNamesViewModel : BaseDoWorkViewModel
     {
@@ -26,12 +26,9 @@ namespace Stock.WebAPI.ViewModels.Fillers
         {
             await setStartDate(SystemEvents.PullAllStockNames);
 
-            JQData.HandleFun hf = new JQData.HandleFun();
+            HandleFun hf = new HandleFun();
 
             //在这里负责刷新token
-            JQData.QueryFun qf = new QueryFun();
-            await qf.RefreshTokenAsync();
-            await qf.RefreshAllTradeDays();
 
             await hf.Update_allStock_Names();
 

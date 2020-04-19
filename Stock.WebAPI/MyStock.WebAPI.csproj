@@ -14,13 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CalcOnServer\Stock.CalcOnServer.csproj" />
-    <ProjectReference Include="..\Stock.Data\Stock.Data.csproj" />
-    <ProjectReference Include="..\Stock.JQData\Stock.JQData.csproj" />
-    <ProjectReference Include="..\Stock.Model\Stock.Model.csproj" />
+    <ProjectReference Include="..\Stock.Data\MyStock.Data.csproj" />
+    <ProjectReference Include="..\Stock.Model\MyStock.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="ViewModels\Auth\" />
     <Folder Include="Notifications\" />
   </ItemGroup>

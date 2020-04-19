@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stock.WebAPI.ViewModels
+namespace MyStock.WebAPI.ViewModels
 {
     public enum TaskStatusType
     {

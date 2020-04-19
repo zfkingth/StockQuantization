@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Stock.Data;
-using Stock.Model;
-using Stock.WebAPI.Services.Abstraction;
-using Stock.WebAPI.ViewModels;
+using MyStock.Data;
+using MyStock.Model;
+using MyStock.WebAPI.Services.Abstraction;
+using MyStock.WebAPI.ViewModels;
 
-namespace Stock.WebAPI.Controllers
+namespace MyStock.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

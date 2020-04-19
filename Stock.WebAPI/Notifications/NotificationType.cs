@@ -1,4 +1,4 @@
-namespace Stock.WebAPI.Notifications
+namespace MyStock.WebAPI.Notifications
 {
     public enum NotificationType
     {

@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Stock.Data;
-using Stock.JQData;
+using MyStock.Data;
+using MyStock.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 
-namespace Stock.WebAPI.Controllers
+namespace MyStock.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -57,12 +57,11 @@ namespace Stock.WebAPI.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> Get(string id, [FromQuery] long start)
+        public async Task<ActionResult<List<DayData>>> Get(string id, [FromQuery] long start)
         {
             DateTime startDate = parstTicks(start);
-            var list = await (from i in _db.PriceSet
-                              where i.Code == id
-                              && i.Unit == Model.UnitEnum.Unit1d
+            var list = await (from i in _db.DayDataSet
+                              where i.StockId == id
                               && i.Date >= startDate
                               select i
                              ).AsNoTracking()
@@ -73,10 +72,10 @@ namespace Stock.WebAPI.Controllers
         }
 
         [HttpGet("GetStock")]
-        public async Task<ActionResult<Stock.Model.Securities>> GetStock(string id)
+        public async Task<ActionResult<Stock>> GetStock(string id)
         {
-            var item = await (from i in _db.SecuritiesSet
-                              where i.Code == id
+            var item = await (from i in _db.StockSet
+                              where i.StockId == id
                               select i
                              ).AsNoTracking()
                            .FirstOrDefaultAsync();
@@ -88,7 +87,7 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetMargin")]
-        public async Task<ActionResult<List<Stock.Model.Price>>> GetMargin([FromQuery] long start)
+        public async Task<ActionResult<List<Stock>>> GetMargin([FromQuery] long start)
         {
 
             DateTime startDate = parstTicks(start);
@@ -103,15 +102,14 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetMarketDeal")]
-        public async Task<ActionResult<List<Stock.Model.MarketDeal>>> GetMarketDeal([FromQuery] long start)
+        public async Task<ActionResult<List<MarketDeal>>> GetMarketDeal([FromQuery] long start)
 
         {
 
             DateTime startDate = parstTicks(start);
             var item = await (from i in _db.MarketDeal
-                              where Constants.LinkIds.Contains(i.LinkId)
-                              && i.Day >= startDate
-                              select new { Date = i.Day, i.LinkId, i.BuyAmount, i.SellAmount }
+                              where i.Date >= startDate
+                              select new { i.Date, i.BuyAmount, i.SellAmount }
                ).AsNoTracking().ToListAsync();
 
 
@@ -120,7 +118,7 @@ namespace Stock.WebAPI.Controllers
 
 
         [HttpGet("GetStaPrice")]
-        public async Task<ActionResult<List<Stock.Model.StaPrice>>> GetStaPrice([FromQuery] long start)
+        public async Task<ActionResult<List<StaPrice>>> GetStaPrice([FromQuery] long start)
         {
 
             DateTime startDate = parstTicks(start);

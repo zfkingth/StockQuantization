@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Stock.WebAPI.Notifications.Models
+namespace MyStock.WebAPI.Notifications.Models
 {
     public class StoryEditPayload
     {

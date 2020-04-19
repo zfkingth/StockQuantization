@@ -3,10 +3,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Stock.WebAPI.Services.Abstraction;
-using Stock.WebAPI.ViewModels;
+using MyStock.WebAPI.Services.Abstraction;
+using MyStock.WebAPI.ViewModels;
 
-namespace Stock.WebAPI.Services
+namespace MyStock.WebAPI.Services
 {
     public class AuthService : IAuthService
     {
