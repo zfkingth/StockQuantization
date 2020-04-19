@@ -12,11 +12,6 @@ namespace MyStock.WebAPI.Utils
             throw new NotImplementedException();
         }
 
-        internal Task Update_PriceAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
         internal Task Update_Price30mAsync(string id)
         {
             throw new NotImplementedException();

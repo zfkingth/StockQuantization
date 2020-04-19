@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stock.Data\MyStock.Data.csproj" />
-    <ProjectReference Include="..\Stock.JQData\Stock.JQData.csproj" />
     <ProjectReference Include="..\Stock.Model\MyStock.Model.csproj" />
   </ItemGroup>
 
