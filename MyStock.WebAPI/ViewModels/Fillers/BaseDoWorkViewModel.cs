@@ -327,7 +327,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine(stockId);
-                    System.Diagnostics.Debug.WriteLine(ss);
+                    //System.Diagnostics.Debug.WriteLine(ss);
 #endif
 
 
