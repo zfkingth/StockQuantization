@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -67,11 +67,28 @@ namespace BackgroundTasksSample.Services
         {
             _logger.LogInformation("Timed Background Service is working. for long period");
 
-            _util.JudgePullStockNames();
-            _util.JudgePullF10();
-            _util.JudgePullDailyData();
-            _util.JudgeEraseRealTimeData().Wait();
+            execLog(_util.JudgePullStockNames);
+            execLog(_util.JudgePullF10);
+            execLog(_util.JudgePullDailyData);
+            execLog(() => _util.JudgeEraseRealTimeData().Wait());
 
+
+        }
+
+        /// <summary>
+        /// 执行函数体，不让抛出异常影响其他方法的执行
+        /// </summary>
+        /// <param name="action"></param>
+        private void execLog(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
         }
 
@@ -80,10 +97,10 @@ namespace BackgroundTasksSample.Services
         {
             _logger.LogInformation("Timed Background Service is working. for short period");
 
-            _util.JudgePullMarginDataAsync().Wait();
-            _util.JudgePullMarketDealDataAsync().Wait();
+            execLog(() => _util.JudgePullMarginDataAsync().Wait());
+            execLog(() => _util.JudgePullMarketDealDataAsync().Wait());
 
-            _util.JudgePullRealTimeDataAsync().Wait();
+            execLog(() => _util.JudgePullRealTimeDataAsync().Wait());
 
         }
 
