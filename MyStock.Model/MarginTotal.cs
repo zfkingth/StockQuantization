@@ -12,7 +12,7 @@ namespace MyStock.Model
       
 
         /// <summary>
-        /// 融资余额（元）
+        /// 融资融券余额（元）
         /// /// </summary>
         public double FinValue { get; set; }
 
