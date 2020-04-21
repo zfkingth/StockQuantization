@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MyStock.WebAPI.ViewModels.Fillers
@@ -133,15 +134,19 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     int lastCurlyBraces = str.LastIndexOf(']');
 
                     var subStr = str[firstCurlyBraces..(lastCurlyBraces + 1)];
-                    //var jsonobj = JsonConvert.DeserializeObject<dynamic>(subStr);
 
-                    JArray jsonVals = JArray.Parse(subStr) as JArray;
+                    Regex regex = new Regex(@"{[^{}]+}");
 
-                    foreach (dynamic item in jsonVals)
+                    var matches = regex.Matches(subStr);
+
+                    for (int m = 0; m < matches.Count; m++)
                     {
+                        string ss = matches[m].Value;
 
+                        var item = JsonConvert.DeserializeObject<dynamic>(ss);
 
-                        DateTime DIM_DATE = DateTime.ParseExact(item.DIM_DATE, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        string dateString = item.DIM_DATE;
+                        DateTime DIM_DATE = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         double RZRQYE = item.RZRQYE;
 
                         var exist = await db.MarginTotal.AnyAsync(s => s.Date == DIM_DATE);
