@@ -16,6 +16,8 @@
     <Compile Include="Migrations\20200419073103_initial.Designer.cs" />
     <Compile Include="Migrations\20200422122003_change_MarketDeal.cs" />
     <Compile Include="Migrations\20200422122003_change_MarketDeal.Designer.cs" />
+    <Compile Include="Migrations\20200422145815_changeMarketDeal2.cs" />
+    <Compile Include="Migrations\20200422145815_changeMarketDeal2.Designer.cs" />
     <Compile Include="Migrations\StockContextModelSnapshot.cs" />
   </ItemGroup>
 

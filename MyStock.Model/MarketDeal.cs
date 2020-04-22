@@ -15,5 +15,7 @@ namespace MyStock.Model
         /// </summary>
         public float DRZJLR { get; set; }
 
+        public bool Permanent { get; set; } = true;
+
     }
 }
