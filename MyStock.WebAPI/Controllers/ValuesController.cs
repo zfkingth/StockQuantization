@@ -109,7 +109,7 @@ namespace MyStock.WebAPI.Controllers
             DateTime startDate = parstTicks(start);
             var item = await (from i in _db.MarketDeal
                               where i.Date >= startDate
-                              select new { i.Date, i.BuyAmount, i.SellAmount }
+                              select new { i.Date, i.DRZJLR }
                ).AsNoTracking().ToListAsync();
 
 

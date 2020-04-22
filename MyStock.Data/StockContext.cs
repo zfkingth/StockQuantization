@@ -82,6 +82,11 @@ namespace MyStock.Data
                 t.ActionDate,
             });
 
+            modelBuilder.Entity<MarketDeal>().HasKey(t => new
+            {
+                t.MarketType,
+                t.Date,
+            });
 
 
             ConfigureModelBuilderForUser(modelBuilder);
@@ -131,7 +136,7 @@ namespace MyStock.Data
                 .HasDefaultValue(null);
         }
 
-         public async Task TruncateRealTimeAndCacheTable()
+        public async Task TruncateRealTimeAndCacheTable()
         {
             //await this.Database.ExecuteSqlCommandAsync("truncate table RealTimeDataSet");
             await this.Database.ExecuteSqlRawAsync("truncate table RealTimeDataSet");

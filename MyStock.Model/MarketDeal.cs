@@ -7,16 +7,13 @@ namespace MyStock.Model
 {
     public class MarketDeal
     {
-        [Key]
+        public MarketType MarketType { get; set; }
         public DateTime Date { get; set; }
-        /// <summary>
-        /// 买入成交额(亿元)
-        /// </summary>
-        public double BuyAmount { get; set; }
 
         /// <summary>
-        /// 卖出成交额(亿元)
+        /// 当日净流入，单位million
         /// </summary>
-        public double SellAmount { get; set; }
+        public float DRZJLR { get; set; }
+
     }
 }
