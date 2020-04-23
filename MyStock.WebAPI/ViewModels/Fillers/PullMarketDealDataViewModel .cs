@@ -108,22 +108,27 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// <returns></returns>
         public async Task pullWriteData()
         {
-
-            //获取300次数据
-            for (int i = 1; i < 6; i++)
+            System.Array values = System.Enum.GetValues(typeof(MarketType));
+            foreach (MarketType market in values)
             {
-                var val = await pullMarketData(MarketType.HuGangTong, i);
-                await Deserialize_WriteDataAsync(MarketType.HuGangTong, val);
-                val = await pullMarketData(MarketType.ShenGangTong, i);
-                await Deserialize_WriteDataAsync(MarketType.ShenGangTong, val);
+                //获取300次数据,page size为50
+
+                for (int i = 1; i < 6; i++)
+                {
+                    var val = await pullMarketData(market, i);
+                    int changed = await Deserialize_WriteDataAsync(market, val);
+                    if (changed < 10) break;//如果改变的数据小于10，则不用取下一页
+                }
+
             }
+
 
 
         }
 
         private async Task<int> Deserialize_WriteDataAsync(MarketType market, Stream stream)
         {
-            int addedItemNum = 0;
+            int addedOrChangedItemNum = 0;
 
             using (var db = new StockContext())
             {
@@ -149,9 +154,9 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                         int type = (int)item.MarketType;
 
-                        string dateString = item.DetailDate;
-                        dateString = dateString.Replace('T', ' ');
-                        DateTime date = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        DateTime date = item.DetailDate;
+                        //dateString = dateString.Replace('T', ' ');
+                        //DateTime date = DateTime.ParseExact(dateString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                         float DRZJLR = item.DRZJLR;
 
                         var itemInDb = await db.MarketDeal.FirstOrDefaultAsync(s => s.MarketType == market && s.Date == date);
@@ -164,13 +169,14 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                             newItem.Permanent = true;
 
                             db.MarketDeal.Add(newItem);
-                            addedItemNum++;
+                            addedOrChangedItemNum++;
                         }
                         else
                             if (itemInDb.Permanent == false)
                         {
                             itemInDb.DRZJLR = DRZJLR;
                             itemInDb.Permanent = true;
+                            addedOrChangedItemNum++;
                         }
 
                     }
@@ -181,7 +187,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 await db.SaveChangesAsync();
             }
 
-            return addedItemNum;
+            return addedOrChangedItemNum;
 
 
 

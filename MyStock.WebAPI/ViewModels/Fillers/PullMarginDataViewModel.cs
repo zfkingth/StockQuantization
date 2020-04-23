@@ -113,7 +113,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             for (int i = 1; i < 6; i++)
             {
                 var val = await pullMarginData(i);
-                await Deserialize_WriteMarginDataAsync(val);
+                int changedNum = await Deserialize_WriteMarginDataAsync(val);
+                if (changedNum < 10) break;//新增小于10，不读取下一页
             }
 
 
