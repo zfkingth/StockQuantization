@@ -36,6 +36,7 @@ namespace MyStock.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             services.AddCors();
 
             services
@@ -127,6 +128,7 @@ namespace MyStock.WebAPI
             services.AddScoped<PullMarketDealDataViewModel>();
             services.AddScoped<CalcLimitNumViewModel>();
             services.AddScoped<PullIndex30mViewModel>();
+            services.AddScoped<PullHuShenTongInTradeTimeViewModel>();
 
 
         }

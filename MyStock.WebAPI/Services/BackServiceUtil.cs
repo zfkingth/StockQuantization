@@ -454,6 +454,27 @@ namespace BackgroundTasksSample.Services
 
         }
 
+        public void EnquepullHuShenTongTask()
+        {
+            if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
+            _logger.LogInformation("enque pull HuShen Tong data task.");
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var puller = scopedServices.GetRequiredService<PullHuShenTongInTradeTimeViewModel>();
+
+                    await puller.PullAll();
+                }
+
+            });
+
+
+        }
+
+
 
         public void EnquepullRealTimeDataTask()
         {

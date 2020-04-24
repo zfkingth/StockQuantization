@@ -6,7 +6,7 @@ namespace MyStock.Model
 {
     public enum MarketType
     {
-        HuGangTong=1,
-        ShenGangTong=3,
+        HuGuTong=1,
+        ShenGuTong=3,
     }
 }
