@@ -35,6 +35,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         internal async Task PullAll()
         {
+            System.Diagnostics.Debug.WriteLine("start pullWriteDataByHeadlessBrowserAsync");
             await setStartDate(SystemEvents.PullMarketDealData);
 
 
@@ -42,6 +43,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
             await setFinishedDate(SystemEvents.PullMarketDealData);
+            System.Diagnostics.Debug.WriteLine("start pullWriteDataByHeadlessBrowserAsync");
 
         }
 

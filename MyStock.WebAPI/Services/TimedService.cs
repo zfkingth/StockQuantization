@@ -71,7 +71,7 @@ namespace BackgroundTasksSample.Services
             execLog(_util.JudgePullF10);
             execLog(_util.JudgePullDailyData);
             execLog(() => _util.JudgeEraseRealTimeData().Wait());
-
+          
 
         }
 
@@ -97,10 +97,17 @@ namespace BackgroundTasksSample.Services
         {
             _logger.LogInformation("Timed Background Service is working. for short period");
 
-            execLog(() => _util.JudgePullMarginDataAsync().Wait());
-            execLog(() => _util.JudgePullMarketDealDataAsync().Wait());
 
             execLog(() => _util.JudgePullRealTimeDataAsync().Wait());
+            execLog(() => _util.JudgepullHuShenTongTAsync());
+
+            //有具体的判断，这个是在开盘前
+            execLog(() => _util.JudgePullMarginDataAsync().Wait());
+
+            //这个是在收盘后
+            execLog(() => _util.JudgePullMarketDealDataAsync().Wait());
+
+
 
         }
 

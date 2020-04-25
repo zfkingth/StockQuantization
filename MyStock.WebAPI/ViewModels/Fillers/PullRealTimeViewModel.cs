@@ -123,9 +123,12 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 IEnumerable<RealTimeData> realItems = null; ;
                 realItems = GetStockRealTimeFormNetEase(item).Result;
 
-                foreach (var realItem in realItems)
+                using (StockContext db = new StockContext())
                 {
-                    WriteRealTdDb(realItem).Wait();
+                    foreach (var realItem in realItems)
+                    {
+                        WriteRealTdDb(db, realItem).Wait();
+                    }
                 }
 
 
@@ -146,64 +149,59 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             return progressCnt;
         }
 
-        private async Task WriteRealTdDb(RealTimeData realItem)
+        private async Task WriteRealTdDb(StockContext db, RealTimeData realItem)
         {
 
-            using (var scope = _serviceScopeFactory.CreateScope())
+
+            var stockId = realItem.StockId;
+            var date = realItem.Date;
+
+
+            //数据库中只保留多个时间点的实时数据，
+
+
+            if (await db.RealTimeDataSet.AnyAsync(s => s.StockId == stockId && s.Date == date))
             {
-                var scopedServices = scope.ServiceProvider;
-                var db = scopedServices.GetRequiredService<StockContext>();
-
-                var stockId = realItem.StockId;
-                var date = realItem.Date;
-
-
-                //数据库中只保留多个时间点的实时数据，
-
-
-                if (await db.RealTimeDataSet.AnyAsync(s => s.StockId == stockId && s.Date == date))
-                {
-                    //如果有这个数据则处理下一个股票的数据
-                    System.Diagnostics.Debug.WriteLine($"{stockId} {date} 的实时数据已存在");
-                    return;
-                }
-
-                var previous = await (from i in db.DayDataSet
-                                      where i.StockId == stockId   //没有换手就是停牌,确保数据库中没有停牌的数据
-                                      orderby i.Date descending
-                                      select i).FirstOrDefaultAsync();
-
-
-
-                db.RealTimeDataSet.Add(realItem);
-
-                if (previous != null)
-                {
-                    if (previous.LiuTongShiZhi != null && previous.Close != 0)
-                    {
-                        float liutongNum = (previous.LiuTongShiZhi.Value / previous.Close);
-                        realItem.HuanShouLiu = realItem.Volume / liutongNum * 100f;
-
-                        realItem.LiuTongShiZhi = realItem.Close * liutongNum;
-
-                    }
-
-                    if (previous.ZongShiZhi != null && previous.Close != 0)
-                    {
-                        float allNum = (previous.ZongShiZhi.Value / previous.Close);
-
-                        realItem.ZongShiZhi = realItem.Close * allNum;
-
-                    }
-
-
-                }
-
-
-
-                await db.SaveChangesAsync();
-                await UpdateDateFlag(stockId, date);
+                //如果有这个数据则处理下一个股票的数据
+                System.Diagnostics.Debug.WriteLine($"{stockId} {date} 的实时数据已存在");
+                return;
             }
+
+            var previous = await (from i in db.DayDataSet
+                                  where i.StockId == stockId   //没有换手就是停牌,确保数据库中没有停牌的数据
+                                  orderby i.Date descending
+                                  select i).FirstOrDefaultAsync();
+
+
+
+            db.RealTimeDataSet.Add(realItem);
+
+            if (previous != null)
+            {
+                if (previous.LiuTongShiZhi != null && previous.Close != 0)
+                {
+                    float liutongNum = (previous.LiuTongShiZhi.Value / previous.Close);
+                    realItem.HuanShouLiu = realItem.Volume / liutongNum * 100f;
+
+                    realItem.LiuTongShiZhi = realItem.Close * liutongNum;
+
+                }
+
+                if (previous.ZongShiZhi != null && previous.Close != 0)
+                {
+                    float allNum = (previous.ZongShiZhi.Value / previous.Close);
+
+                    realItem.ZongShiZhi = realItem.Close * allNum;
+
+                }
+
+
+            }
+
+
+
+            await db.SaveChangesAsync();
+            await UpdateDateFlag(stockId, date);
 
 
         }

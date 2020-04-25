@@ -76,6 +76,25 @@ namespace BackgroundTasksSample.Services
             }
         }
 
+
+
+        internal void JudgepullHuShenTongTAsync()
+        {
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+                if (Utility.IsTradingTime(DateTime.Now))
+                {
+
+                    EnquepullHuShenTongTask();
+                }
+
+            }
+        }
+
         internal async Task JudgePullIndex30mData()
         {
 
