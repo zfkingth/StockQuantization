@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyStock.Data;
 using MyStock.Model;
@@ -39,10 +40,30 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             await pullShanghaiKCB();
 
+            await writeZhiShu();
+
             await setFinishedDate(SystemEvents.PullAllStockNames);
 
         }
 
+        private async Task writeZhiShu()
+        {
+
+            using (var db = new StockContext())
+            {
+                var exsit = await db.StockSet.AnyAsync(s => s.StockId == Constants.IndexBase);
+                if (!exsit)
+                {
+                    var item = new Stock();
+                    item.StockId = Constants.IndexBase;
+                    item.StockName = "深圳成指";
+
+                    db.StockSet.Add(item);
+
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
 
         private ReturnInfo deserializeShenzhen(Stream stream)
         {

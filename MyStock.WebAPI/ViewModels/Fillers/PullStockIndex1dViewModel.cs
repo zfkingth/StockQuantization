@@ -47,7 +47,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 var list = (from i in db.StockSet
 
                             select i.StockId).AsNoTracking().ToList();
-                list.Add(Constants.IndexBase);
+                //list.Add(Constants.IndexBase);
                 return list;
             }
         }
