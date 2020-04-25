@@ -5,6 +5,8 @@ using MyStock.Data;
 using MyStock.Model;
 using MyStock.WebAPI.Utils;
 using Newtonsoft.Json;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -35,13 +37,140 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
             await setStartDate(SystemEvents.PullMarketDealData);
 
-            await pullWriteData();
+
+            await pullWriteDataByHeadlessBrowserAsync();
 
 
             await setFinishedDate(SystemEvents.PullMarketDealData);
 
         }
 
+        private async Task pullWriteDataByHeadlessBrowserAsync()
+        {
+
+            ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
+            driverService.HideCommandPromptWindow = true;//关闭黑色cmd窗口
+
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            //禁用图片
+            options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
+            options.AddArgument("--headless");
+
+
+            System.Diagnostics.Debug.WriteLine("test case started ");
+            //create the reference for the browser  
+            IWebDriver driver = new ChromeDriver(driverService, options);
+            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
+
+
+
+            // navigate to URL  
+            driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
+
+
+            var ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_hgt\"]/td[5]/span"));
+            var huguTongstr = ele.Text;
+
+            ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_sgt\"]/td[5]/span"));
+
+            var shenguTongstr = ele.Text;
+
+
+            ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
+
+            var datestr = ele.Text;
+
+
+            //close the browser  
+            driver.Close();
+            System.Diagnostics.Debug.WriteLine("test case ended ");
+
+
+
+            //解析时间
+            var sa = datestr.Split('-');
+            int month = int.Parse(sa[0]);
+            int day = int.Parse(sa[1]);
+
+            DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
+
+            //写入数据库
+
+            await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
+            await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
+
+
+
+
+
+
+
+
+        }
+
+        private async Task writetoDb(DateTime updateTime, MarketType market, string strVal)
+        {
+            string val = strVal.Replace("亿元", "");
+            var tempFloat = Utility.convertToFloat(val);
+
+            if (tempFloat == null)
+            {
+                throw new Exception("东方财富 深沪港通数据解析错误!");
+            }
+
+
+            using (var db = new StockContext())
+            {
+
+
+
+                var query = from i in db.MarketDeal
+                            where i.MarketType == market
+                            && i.Date == updateTime
+                            orderby i.Date descending
+                            select i;
+                var itemIndb = await query.FirstOrDefaultAsync();
+                if (itemIndb == null)
+                {
+                    //数据库中没有相应的数据，需要求加到数据库中
+                    var newItem = new MarketDeal()
+                    {
+                        MarketType = market,
+                        Date = updateTime,
+                        DRZJLR = tempFloat.Value * 100,
+                        Permanent = false,
+                    };
+
+                    db.MarketDeal.Add(newItem);
+
+                }
+                else
+                {
+                    if (itemIndb.Permanent == true)
+                    {
+                        //数据库中已存在，且数据为永久数据
+                        //直接退出。
+                        return;
+
+                    }
+                    else
+                    {
+
+                        itemIndb.DRZJLR = tempFloat.Value * 100;
+
+                    }
+                }
+
+
+                await db.SaveChangesAsync();
+            }
+
+
+
+
+
+        }
 
         private static readonly Lazy<HttpClient> lazyForHuShenTong =
            new Lazy<HttpClient>(
@@ -85,7 +214,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             string request = "hsgt/index.html";
 
 
-         
+
 
             HttpResponseMessage response = await client.GetAsync(request);
 
@@ -142,7 +271,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                                 where i.MarketType == market
                                 orderby i.Date descending
                                 select i;
-                    var itemIndb =await query.FirstOrDefaultAsync();
+                    var itemIndb = await query.FirstOrDefaultAsync();
 
                     var node = doc.DocumentNode.SelectSingleNode("//*[@id=\"zjlx_hgt\"]/td[5]/span");
 

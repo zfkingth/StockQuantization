@@ -282,6 +282,51 @@
 			"response": []
 		},
 		{
+			"name": "test Get sta price",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/Values/GetMarketDeal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"Values",
+						"GetMarketDeal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "search UpwardGap",
 			"request": {
 				"auth": {
@@ -347,10 +392,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "{\n\t\"EventName\":\"PullAllStockNames\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:53791/api/Tasks/pullAllStockNames",
+					"raw": "http://localhost:53791/api/Tasks/ariseSystemEvent",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -359,7 +404,7 @@
 					"path": [
 						"api",
 						"Tasks",
-						"pullAllStockNames"
+						"ariseSystemEvent"
 					]
 				}
 			},
@@ -389,10 +434,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+					"raw": "{\n\t\"EventName\":\"PullStockF10\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:53791/api/tasks/pullF10",
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -401,7 +446,7 @@
 					"path": [
 						"api",
 						"tasks",
-						"pullF10"
+						"ariseSystemEvent"
 					]
 				}
 			},
@@ -431,10 +476,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+					"raw": "{\n\t\"EventName\":\"PullStockIndex1d\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:53791/api/tasks/pullDayData",
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -443,7 +488,49 @@
 					"path": [
 						"api",
 						"tasks",
-						"pullDayData"
+						"ariseSystemEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send pull real time",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"EventName\":\"PullRealTime\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"ariseSystemEvent"
 					]
 				}
 			},
@@ -473,10 +560,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+					"raw": "{\n\t\"EventName\":\"PullMarginData\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:53791/api/tasks/pullMarginData",
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -485,7 +572,133 @@
 					"path": [
 						"api",
 						"tasks",
-						"pullMarginData"
+						"ariseSystemEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send pull market deal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"EventName\":\"PullMarketDealData\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"ariseSystemEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send pull realtime market deal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"EventName\":\"PullHuShenTongInTradeTime\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"ariseSystemEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send EnqueCalcLimitNum",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/calcLimitNum",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"calcLimitNum"
 					]
 				}
 			},

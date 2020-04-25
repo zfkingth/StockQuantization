@@ -68,18 +68,6 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             return zdf != null ? true : false;
         }
 
-        private static float? convertToFloat(string numberStr)
-        {
-            float number;
-
-            // The numberStr is the string you want to parse
-            if (float.TryParse(numberStr, out number))
-            {
-                return number;
-            }
-
-            return null;
-        }
 
         private static void setField(DayData item, string[] words)
         {
@@ -97,13 +85,13 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
-            item.HuanShouLiu = convertToFloat(words[10]);//网易的指数数据没有换手率
+            item.HuanShouLiu = Utility.convertToFloat(words[10]);//网易的指数数据没有换手率
 
             item.Volume = float.Parse(words[11]);
             item.Amount = float.Parse(words[12]);
 
-            item.ZongShiZhi = convertToFloat(words[13]);
-            item.LiuTongShiZhi = convertToFloat(words[14]);
+            item.ZongShiZhi = Utility.convertToFloat(words[13]);
+            item.LiuTongShiZhi = Utility.convertToFloat(words[14]);
 
             //从excel中获取的历史数据
             item.Type = DayDataType.History;

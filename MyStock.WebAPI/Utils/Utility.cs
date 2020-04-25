@@ -246,5 +246,19 @@ namespace MyStock.WebAPI.Utils
 
             return false;
         }
+
+        public static float? convertToFloat(string numberStr)
+        {
+            float number;
+
+            // The numberStr is the string you want to parse
+            if (float.TryParse(numberStr, out number))
+            {
+                return number;
+            }
+
+            return null;
+        }
+
     }
 }
