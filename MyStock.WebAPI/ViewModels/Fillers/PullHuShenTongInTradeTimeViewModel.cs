@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+
 namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class PullHuShenTongInTradeTimeViewModel : BaseDoWorkViewModel
@@ -57,13 +58,13 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
-                   client.BaseAddress = new Uri("http://data.10jqka.com.cn");
+                   client.BaseAddress = new Uri("http://data.eastmoney.com/");
 
 
-                   client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, */*");
-                   client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.5");
+                   client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, image/jxr, */*");
+                   client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3");
                    client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
-                   client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                   client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko Core/1.70.3754.400 QQBrowser/10.5.4020.400");
                    client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
                    client.DefaultRequestHeaders.ExpectContinue = true;
 
@@ -81,18 +82,10 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
             Stream val = null;
-            string request = "";
+            string request = "hsgt/index.html";
 
 
-            if (market == MarketType.HuGuTong)
-            {
-                request = "hgt/hgtb";
-            }
-            else if (market == MarketType.ShenGuTong)
-            {
-                request = "hgt/sgtb";
-            }
-
+         
 
             HttpResponseMessage response = await client.GetAsync(request);
 
@@ -104,7 +97,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
             else
             {
-                throw new Exception($"从同花顺获取沪股通，深股股通资金流入数据错误");
+                throw new Exception($"从东方财富数据中心获取沪股通，深股股通资金流入数据错误");
             }
 
             return val;
@@ -136,7 +129,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             using (var db = new StockContext())
             {
 
-                using (StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("gbk")))
+                using (StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("gb2312")))
                 {
 
 
@@ -151,11 +144,11 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                                 select i;
                     var itemIndb =await query.FirstOrDefaultAsync();
 
-                    var node = doc.DocumentNode.SelectSingleNode("//*[@id=\"datacenter_change_content\"]/div[3]/div[2]/b[1]");
+                    var node = doc.DocumentNode.SelectSingleNode("//*[@id=\"zjlx_hgt\"]/td[5]/span");
 
                     if (node == null)
                     {
-                        throw new Exception("同花顺深沪港通数据解析错误!");
+                        throw new Exception("东方财富 深沪港通数据解析错误!");
                     }
 
                 }
