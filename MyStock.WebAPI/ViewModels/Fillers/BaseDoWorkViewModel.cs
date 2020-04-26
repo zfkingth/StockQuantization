@@ -305,6 +305,20 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         }
 
+
+        protected async Task<DateTime> GetLastTradeDayFromWebPage()
+        {
+            //以上证指数的数据为基准
+            var ie = await GetStockRealTimeFormNetEase(new List<string>() { Utils.Constants.IndexBase });
+            DateTime date = default;
+            var item = ie.FirstOrDefault();
+            if (item != null) date = item.Date;
+
+            return date;
+
+        }
+
+
         private List<RealTimeData> ParseRealData(Stream stream)
         {
             List<RealTimeData> list = new List<RealTimeData>();

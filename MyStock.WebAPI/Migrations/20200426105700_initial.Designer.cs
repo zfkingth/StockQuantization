@@ -9,7 +9,7 @@ using MyStock.Data;
 namespace MyStock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    [Migration("20200419073103_initial")]
+    [Migration("20200426105700_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,12 @@ namespace MyStock.WebAPI.Migrations
                     b.Property<float?>("HuanShouLiu")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsDT")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsZT")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<float?>("LiuTongShiZhi")
                         .HasColumnType("float");
 
@@ -49,8 +55,11 @@ namespace MyStock.WebAPI.Migrations
                     b.Property<float>("Open")
                         .HasColumnType("float");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<bool>("Permanent")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<float>("PreClose")
+                        .HasColumnType("float");
 
                     b.Property<float>("Volume")
                         .HasColumnType("float");
@@ -62,6 +71,8 @@ namespace MyStock.WebAPI.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("StockId", "Date");
+
+                    b.HasIndex("Date");
 
                     b.ToTable("DayDataSet");
                 });
@@ -81,16 +92,19 @@ namespace MyStock.WebAPI.Migrations
 
             modelBuilder.Entity("MyStock.Model.MarketDeal", b =>
                 {
+                    b.Property<int>("MarketType")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<double>("BuyAmount")
-                        .HasColumnType("double");
+                    b.Property<float>("DRZJLR")
+                        .HasColumnType("float");
 
-                    b.Property<double>("SellAmount")
-                        .HasColumnType("double");
+                    b.Property<bool>("Permanent")
+                        .HasColumnType("tinyint(1)");
 
-                    b.HasKey("Date");
+                    b.HasKey("MarketType", "Date");
 
                     b.ToTable("MarketDeal");
                 });
@@ -222,6 +236,9 @@ namespace MyStock.WebAPI.Migrations
 
                     b.Property<int>("LowlimitNum")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Permanent")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Date");
 

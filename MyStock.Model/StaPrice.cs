@@ -26,6 +26,7 @@ namespace MyStock.Model
         public int FailNum { get; set; }
 
 
+        public bool Permanent { get; set; } = true;
 
       }
 }

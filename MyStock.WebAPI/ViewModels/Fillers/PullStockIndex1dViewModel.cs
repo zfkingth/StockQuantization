@@ -94,7 +94,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             item.LiuTongShiZhi = Utility.convertToFloat(words[14]);
 
             //从excel中获取的历史数据
-            item.Type = DayDataType.History;
+            item.Permanent = true;
 
 
         }
@@ -149,7 +149,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                             else
                             {
                                 //数据库中存在这个数据
-                                if (item.Type == DayDataType.History)
+                                if (item.Permanent)
                                 {
                                     //已经有完整的历史数据
                                     //不能插入或者更新这个数据
@@ -212,17 +212,6 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         }
 
-        private async Task<DateTime> GetLastTradeDayFromWebPage()
-        {
-            //以上证指数的数据为基准
-            var ie = await base.GetStockRealTimeFormNetEase(new List<string>() { Utils.Constants.IndexBase });
-            DateTime date = default;
-            var item = ie.FirstOrDefault();
-            if (item != null) date = item.Date;
-
-            return date;
-
-        }
 
 
 
@@ -431,7 +420,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
                 DateTime date = await (from i in db.DayDataSet
-                                       where i.StockId == stockId && i.Type == DayDataType.History
+                                       where i.StockId == stockId && i.Permanent == true
                                        orderby i.Date descending
                                        select i.Date).FirstOrDefaultAsync();
                 //.Take(1).DefaultIfEmpty(DateTime.MinValue).Single();
@@ -499,7 +488,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                         {
                             DayData item = new DayData();
                             item.Date = tempDate;
-                            item.Type = DayDataType.Page;
+                            item.Permanent =false;
                             item.StockId = stockId;
 
                             float temp = 0;

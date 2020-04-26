@@ -57,6 +57,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     var item = new Stock();
                     item.StockId = Constants.IndexBase;
                     item.StockName = "深圳成指";
+                    item.StockType = StockTypeEnum.Index;
 
                     db.StockSet.Add(item);
 

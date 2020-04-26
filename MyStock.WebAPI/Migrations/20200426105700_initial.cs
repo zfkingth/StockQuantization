@@ -23,7 +23,10 @@ namespace MyStock.WebAPI.Migrations
                     ZongShiZhi = table.Column<float>(nullable: true),
                     LiuTongShiZhi = table.Column<float>(nullable: true),
                     HuanShouLiu = table.Column<float>(nullable: true),
-                    Type = table.Column<int>(nullable: false)
+                    Permanent = table.Column<bool>(nullable: false),
+                    PreClose = table.Column<float>(nullable: false),
+                    IsZT = table.Column<bool>(nullable: false),
+                    IsDT = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,13 +49,14 @@ namespace MyStock.WebAPI.Migrations
                 name: "MarketDeal",
                 columns: table => new
                 {
+                    MarketType = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
-                    BuyAmount = table.Column<double>(nullable: false),
-                    SellAmount = table.Column<double>(nullable: false)
+                    DRZJLR = table.Column<float>(nullable: false),
+                    Permanent = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MarketDeal", x => x.Date);
+                    table.PrimaryKey("PK_MarketDeal", x => new { x.MarketType, x.Date });
                 });
 
             migrationBuilder.CreateTable(
@@ -128,7 +132,8 @@ namespace MyStock.WebAPI.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     HighlimitNum = table.Column<int>(nullable: false),
                     LowlimitNum = table.Column<int>(nullable: false),
-                    FailNum = table.Column<int>(nullable: false)
+                    FailNum = table.Column<int>(nullable: false),
+                    Permanent = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,6 +197,11 @@ namespace MyStock.WebAPI.Migrations
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DayDataSet_Date",
+                table: "DayDataSet",
+                column: "Date");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

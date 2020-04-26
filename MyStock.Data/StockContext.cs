@@ -57,6 +57,12 @@ namespace MyStock.Data
                 t.Date
             });
 
+            modelBuilder.Entity<DayData>().HasIndex(t => new
+            {
+                t.Date
+            });
+
+
             //获取实时数据时，以最新地时间为重点
             modelBuilder.Entity<RealTimeData>().HasKey(t => new
             {

@@ -38,6 +38,12 @@ namespace MyStock.WebAPI.Migrations
                     b.Property<float?>("HuanShouLiu")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsDT")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsZT")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<float?>("LiuTongShiZhi")
                         .HasColumnType("float");
 
@@ -47,8 +53,11 @@ namespace MyStock.WebAPI.Migrations
                     b.Property<float>("Open")
                         .HasColumnType("float");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<bool>("Permanent")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<float>("PreClose")
+                        .HasColumnType("float");
 
                     b.Property<float>("Volume")
                         .HasColumnType("float");
@@ -60,6 +69,8 @@ namespace MyStock.WebAPI.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("StockId", "Date");
+
+                    b.HasIndex("Date");
 
                     b.ToTable("DayDataSet");
                 });
@@ -223,6 +234,9 @@ namespace MyStock.WebAPI.Migrations
 
                     b.Property<int>("LowlimitNum")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Permanent")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Date");
 
