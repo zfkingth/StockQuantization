@@ -52,22 +52,7 @@ namespace MyStock.Model
 
         public bool Permanent { get; set; } = true;
 
-        /// <summary>
-        /// 前一个交易日的收盘价
-        /// </summary>
-        public float PreClose { get; set; }
-
-        /// <summary>
-        /// 是否是涨停
-        /// </summary>
-        public bool IsZT { get; set; } = false;
-
-
-        /// <summary>
-        /// 是否跌停
-        /// </summary>
-        public bool IsDT { get; set; } = false;
-
+      
 
     }
 }
