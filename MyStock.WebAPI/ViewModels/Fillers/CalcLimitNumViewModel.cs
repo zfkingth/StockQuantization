@@ -41,7 +41,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             {
 
                 var querySta = from i in db.StaPrice
-                               orderby i.Date
+                               orderby i.Date descending
                                select i;
                 var lastItem = await querySta.FirstOrDefaultAsync();
 
@@ -70,11 +70,52 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 var needHandleList = await query.ToListAsync();
 
 
+                List<DayData> previousDayDataList = new List<DayData>();
+
+                //需要list升序排列
                 foreach (var dateItem in needHandleList)
                 {
+                    var query2 = from i in db.DayDataSet
+                                 where i.Date == dateItem
+                                 select i;
+                    var currentDayDataList = await query2.AsNoTracking().ToListAsync();
 
-                    await staByDate(dateItem, db);
+                    if (previousDayDataList.Count > 0)
+                    {
+                        //进行统计
+                        var staItem = new StaPrice()
+                        {
+                            Date = dateItem,
+                            HighlimitNum = 0,
+                            LowlimitNum = 0,
+                            FailNum = 0,
+                            Permanent = true,
+                        };
 
+                        foreach (var currentDayData in currentDayDataList)
+                        {
+                            var previousItem = previousDayDataList.FirstOrDefault(s => s.StockId == currentDayData.StockId);
+                            if (previousItem != null)
+                            {
+                                double zhangtingjia = Math.Round(previousItem.Close * 1.1, 2, MidpointRounding.AwayFromZero);
+                                double dietingjia = Math.Round(previousItem.Close * 0.9, 2, MidpointRounding.AwayFromZero);
+
+                                if (currentDayData.Close == zhangtingjia)
+                                {
+                                    staItem.HighlimitNum++;
+                                }
+                                else if (currentDayData.Close == dietingjia)
+                                {
+                                    staItem.LowlimitNum++;
+                                }
+                            }
+                        }
+
+                        db.StaPrice.Add(staItem);
+                    }
+
+                    //结束后
+                    previousDayDataList = currentDayDataList;
 
                 }
 
@@ -84,14 +125,5 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
         }
 
-        private async Task staByDate(DateTime dateItem, StockContext db)
-        {
-            //daydata 建立了date 索引
-            var query = from i in db.DayDataSet
-                        where i.Date == dateItem
-                        select i;
-            var itemList = await query.AsNoTracking().ToListAsync();
-           
-        }
     }
 }

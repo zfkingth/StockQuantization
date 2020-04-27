@@ -542,6 +542,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                                 item.HuanShouLiu = temp;
                             }//else use default value which be set in contructo
 
+                            item.Permanent = false;
+
                             yield return item;
                         }
 
