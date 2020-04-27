@@ -232,7 +232,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 System.Diagnostics.Debug.WriteLine($"stock {stockId} excel last data {lastDate}");
 
                 //如果这里还是default ，表明长期停牌，或者退市
-                if (lastDate != default && Utility.IsSameDay(lastDate, _lastTradeDay) == false)
+                //指数没有page data
+                if (stockId != Constants.IndexBase && lastDate != default && Utility.IsSameDay(lastDate, _lastTradeDay) == false)
                 {
                     //没有从excel中没有取到最新交易日的数据。
                     //需要从当日的网页数据获取
@@ -488,7 +489,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                         {
                             DayData item = new DayData();
                             item.Date = tempDate;
-                            item.Permanent =false;
+                            item.Permanent = false;
                             item.StockId = stockId;
 
                             float temp = 0;
