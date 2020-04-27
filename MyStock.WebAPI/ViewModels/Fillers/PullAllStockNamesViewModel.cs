@@ -6,6 +6,7 @@ using MyStock.Model;
 using MyStock.WebAPI.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -96,6 +97,15 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                         var si = new StockInfo();
                         si.symbol = stockSymbol.Trim();
                         si.name = stockName.Trim();//一个是中文空格，一个是英文空格
+                        var ds = ws.Cells[rowNum, 8].Text;
+                        System.Diagnostics.Debug.WriteLine($"parse {stockSymbol}");
+
+                        if (DateTime.TryParseExact(ds, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out DateTime tempDate))
+                        {
+                            si.MarketStartDate = tempDate;
+                        }
+
                         switch (si.symbol.Substring(0, 2))
                         {
                             case "60":
@@ -150,6 +160,12 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                         var si = new StockInfo();
                         si.symbol = words[0].Trim();
                         si.name = words[1].Trim();
+                        System.Diagnostics.Debug.WriteLine($"parse {line}");
+                        if (DateTime.TryParseExact(words[4].Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                            DateTimeStyles.None, out DateTime tempDate))
+                        {
+                            si.MarketStartDate = tempDate;
+                        }
                         switch (si.symbol.Substring(0, 2))
                         {
                             case "60":
@@ -256,6 +272,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                             itemindb.StockName = item.name;
                             db.StockSet.Add(itemindb);
                         }
+
+                        itemindb.MarketStartDate = item.MarketStartDate;
 
                         //在foreach 中不会等等
                         db.SaveChanges();

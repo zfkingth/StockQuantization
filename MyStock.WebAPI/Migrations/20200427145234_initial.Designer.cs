@@ -9,7 +9,7 @@ using MyStock.Data;
 namespace MyStock.WebAPI.Migrations
 {
     [DbContext(typeof(StockContext))]
-    [Migration("20200426105700_initial")]
+    [Migration("20200427145234_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,12 +40,6 @@ namespace MyStock.WebAPI.Migrations
                     b.Property<float?>("HuanShouLiu")
                         .HasColumnType("float");
 
-                    b.Property<bool>("IsDT")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsZT")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<float?>("LiuTongShiZhi")
                         .HasColumnType("float");
 
@@ -57,9 +51,6 @@ namespace MyStock.WebAPI.Migrations
 
                     b.Property<bool>("Permanent")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<float>("PreClose")
-                        .HasColumnType("float");
 
                     b.Property<float>("Volume")
                         .HasColumnType("float");
@@ -250,6 +241,9 @@ namespace MyStock.WebAPI.Migrations
                     b.Property<string>("StockId")
                         .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
                         .HasMaxLength(10);
+
+                    b.Property<DateTime>("MarketStartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("RealDataUpdated")
                         .HasColumnType("datetime(6)");

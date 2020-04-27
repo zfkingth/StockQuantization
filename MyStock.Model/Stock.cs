@@ -23,7 +23,10 @@ namespace MyStock.Model
 
         public StockTypeEnum StockType { get; set; } = StockTypeEnum.Stock;
 
-
+        /// <summary>
+        /// 上市时间
+        /// </summary>
+        public DateTime MarketStartDate { get; set; }
 
         /// <summary>
         /// 分红，送股信息

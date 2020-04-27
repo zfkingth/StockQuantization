@@ -12,10 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Migrations\20200426105700_initial.cs" />
-    <Compile Include="Migrations\20200426105700_initial.Designer.cs" />
-    <Compile Include="Migrations\20200426141226_initial2.cs" />
-    <Compile Include="Migrations\20200426141226_initial2.Designer.cs" />
+    <Compile Include="Migrations\20200427145234_initial.cs" />
+    <Compile Include="Migrations\20200427145234_initial.Designer.cs" />
     <Compile Include="Migrations\StockContextModelSnapshot.cs" />
   </ItemGroup>
 

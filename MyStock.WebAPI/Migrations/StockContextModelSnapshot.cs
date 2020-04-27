@@ -240,6 +240,9 @@ namespace MyStock.WebAPI.Migrations
                         .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
                         .HasMaxLength(10);
 
+                    b.Property<DateTime>("MarketStartDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("RealDataUpdated")
                         .HasColumnType("datetime(6)");
 

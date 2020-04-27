@@ -30,6 +30,11 @@ namespace MyStock.WebAPI.ViewModels
         /// 股票名称
         /// </summary>
         public string name { get; set; }
+
+        /// <summary>
+        /// 上市时间
+        /// </summary>
+        public DateTime MarketStartDate { get; set; }
     }
 
 

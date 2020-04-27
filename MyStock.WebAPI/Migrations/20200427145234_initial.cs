@@ -23,10 +23,7 @@ namespace MyStock.WebAPI.Migrations
                     ZongShiZhi = table.Column<float>(nullable: true),
                     LiuTongShiZhi = table.Column<float>(nullable: true),
                     HuanShouLiu = table.Column<float>(nullable: true),
-                    Permanent = table.Column<bool>(nullable: false),
-                    PreClose = table.Column<float>(nullable: false),
-                    IsZT = table.Column<bool>(nullable: false),
-                    IsDT = table.Column<bool>(nullable: false)
+                    Permanent = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,7 +172,8 @@ namespace MyStock.WebAPI.Migrations
                     StockId = table.Column<string>(maxLength: 10, nullable: false),
                     StockName = table.Column<string>(maxLength: 10, nullable: true),
                     RealDataUpdated = table.Column<DateTime>(nullable: false),
-                    StockType = table.Column<int>(nullable: false)
+                    StockType = table.Column<int>(nullable: false),
+                    MarketStartDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
