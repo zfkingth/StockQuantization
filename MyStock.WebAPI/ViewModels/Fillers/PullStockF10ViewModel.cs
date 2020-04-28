@@ -33,8 +33,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         async Task F10Filler_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
 
-            System.Diagnostics.Debug.WriteLine($"pull f10 data for stock id: {e.StockId}");
-            await FillStockF10_FHPG_FormNetEase(e.StockId);
+            System.Diagnostics.Debug.WriteLine($"pull f10 data for stock id: {e.StockItem.StockId}");
+            await FillStockF10_FHPG_FormNetEase(e.StockItem.StockId);
 
         }
 

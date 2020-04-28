@@ -64,7 +64,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         protected class StockArgs : EventArgs
         {
 
-            public string StockId { get; set; }
+            public Stock StockItem { get; set; }
         }
 
         protected CancellationTokenSource cts = new CancellationTokenSource();
@@ -115,7 +115,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// 获取需要处理的股票或者指数在代码,默认只处理股票
         /// </summary>
         /// <returns></returns>
-        protected virtual List<string> GetStockList()
+        protected virtual List<Stock> GetStockList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -125,7 +125,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                 var list = (from i in db.StockSet
                             where i.StockType == StockTypeEnum.Stock
-                            select i.StockId).AsNoTracking().ToList();
+                            select i).AsNoTracking().ToList();
                 return list;
             }
         }
@@ -165,12 +165,12 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     };
 
 
-                    Parallel.ForEach(list, po, (stockId) =>
+                    Parallel.ForEach(list, po, (stock) =>
                    {
                        po.CancellationToken.ThrowIfCancellationRequested();
 
 
-                       stockHandle(new StockArgs() { StockId = stockId }).Wait();
+                       stockHandle(new StockArgs() { StockItem = stock }).Wait();
 
                        Interlocked.Increment(ref progressCnt);
                        //增加1%才更新

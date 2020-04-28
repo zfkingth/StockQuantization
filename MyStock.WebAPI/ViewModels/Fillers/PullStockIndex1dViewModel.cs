@@ -32,11 +32,11 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         async Task DayDataFiller_stockHandle(BaseDoWorkViewModel.StockArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"******************pull daily data : {e.StockId}***************************");
-            await FillStockDataFormNetEase(e.StockId, _startDate);
+            System.Diagnostics.Debug.WriteLine($"******************pull daily data : {e.StockItem.StockId}***************************");
+            await FillStockDataFormNetEase(e.StockItem, _startDate);
 
         }
-        protected override List<string> GetStockList()
+        protected override List<Stock> GetStockList()
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -46,7 +46,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                 var list = (from i in db.StockSet
 
-                            select i.StockId).AsNoTracking().ToList();
+                            select i).AsNoTracking().ToList();
                 //list.Add(Constants.IndexBase);
                 return list;
             }
@@ -222,8 +222,9 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public async Task FillStockDataFormNetEase(string stockId, DateTime startDate)
+        public async Task FillStockDataFormNetEase(Stock stock, DateTime startDate)
         {
+            string stockId = stock.StockId;
             DateTime lastDate = await GetLastDate(stockId);
             if (Utils.Utility.IsSameDay(lastDate, _lastTradeDay) == false)
             {
@@ -233,7 +234,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                 //如果这里还是default ，表明长期停牌，或者退市
                 //指数没有page data
-                if (stockId != Constants.IndexBase && lastDate != default && Utility.IsSameDay(lastDate, _lastTradeDay) == false)
+                if (stock.StockType == StockTypeEnum.Stock && lastDate != default && Utility.IsSameDay(lastDate, _lastTradeDay) == false)
                 {
                     //没有从excel中没有取到最新交易日的数据。
                     //需要从当日的网页数据获取

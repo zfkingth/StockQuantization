@@ -37,6 +37,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         private async Task staLimitNum()
         {
             DateTime lastDateTime = await GetLastTradeDayFromWebPage();
+
+            var stockList = base.GetStockList();
             using (var db = new StockContext())
             {
 
@@ -75,6 +77,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 //需要list升序排列
                 foreach (var dateItem in needHandleList)
                 {
+
+                    System.Diagnostics.Debug.WriteLine($"calc limit num for {dateItem}");
                     var query2 = from i in db.DayDataSet
                                  where i.Date == dateItem
                                  select i;
@@ -100,13 +104,28 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                                 double zhangtingjia = Math.Round(previousItem.Close * 1.1, 2, MidpointRounding.AwayFromZero);
                                 double dietingjia = Math.Round(previousItem.Close * 0.9, 2, MidpointRounding.AwayFromZero);
 
-                                if (currentDayData.Close == zhangtingjia)
+                                var stock = (
+                                    from i in stockList
+                                    where i.StockId == currentDayData.StockId
+                                    select i
+                                             ).FirstOrDefault();
+
+                                if (stock != null)
                                 {
-                                    staItem.HighlimitNum++;
-                                }
-                                else if (currentDayData.Close == dietingjia)
-                                {
-                                    staItem.LowlimitNum++;
+
+                                    if (currentDayData.Date - stock.MarketStartDate >= TimeSpan.FromDays(30))
+                                    {
+                                        ///只统计上市30天以后的。
+
+                                        if (currentDayData.Close >= zhangtingjia)
+                                        {
+                                            staItem.HighlimitNum++;
+                                        }
+                                        else if (currentDayData.Close <= dietingjia)
+                                        {
+                                            staItem.LowlimitNum++;
+                                        }
+                                    }
                                 }
                             }
                         }
