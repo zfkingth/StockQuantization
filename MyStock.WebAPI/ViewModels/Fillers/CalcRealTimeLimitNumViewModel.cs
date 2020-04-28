@@ -62,14 +62,15 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     staItem = new StaPrice()
                     {
                         Date = lastDateTime,
-                        HighlimitNum = 0,
-                        LowlimitNum = 0,
-                        FailNum = 0,
-                        Permanent = false,
+
                     };
 
                     db.StaPrice.Add(staItem);
                 }
+                staItem.HighlimitNum = 0;
+                staItem.LowlimitNum = 0;
+                staItem.FailNum = 0;
+                staItem.Permanent = false;
 
 
                 DateTime previousDate = await (

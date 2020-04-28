@@ -36,7 +36,6 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         private async Task staLimitNum()
         {
-            DateTime lastDateTime = await GetLastTradeDayFromWebPage();
 
             var stockList = base.GetStockList();
             using (var db = new StockContext())
@@ -45,98 +44,11 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 var querySta = from i in db.StaPrice
                                orderby i.Date descending
                                select i;
-                var lastItem = await querySta.FirstOrDefaultAsync();
+                var list = await querySta.Take(10).ToListAsync(); //更新最后10次的，怕数据不全导致出错
 
-                DateTime startDateThisTime = default;
+                var item = list.Last();
 
-                if (lastItem != null)
-                {
-                    if (lastItem.Permanent == false)
-                    {
-                        startDateThisTime = lastItem.Date;
-                        //把临时的数据删掉
-                        db.StaPrice.Remove(lastItem);
-                    }
-                    else
-                    {
-                        startDateThisTime = lastItem.Date.AddDays(1);//增加了一天，但不一定是交易日。
-                    }
-                }
-
-                var query = from i in db.DayDataSet
-                            where i.StockId == Constants.IndexBase
-                            && i.Date >= startDateThisTime
-                            orderby i.Date ascending
-                            select i.Date;
-
-                var needHandleList = await query.ToListAsync();
-
-
-                List<DayData> previousDayDataList = new List<DayData>();
-
-                //需要list升序排列
-                foreach (var dateItem in needHandleList)
-                {
-
-                    System.Diagnostics.Debug.WriteLine($"calc limit num for {dateItem}");
-                    var query2 = from i in db.DayDataSet
-                                 where i.Date == dateItem
-                                 select i;
-                    var currentDayDataList = await query2.AsNoTracking().ToListAsync();
-
-                    if (previousDayDataList.Count > 0)
-                    {
-                        //进行统计
-                        var staItem = new StaPrice()
-                        {
-                            Date = dateItem,
-                            HighlimitNum = 0,
-                            LowlimitNum = 0,
-                            FailNum = 0,
-                            Permanent = true,
-                        };
-
-                        foreach (var currentDayData in currentDayDataList)
-                        {
-                            var previousItem = previousDayDataList.FirstOrDefault(s => s.StockId == currentDayData.StockId);
-                            if (previousItem != null)
-                            {
-                                double zhangtingjia = Math.Round(previousItem.Close * 1.1, 2, MidpointRounding.AwayFromZero);
-                                double dietingjia = Math.Round(previousItem.Close * 0.9, 2, MidpointRounding.AwayFromZero);
-
-                                var stock = (
-                                    from i in stockList
-                                    where i.StockId == currentDayData.StockId
-                                    select i
-                                             ).FirstOrDefault();
-
-                                if (stock != null)
-                                {
-
-                                    if (currentDayData.Date - stock.MarketStartDate >= TimeSpan.FromDays(30))
-                                    {
-                                        ///只统计上市30天以后的。
-
-                                        if (currentDayData.Close >= zhangtingjia)
-                                        {
-                                            staItem.HighlimitNum++;
-                                        }
-                                        else if (currentDayData.Close <= dietingjia)
-                                        {
-                                            staItem.LowlimitNum++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        db.StaPrice.Add(staItem);
-                    }
-
-                    //结束后
-                    previousDayDataList = currentDayDataList;
-
-                }
+                await calcStaPrice(stockList, db, item);
 
                 await db.SaveChangesAsync();
 
@@ -144,5 +56,97 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
         }
 
+        private static async Task<DateTime> calcStaPrice(List<Stock> stockList, StockContext db, StaPrice lastItem)
+        {
+            DateTime startDateThisTime = default;
+            if (lastItem != null)
+            {
+                startDateThisTime = lastItem.Date;
+            }
+
+            var query = from i in db.DayDataSet
+                        where i.StockId == Constants.IndexBase
+                        && i.Date >= startDateThisTime
+                        orderby i.Date ascending
+                        select i.Date;
+
+            var needHandleList = await query.ToListAsync();
+
+
+            List<DayData> previousDayDataList = new List<DayData>();
+
+            //需要list升序排列
+            foreach (var dateItem in needHandleList)
+            {
+
+                System.Diagnostics.Debug.WriteLine($"calc limit num for {dateItem}");
+                var query2 = from i in db.DayDataSet
+                             where i.Date == dateItem
+                             select i;
+                var currentDayDataList = await query2.AsNoTracking().ToListAsync();
+
+                if (previousDayDataList.Count > 0)
+                {
+                    var staItem = await (
+                        from i in db.StaPrice
+                        where i.Date == dateItem
+                        select i
+                               ).FirstOrDefaultAsync();
+                    if (staItem == null)
+                    {
+                        //进行统计
+                        staItem = new StaPrice();
+                        staItem.Date = dateItem;
+                        db.StaPrice.Add(staItem);
+                    }
+
+                    staItem.HighlimitNum = 0;
+                    staItem.LowlimitNum = 0;
+                    staItem.FailNum = 0;
+                    staItem.Permanent = true;
+
+                    foreach (var currentDayData in currentDayDataList)
+                    {
+                        var previousItem = previousDayDataList.FirstOrDefault(s => s.StockId == currentDayData.StockId);
+                        if (previousItem != null)
+                        {
+                            double zhangtingjia = Math.Round(previousItem.Close * 1.1, 2, MidpointRounding.AwayFromZero);
+                            double dietingjia = Math.Round(previousItem.Close * 0.9, 2, MidpointRounding.AwayFromZero);
+
+                            var stock = (
+                                from i in stockList
+                                where i.StockId == currentDayData.StockId
+                                select i
+                                         ).FirstOrDefault();
+
+                            if (stock != null)
+                            {
+
+                                if (currentDayData.Date - stock.MarketStartDate >= TimeSpan.FromDays(30))
+                                {
+                                    ///只统计上市30天以后的。
+
+                                    if (currentDayData.Close >= zhangtingjia)
+                                    {
+                                        staItem.HighlimitNum++;
+                                    }
+                                    else if (currentDayData.Close <= dietingjia)
+                                    {
+                                        staItem.LowlimitNum++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                //结束后
+                previousDayDataList = currentDayDataList;
+
+            }
+
+            return startDateThisTime;
+        }
     }
 }
