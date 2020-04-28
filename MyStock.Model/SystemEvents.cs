@@ -15,6 +15,7 @@ namespace MyStock.Model
         public const string CalcLimitNum = "CalcLimitNum";
         public const string PullIndex30m = "PullIndex30m";
         public const string PullHuShenTongInTradeTime = "PullHuShenTongInTradeTime";
+        public const string CalcRealTimeLimitNum = "CalcRealTimeLimitNum";
 
     }
 }

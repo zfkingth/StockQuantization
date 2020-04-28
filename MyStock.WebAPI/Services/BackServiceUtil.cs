@@ -76,6 +76,25 @@ namespace BackgroundTasksSample.Services
             }
         }
 
+        internal void JudgeCalcRealTimeLimitNum()
+        {
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+                //交易时间执行频率由appsettings.json文件里的ShortPeriodCycle来，定义。
+                //每次执行成功后，会更新LastAriseStartDate，所以不会有太多的执行次数
+                if (Utility.IsTradingTime(DateTime.Now))
+                {
+
+                    EnqueCalcRealTimeLimitNum();
+                }
+
+            }
+        }
+
 
 
         internal void JudgepullHuShenTongTAsync()
@@ -181,6 +200,27 @@ namespace BackgroundTasksSample.Services
 
         }
 
+        internal void EnqueCalcRealTimeLimitNum()
+        {
+            if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
+            _logger.LogInformation("enque calc real time limit numtask.");
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var puller = scopedServices.GetRequiredService<CalcRealTimeLimitNumViewModel>();
+
+                    await puller.PullAll();
+                }
+
+            });
+
+
+        }
+
+
         internal void EnquePullMarginData()
         {
             if (_taskQueue.Count >= Constants.MaxQueueCnt) return;
@@ -264,6 +304,21 @@ namespace BackgroundTasksSample.Services
                 }
             }
         }
+
+        internal void JudgeCalcLimitNum()
+        {
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+                if (IsIdleTime(DateTime.Now))
+                    EnqueCalcLimitNum();
+
+            }
+        }
+
 
         internal async Task JudgePullMarginDataAsync()
         {
@@ -472,6 +527,8 @@ namespace BackgroundTasksSample.Services
 
 
         }
+
+
 
         public void EnquepullHuShenTongTask()
         {

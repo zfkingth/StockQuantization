@@ -77,6 +77,7 @@ namespace MyStock.WebAPI.Controllers
                     break;
                 case SystemEvents.PullIndex30m: _util.EnquePullIndex30mData(); break;
                 case SystemEvents.PullHuShenTongInTradeTime: _util.EnquepullHuShenTongTask(); break;
+                case SystemEvents.CalcRealTimeLimitNum: _util.EnqueCalcRealTimeLimitNum(); break;
             }
             return NoContent();
         }

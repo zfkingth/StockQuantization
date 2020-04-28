@@ -663,6 +663,48 @@
 			"response": []
 		},
 		{
+			"name": "send clear flag",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"PullRealTime\""
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/clearDate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"clearDate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "send EnqueCalcLimitNum",
 			"request": {
 				"auth": {
@@ -686,10 +728,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+					"raw": "{\n\t\"EventName\":\"CalcLimitNum\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:53791/api/tasks/calcLimitNum",
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -698,7 +740,49 @@
 					"path": [
 						"api",
 						"tasks",
-						"calcLimitNum"
+						"ariseSystemEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send EnqueCalc real time LimitNum",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"EventName\":\"CalcRealTimeLimitNum\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/tasks/ariseSystemEvent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"tasks",
+						"ariseSystemEvent"
 					]
 				}
 			},

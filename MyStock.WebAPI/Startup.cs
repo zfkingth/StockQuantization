@@ -127,6 +127,7 @@ namespace MyStock.WebAPI
             services.AddScoped<PullMarginDataViewModel>();
             services.AddScoped<PullMarketDealDataViewModel>();
             services.AddScoped<CalcLimitNumViewModel>();
+            services.AddScoped<CalcRealTimeLimitNumViewModel>();
             services.AddScoped<PullIndex30mViewModel>();
             services.AddScoped<PullHuShenTongInTradeTimeViewModel>();
 

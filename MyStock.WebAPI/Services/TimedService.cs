@@ -71,7 +71,8 @@ namespace BackgroundTasksSample.Services
             execLog(_util.JudgePullF10);
             execLog(_util.JudgePullDailyData);
             execLog(() => _util.JudgeEraseRealTimeData().Wait());
-          
+            execLog(_util.JudgeCalcLimitNum);
+
 
         }
 
@@ -100,6 +101,7 @@ namespace BackgroundTasksSample.Services
 
             execLog(() => _util.JudgePullRealTimeDataAsync().Wait());
             execLog(() => _util.JudgepullHuShenTongTAsync());
+            execLog(_util.JudgeCalcRealTimeLimitNum);
 
             //有具体的判断，这个是在开盘前
             execLog(() => _util.JudgePullMarginDataAsync().Wait());
