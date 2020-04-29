@@ -1,7 +1,6 @@
 
 import _ from 'lodash'
 
-export const shicha = 8 * 3600 * 1000;
 
 
 
@@ -21,7 +20,7 @@ export const calcCCI = (historyData, n) => {
   
     for (let i = 0; i < historyData.length; i += 1) {
       let price = historyData[i];
-      let currentDate = new Date(price.date).getTime() + shicha;
+      let currentDate = new Date(price.date).getTime() ;
   
   
       if (i < Num) {

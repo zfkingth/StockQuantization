@@ -12,7 +12,7 @@ import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
-import { shicha, calcCCI } from './common'
+import { calcCCI } from './common'
 
 
 export const maset = [5, 20, 60];
@@ -49,26 +49,19 @@ function timeStamp2String(time) {
 }
 
 function handleMarginData(marginArray) {
-  let myMap = new Map();
-  for (let i = 0; i < marginArray.length; i++) {
-    let item = marginArray[i];
-    let currentDate = new Date(item.date).getTime() + shicha;
-    let val = myMap.get(currentDate);
-    if (!val) {
-      val = 0;
-    }
-    val += item.finValue;
-    myMap.set(currentDate, val);
-  }
   let marginForChart = [];
 
   let preVal = undefined;
-  for (const [key, val] of myMap) {
+  for (let i = 0; i < marginArray.length; i++) {
+    let item = marginArray[i];
+    let currentDate = new Date(item.date).getTime();
+    let val = item.finValue;
+
     if (preVal !== undefined) {
       let change = val - preVal;
 
       marginForChart.push([
-        key,
+        currentDate,
         _.round(change / 10 ** 8, 2)
       ]);
 
@@ -85,12 +78,12 @@ const prepareMarketDeal = mk => {
   let myMap = new Map();
   for (let i = 0; i < mk.length; i++) {
     let item = mk[i];
-    let currentDate = new Date(item.date).getTime() + shicha;
+    let currentDate = new Date(item.date).getTime();
     let val = myMap.get(currentDate);
     if (!val) {
       val = 0;
     }
-    val += item.buyAmount - item.sellAmount;
+    val += item.drzjlr;
     myMap.set(currentDate, val);
   }
   let dataForChart = [];
@@ -116,7 +109,7 @@ const prepareHistoryData = (historyData) => {
   let ma = [], ohlc = [], money = [];
   for (let i = 0; i < historyData.length; i += 1) {
     let price = historyData[i];
-    let currentDate = new Date(price.date).getTime() + shicha;
+    let currentDate = new Date(price.date).getTime();
     ohlc.push({
       x: currentDate,
 
@@ -129,7 +122,7 @@ const prepareHistoryData = (historyData) => {
     });
     money.push([
       currentDate,
-      _.round(price.money / 10 ** 8, 2)
+      _.round(price.amount / 10 ** 8, 2)
     ]);
 
     for (let index = 0; index < maset.length; index++) {
@@ -163,7 +156,7 @@ const prepareStaData = (staPrice) => {
 
   for (let i = 0; i < staPrice.length; i += 1) {
     let sta = staPrice[i];
-    let currentDate = new Date(sta.date).getTime() + shicha;
+    let currentDate = new Date(sta.date).getTime();
 
     highData.push([currentDate, sta.highlimitNum]);
     lowData.push([currentDate, -sta.lowlimitNum]);

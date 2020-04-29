@@ -63,6 +63,7 @@ namespace MyStock.WebAPI.Controllers
             var list = await (from i in _db.DayDataSet
                               where i.StockId == id
                               && i.Date >= startDate
+                              orderby i.Date ascending
                               select new
                               {
                                   i.Date,
@@ -70,7 +71,8 @@ namespace MyStock.WebAPI.Controllers
                                   i.High,
                                   i.Low,
                                   i.Close,
-                                  i.ZhangDieFu
+                                  i.ZhangDieFu,
+                                  i.Amount
                               }
                              ).AsNoTracking()
                            .ToListAsync();
@@ -102,6 +104,7 @@ namespace MyStock.WebAPI.Controllers
 
             var item = await (from i in _db.MarginTotal
                               where i.Date >= startDate
+                              orderby i.Date ascending
                               select new { i.Date, i.FinValue }
                  ).AsNoTracking().ToListAsync();
 
@@ -117,6 +120,7 @@ namespace MyStock.WebAPI.Controllers
             DateTime startDate = parstTicks(start);
             var item = await (from i in _db.MarketDeal
                               where i.Date >= startDate
+                              orderby i.Date ascending
                               select new { i.Date, i.DRZJLR }
                ).AsNoTracking().ToListAsync();
 
