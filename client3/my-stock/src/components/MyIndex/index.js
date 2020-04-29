@@ -124,7 +124,7 @@ const prepareHistoryData = (historyData) => {
       high: price.high,
       low: price.low,
       close: price.close,
-      preclose: price.preclose,
+      preclose: _.round(price.close / (100 + price.zhangDieFu) * 100, 2)
 
     });
     money.push([
@@ -179,11 +179,6 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
 
 
 
-  const marginForChart = handleMarginData(marginData);
-  const marketForChart = prepareMarketDeal(marketDeal);
-
-  const staForChart = prepareStaData(staPrice);
-
   let rt = prepareHistoryData(historyData);
   let ohlc = rt.ohlc, money = rt.money, ma = rt.ma;
   // set the allowed units for data grouping
@@ -191,6 +186,10 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
   let cciData = calcCCI(historyData, 14);
 
 
+  const marginForChart = handleMarginData(marginData);
+  const marketForChart = prepareMarketDeal(marketDeal);
+
+  const staForChart = prepareStaData(staPrice);
 
 
   let stockOptions = {
@@ -568,7 +567,7 @@ const IndexHS300 = (props) => {
 
 
 const IndexSZCZ = (props) => {
-  return <Basecontrol stockId="399001.XSHE" />;
+  return <Basecontrol stockId="1399001" />;
 }
 
 const IndexSZZZ = (props) => {

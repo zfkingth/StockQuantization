@@ -63,7 +63,15 @@ namespace MyStock.WebAPI.Controllers
             var list = await (from i in _db.DayDataSet
                               where i.StockId == id
                               && i.Date >= startDate
-                              select i
+                              select new
+                              {
+                                  i.Date,
+                                  i.Open,
+                                  i.High,
+                                  i.Low,
+                                  i.Close,
+                                  i.ZhangDieFu
+                              }
                              ).AsNoTracking()
                            .ToListAsync();
 
