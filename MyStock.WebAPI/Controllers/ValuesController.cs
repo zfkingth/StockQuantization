@@ -137,6 +137,7 @@ namespace MyStock.WebAPI.Controllers
 
             var query = from i in _db.StaPrice
                         where i.Date >= startDate
+                        orderby i.Date ascending
                         select i;
 
             var rt = await query.AsNoTracking().ToListAsync();

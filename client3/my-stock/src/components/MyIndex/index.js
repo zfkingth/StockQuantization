@@ -12,7 +12,7 @@ import _ from 'lodash'
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 
-import { calcCCI } from './common'
+import { shicha, calcCCI } from './common'
 
 
 export const maset = [5, 20, 60];
@@ -54,7 +54,7 @@ function handleMarginData(marginArray) {
   let preVal = undefined;
   for (let i = 0; i < marginArray.length; i++) {
     let item = marginArray[i];
-    let currentDate = new Date(item.date).getTime();
+    let currentDate = new Date(item.date).getTime() + shicha;;
     let val = item.finValue;
 
     if (preVal !== undefined) {
@@ -78,7 +78,7 @@ const prepareMarketDeal = mk => {
   let myMap = new Map();
   for (let i = 0; i < mk.length; i++) {
     let item = mk[i];
-    let currentDate = new Date(item.date).getTime();
+    let currentDate = new Date(item.date).getTime() + shicha;;
     let val = myMap.get(currentDate);
     if (!val) {
       val = 0;
@@ -92,7 +92,7 @@ const prepareMarketDeal = mk => {
 
     dataForChart.push([
       key,
-      _.round(val, 2)
+      _.round(val / 100, 2)   //单位是million
     ]);
 
 
@@ -109,7 +109,7 @@ const prepareHistoryData = (historyData) => {
   let ma = [], ohlc = [], money = [];
   for (let i = 0; i < historyData.length; i += 1) {
     let price = historyData[i];
-    let currentDate = new Date(price.date).getTime();
+    let currentDate = new Date(price.date).getTime() + shicha;;
     ohlc.push({
       x: currentDate,
 
@@ -156,7 +156,7 @@ const prepareStaData = (staPrice) => {
 
   for (let i = 0; i < staPrice.length; i += 1) {
     let sta = staPrice[i];
-    let currentDate = new Date(sta.date).getTime();
+    let currentDate = new Date(sta.date).getTime() + shicha;;
 
     highData.push([currentDate, sta.highlimitNum]);
     lowData.push([currentDate, -sta.lowlimitNum]);
