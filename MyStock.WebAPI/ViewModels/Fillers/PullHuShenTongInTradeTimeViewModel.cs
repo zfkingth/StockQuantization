@@ -63,46 +63,54 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             System.Diagnostics.Debug.WriteLine("test case started ");
             //create the reference for the browser  
             IWebDriver driver = new ChromeDriver(driverService, options);
-            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
+
+            try
+            {
+                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
 
 
 
-            // navigate to URL  
-            driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
+                // navigate to URL  
+                driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
 
 
-            var ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_hgt\"]/td[5]/span"));
-            var huguTongstr = ele.Text;
+                var ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_hgt\"]/td[5]/span"));
+                var huguTongstr = ele.Text;
 
-            ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_sgt\"]/td[5]/span"));
+                ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_sgt\"]/td[5]/span"));
 
-            var shenguTongstr = ele.Text;
-
-
-            ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
-
-            var datestr = ele.Text;
+                var shenguTongstr = ele.Text;
 
 
-            //close the browser  
-            driver.Close();
-            System.Diagnostics.Debug.WriteLine("test case ended ");
+                ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
+
+                var datestr = ele.Text;
+
+
+                //close the browser  
+                driver.Close();
+                System.Diagnostics.Debug.WriteLine("test case ended ");
 
 
 
-            //解析时间
-            var sa = datestr.Split('-');
-            int month = int.Parse(sa[0]);
-            int day = int.Parse(sa[1]);
+                //解析时间
+                var sa = datestr.Split('-');
+                int month = int.Parse(sa[0]);
+                int day = int.Parse(sa[1]);
 
-            DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
+                DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
 
-            //写入数据库
+                //写入数据库
 
-            await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
-            await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
+                await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
+                await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
 
-
+            }
+            catch (Exception ex)
+            {
+                driver.Quit();
+                throw ex;
+            }
 
 
 
