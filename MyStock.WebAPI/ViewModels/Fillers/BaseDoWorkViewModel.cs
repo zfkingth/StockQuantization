@@ -58,6 +58,26 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
         }
 
+        /// <summary>
+        /// 获取所有的股票id，不包括指数
+        /// </summary>
+        /// <returns></returns>
+        protected List<string> GetAllStockIdWithOutIndex()
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<StockContext>();
+
+
+                var list = (from i in db.StockSet
+                            where i.StockType == StockTypeEnum.Stock
+                            select i.StockId).ToList();
+                return list;
+            }
+        }
+
+
         private static DateTime baseDate = DateTime.MaxValue;
 
 
