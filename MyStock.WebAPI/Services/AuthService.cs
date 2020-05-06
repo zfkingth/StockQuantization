@@ -25,7 +25,8 @@ namespace MyStock.WebAPI.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, id),
+                    new Claim(ClaimTypes.NameIdentifier, id),//use for hub to identify user
+                    new Claim(ClaimTypes.Name,id),
                     new Claim(ClaimTypes.Role,roleName)
                 }),
                 Expires = expirationTime,

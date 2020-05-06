@@ -585,6 +585,11 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 var hubContext = scopedServices.GetRequiredService<IHubContext<NotificationsHub>>();
 
 
+                //hubContext.Clients.All.SendAsync("notification", "test");
+
+                //var test = hubContext.Clients.User(userId);  //能够找到user，但是客户端接收不到
+
+
                 hubContext.Clients.User(userId).SendAsync(
                       "notification",
                       new Notification<TaskSuccessPayload>

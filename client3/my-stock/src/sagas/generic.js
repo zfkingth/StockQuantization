@@ -26,12 +26,12 @@ const enters = {
 }
 
 
-const NotificationEnum=
+const NotificationEnum =
 {
-   TaskStart:0,
-   TaskProgress:1,
-   TaskFail:2,
-   TaskSuccess:3,
+  TaskStart: 0,
+  TaskProgress: 1,
+  TaskFail: 2,
+  TaskSuccess: 3,
 }
 
 export function* enterPage() {
@@ -43,7 +43,14 @@ export function* enterPage() {
 
 function* listenNotifications() {
   const connection = new signalR.HubConnectionBuilder()
-    .withUrl(process.env.REACT_APP_SingalR_URL, { accessTokenFactory: () => localStorage.token })
+    .withUrl(process.env.REACT_APP_SingalR_URL, {
+      accessTokenFactory:
+        () => {
+          console.log('**** token: ' + localStorage.token);
+          return localStorage.token;
+
+        }
+    })
     .build()
 
   let attempt = 0
@@ -63,7 +70,10 @@ function* listenNotifications() {
 
   if (connected) {
     const getEventChannel = connection => eventChannel(emit => {
-      const handler = data => { emit(data) };
+      const handler = data => {
+        console.log('*****  ***** emit ' + data);
+        emit(data);
+      };
       connection.on('notification', handler);
       return () => { connection.off() };
     });
@@ -86,7 +96,7 @@ function* listenNotifications() {
       // }
       console.log('receive notification:' + notificationType);
       console.log('receive payload:' + JSON.stringify(payload));
-      if (notificationType ===  NotificationEnum.TaskStart ) {
+      if (notificationType === NotificationEnum.TaskStart) {
 
         yield put(stockActions.TaskStart(payload));
       }
@@ -97,12 +107,12 @@ function* listenNotifications() {
         yield put(stockActions.TaskSuccess(payload));
       }
 
-      else if (notificationType ===  NotificationEnum.TaskProgress ) {
+      else if (notificationType === NotificationEnum.TaskProgress) {
 
 
         yield put(stockActions.TaskProgress(payload));
       }
-      else if (notificationType ===  NotificationEnum.TaskFail ) {
+      else if (notificationType === NotificationEnum.TaskFail) {
 
         yield put(stockActions.TaskFail(payload));
       }
