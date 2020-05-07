@@ -42,7 +42,22 @@ class App extends React.Component {
   updateRow = (e) => {
 
     const values = e.data;
+    this.props.updateUser({
+      id: values.id,
+      values,
+      reject: (message) => { this.props.goToErrorPage(message) }
+    });
     this.logEvent('RowUpdated');
+
+  }
+
+  removeRow = e => {
+
+    const row = e.data;
+    this.props.deleteUser({
+      id: row.id,
+      reject: (message) => { this.props.goToErrorPage(message) }
+    });
 
   }
 
@@ -63,7 +78,7 @@ class App extends React.Component {
           onRowUpdating={this.onRowUpdating}
           onRowUpdated={this.updateRow}
           onRowRemoving={this.onRowRemoving}
-          onRowRemoved={this.onRowRemoved}>
+          onRowRemoved={this.removeRow}>
 
           <Paging enabled={true} />
           <Editing
