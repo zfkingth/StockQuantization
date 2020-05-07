@@ -5,7 +5,7 @@ import React from "react";
 
 import styled from 'styled-components'
 
-import StockTable from './StockTable'
+import StockTable from './NewStockTable'
 
 import LinearDeterminate from './LinearDeterminate'
 import TaskStatusLabel from './TaskStatusLabel'
