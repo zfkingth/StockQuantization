@@ -21,6 +21,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<PullRealTimeViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            _eventName = SystemEvents.PullRealTime;
 
         }
 
@@ -48,7 +49,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// </summary>
         public async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullRealTime);
+            await setStartDate(_eventName);
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -111,7 +112,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             }
 
-            await setFinishedDate(SystemEvents.PullRealTime);
+            await setFinishedDate(_eventName);
         }
 
         private int processList(List<string> item, int progressCnt, int cnt, ParallelOptions po)

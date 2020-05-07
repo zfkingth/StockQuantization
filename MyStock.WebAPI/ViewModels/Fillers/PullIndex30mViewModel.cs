@@ -22,6 +22,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
             _logger = logger;
             this.stockHandle = handle;
+            _eventName = SystemEvents.PullIndex30m;
 
         }
 
@@ -62,13 +63,13 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         public async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullIndex30m);
+            await setStartDate(_eventName);
 
 
             base.DoWork();
 
 
-            await setFinishedDate(SystemEvents.PullIndex30m);
+            await setFinishedDate(_eventName);
 
         }
 

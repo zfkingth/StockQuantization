@@ -26,6 +26,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
             _logger = logger;
             this.stockHandle = DayDataFiller_stockHandle;
+            _eventName = SystemEvents.PullStockIndex1d;
 
         }
 
@@ -199,16 +200,15 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// <returns></returns>
         public async Task PullAll(int lastYear)
         {
-            await setStartDate(SystemEvents.PullStockIndex1d);
+            await setStartDate(_eventName);
             _lastTradeDay = await GetLastTradeDayFromWebPage();
-            System.Diagnostics.Debug.WriteLine("Filling all day data");
 
             _startDate = DateTime.Now.AddYears(-lastYear);
 
             base.DoWork();
 
 
-            await setFinishedDate(SystemEvents.PullStockIndex1d);
+            await setFinishedDate(_eventName);
 
         }
 

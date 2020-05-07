@@ -19,18 +19,19 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<CalcLimitNumViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            _eventName = SystemEvents.CalcLimitNum;
         }
 
 
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.CalcLimitNum);
+            await setStartDate(_eventName);
 
 
             await staLimitNum();
 
-            await setFinishedDate(SystemEvents.CalcLimitNum);
+            await setFinishedDate(_eventName);
 
         }
 

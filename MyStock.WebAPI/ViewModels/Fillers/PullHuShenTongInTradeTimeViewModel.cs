@@ -29,21 +29,20 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<PullHuShenTongInTradeTimeViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            _eventName = SystemEvents.PullHuShenTongInTradeTime;
         }
 
 
 
         internal async Task PullAll()
         {
-            System.Diagnostics.Debug.WriteLine("start pullWriteDataByHeadlessBrowserAsync");
-            await setStartDate(SystemEvents.PullMarketDealData);
+            await setStartDate(_eventName);
 
 
             await pullWriteDataByHeadlessBrowserAsync();
 
 
-            await setFinishedDate(SystemEvents.PullMarketDealData);
-            System.Diagnostics.Debug.WriteLine("start pullWriteDataByHeadlessBrowserAsync");
+            await setFinishedDate(_eventName);
 
         }
 

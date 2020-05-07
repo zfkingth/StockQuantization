@@ -25,13 +25,15 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<PullAllStockNamesViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+
+            _eventName = SystemEvents.PullAllStockNames;
         }
 
 
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullAllStockNames);
+            await setStartDate(_eventName);
 
 
             //在这里负责刷新token
@@ -43,7 +45,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             await writeZhiShu();
 
-            await setFinishedDate(SystemEvents.PullAllStockNames);
+            await setFinishedDate(_eventName);
 
         }
 

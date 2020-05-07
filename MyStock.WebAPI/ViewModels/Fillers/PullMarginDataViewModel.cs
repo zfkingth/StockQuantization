@@ -27,17 +27,18 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<PullMarginDataViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            _eventName = SystemEvents.PullMarginData;
         }
 
 
 
         internal async Task PullAll()
         {
-            await setStartDate(SystemEvents.PullMarginData);
+            await setStartDate(_eventName);
 
             await pullWriteMarginData();
 
-            await setFinishedDate(SystemEvents.PullMarginData);
+            await setFinishedDate(_eventName);
 
         }
 

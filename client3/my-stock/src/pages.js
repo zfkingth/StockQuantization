@@ -15,7 +15,6 @@ export { default as register } from './components/auth/register'
 export { default as errorPage } from './components/ErrorPage'
 export { default as manage } from './components/manage'
 export { default as systemStatus } from './components/manage/systemEvent'
-export { default as systemEventPage } from './components/manage/systemEvent'
 export { default as systemInfo } from './components/About'
 // default page
 export { IndexCyb, IndexHS300, IndexSZCZ,IndexSZZZ } from './components/MyIndex'

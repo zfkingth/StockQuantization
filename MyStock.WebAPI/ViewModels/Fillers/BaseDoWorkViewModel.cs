@@ -37,6 +37,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
+        protected string _eventName = "";
 
 
         static int _maxThreadNum = 10;
@@ -214,6 +215,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         protected async Task setStartDate(string eventName)
         {
+            System.Diagnostics.Debug.WriteLine($"event {eventName} start.");
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -226,7 +228,6 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 await db.SaveChangesAsync();
 
             }
-            System.Diagnostics.Debug.WriteLine($"event {eventName} start.");
         }
 
         protected async Task setFinishedDate(string eventName)
