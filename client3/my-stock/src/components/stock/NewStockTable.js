@@ -1,8 +1,24 @@
 import React from 'react';
-import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
+import DataGrid, { Column, } from 'devextreme-react/data-grid';
 
 
 import { connectTo } from '../../utils/generic';
+import { formatNumber } from '../../utils/api';
+
+
+
+const getXueQiuUrl = wangyiNum => {
+  const pre = "https://xueqiu.com/S/";
+  let jys;
+  //首字母0表示上海
+  if (wangyiNum[0] === '0') {
+    jys = 'SH';
+  } else {
+    jys = 'SZ';
+  }
+  return pre + jys + wangyiNum.substr(1);
+}
+
 
 class DemoBase extends React.PureComponent {
 
@@ -25,6 +41,35 @@ class DemoBase extends React.PureComponent {
 
 
 
+  getZhangDieFuCellValue(data) {
+    return formatNumber(data.zhangDieFu, 2) + '%';
+  }
+
+
+
+  getHuanShouLvCellValue(data) {
+    return formatNumber(data.huanShouLiu, 2) + '%';
+  }
+
+  getLiuTongShiZhiCellValue(data) {
+    const fv = data.liuTongShiZhi * 10 ** -8;
+    return formatNumber(fv, 2);
+  }
+  getZongShiZhiCellValue(data) {
+    const fv = data.zongShiZhi * 10 ** -8;
+    return formatNumber(fv, 2);
+  }
+
+
+
+
+  cellRender(data) {
+    const stockId = data.data.stockId;
+    const myRef = React.createRef();
+    return <a ref={myRef} href={getXueQiuUrl(stockId)} target="_blank" rel="noopener noreferrer" >
+      {stockId.substr(1)}</a>
+  }
+
   render() {
 
     const { rows, } = this.props;
@@ -38,13 +83,20 @@ class DemoBase extends React.PureComponent {
         >
 
           <Column dataField="date" caption="日期" dataType="date" format="yyyy-MM-dd" />
-          <Column dataField="stockId" caption="股票代码" />
+          <Column caption="股票代码" cellRender={this.cellRender} />
           <Column dataField="stockName" caption="股票名称" />
-          <Column dataField="zhangDieFu" caption="涨跌幅" />
+          <Column calculateCellValue={this.getZhangDieFuCellValue}
+            alignment="right"
+            caption="涨跌幅" />
           <Column dataField="close" caption="价格" />
-          <Column dataField="huanShouLiu" caption="换手率" />
-          <Column dataField="liuTongShiZhi" caption="流通市值(亿元)" />
-          <Column dataField="zongShiZhi" caption="总市值(亿元)" />
+          <Column calculateCellValue={this.getHuanShouLvCellValue}
+            alignment="right" caption="换手率" />
+          <Column calculateCellValue={this.getLiuTongShiZhiCellValue}
+            alignment="right"
+            caption="流通市值(亿元)" />
+          <Column calculateCellValue={this.getZongShiZhiCellValue}
+            alignment="right"
+            caption="总市值(亿元)" />
 
         </DataGrid>
 

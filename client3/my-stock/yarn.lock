@@ -957,39 +957,6 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@devexpress/dx-core@2.6.0", "@devexpress/dx-core@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-core/-/dx-core-2.6.0.tgz#90b55d0a7d141694e5d8a22dd3e23ef73d45cce8"
-  integrity sha512-QnZCEF05IxRSizHYrsZXea85pzbVFjIfxf9EUqksqTd7goc4wOOMvT8ImTlIYOjyQntbGGeDgQOV31nOXrxAnQ==
-
-"@devexpress/dx-grid-core@2.6.0", "@devexpress/dx-grid-core@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-grid-core/-/dx-grid-core-2.6.0.tgz#b2731da007ab020670d8d76adc8471aef66692e9"
-  integrity sha512-9JMpKvqyyLyMo7qfyLg0h1wuZLQYheepFlZAq+j5h6dZs+wCl0i9fx6N/rMZttmbRva5vPfcghCU17Cu/VQQdA==
-
-"@devexpress/dx-react-core@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-core/-/dx-react-core-2.6.0.tgz#12e991ae2282f72ae97a7d94cd8508f390f26a94"
-  integrity sha512-Cw7uCmViqopmsvyhznI6W2VYji1F19qWJm18v0aCyYgK+WDhemoUbWYLEB3CZrbUJpIwZPUU/MEPPpvRUSIASw==
-  dependencies:
-    "@devexpress/dx-core" "2.6.0"
-    prop-types "^15.7.2"
-
-"@devexpress/dx-react-grid-material-ui@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid-material-ui/-/dx-react-grid-material-ui-2.6.0.tgz#2ea302ab786aed9e9a0451b3d2e8fe4f67951a89"
-  integrity sha512-BfzKHuzNW71xa2t/7ceY9fXJ9VbRDoYf8LrDpJ8pfBa6TUCrSnYRvcqoBd7E+sytNZprCjmBkGbb5iNz8yXdzw==
-  dependencies:
-    clsx "^1.0.4"
-    prop-types "^15.7.2"
-
-"@devexpress/dx-react-grid@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@devexpress/dx-react-grid/-/dx-react-grid-2.6.0.tgz#f9f37df91e127b99adc79f39aae6281a17a13273"
-  integrity sha512-nUzxybMJH//DB1Q6LmNNg+zWrjdV9I8cSpUfUJJ9Hz5ZDMUfUe4twD4ESSyV0JXi9mO4DwjzbYZTDQ5v2G6XxA==
-  dependencies:
-    "@devexpress/dx-grid-core" "2.6.0"
-
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -3067,7 +3034,7 @@ clone@^2.1.1:
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
   integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
 
-clsx@^1.0.2, clsx@^1.0.4:
+clsx@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.0.tgz#62937c6adfea771247c34b54d320fb99624f5702"
   integrity sha512-3avwM37fSK5oP6M5rQ9CNe99lwxhXDOeSWVPAOYF6OazUTgZCMb0yWlJpmdD74REy1gkEaFiub2ULv4fq9GUhA==
