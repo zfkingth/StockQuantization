@@ -65,8 +65,7 @@ class DemoBase extends React.PureComponent {
 
   cellRender(data) {
     const stockId = data.data.stockId;
-    const myRef = React.createRef();
-    return <a ref={myRef} href={getXueQiuUrl(stockId)} target="_blank" rel="noopener noreferrer" >
+    return <a href={getXueQiuUrl(stockId)} target="_blank" rel="noopener noreferrer" >
       {stockId.substr(1)}</a>
   }
 
@@ -83,18 +82,30 @@ class DemoBase extends React.PureComponent {
         >
 
           <Column dataField="date" caption="日期" dataType="date" format="yyyy-MM-dd" />
-          <Column caption="股票代码" cellRender={this.cellRender} />
-          <Column dataField="stockName" caption="股票名称" />
+          <Column caption="股票代码" cellRender={this.cellRender}
+            calculateSortValue="stockId"
+            allowSorting='true'
+          />
+          <Column dataField="stockName" caption="股票名称"
+          />
           <Column calculateCellValue={this.getZhangDieFuCellValue}
+            calculateSortValue="zhangDieFu"
+            allowSorting='true'
             alignment="right"
             caption="涨跌幅" />
           <Column dataField="close" caption="价格" />
           <Column calculateCellValue={this.getHuanShouLvCellValue}
+            calculateSortValue="huanShouLiu"
+            allowSorting='true'
             alignment="right" caption="换手率" />
           <Column calculateCellValue={this.getLiuTongShiZhiCellValue}
+            calculateSortValue="liuTongShiZhi"
+            allowSorting='true'
             alignment="right"
             caption="流通市值(亿元)" />
           <Column calculateCellValue={this.getZongShiZhiCellValue}
+            calculateSortValue="zongShiZhi"
+            allowSorting='true'
             alignment="right"
             caption="总市值(亿元)" />
 
