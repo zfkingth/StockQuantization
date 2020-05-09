@@ -789,48 +789,6 @@
 			"response": []
 		},
 		{
-			"name": "send pull market deal",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{access_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"stockIdList\": [\n        \"aaaa\",\n        \"bbbb\"\n    ],\n    \"gapPercent\": 1,\n    \"lowToGapPercent\": 2,\n    \"limitPercent\": 7,\n    \"nearDaysNum\": 2,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
-				},
-				"url": {
-					"raw": "http://localhost:53791/api/tasks/pullMarketDealData",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "53791",
-					"path": [
-						"api",
-						"tasks",
-						"pullMarketDealData"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "register",
 			"event": [
 				{
