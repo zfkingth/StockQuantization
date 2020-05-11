@@ -40,10 +40,14 @@ namespace MyStock.WebAPI
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             services.AddCors();
 
+
+            string conString = Configuration.GetConnectionString("StockContext");
+            StockContext.MyConnectionString = conString;
+
             services
           .AddDbContext<StockContext>(options =>
               options.UseMySql(
-                  Configuration.GetConnectionString("StockContext"),
+                 conString,
                   o => o.MigrationsAssembly("MyStock.WebAPI")
               )
           );

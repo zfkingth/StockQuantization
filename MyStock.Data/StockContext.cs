@@ -27,7 +27,23 @@ namespace MyStock.Data
         public DbSet<MarketDeal> MarketDeal { get; set; }
         public DbSet<StaPrice> StaPrice { get; set; }
 
-
+        private static string _myConnectionString=null;
+        public static string MyConnectionString
+        {
+            get
+            {
+                return _myConnectionString;
+            }set
+            {
+                if(_myConnectionString==null)
+                {
+                    _myConnectionString = value;
+                }else
+                {
+                    throw new Exception("my connection string has been set!");
+                }
+            }
+        }
 
 
 
@@ -35,7 +51,7 @@ namespace MyStock.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=localhost;database=StockQuantization;user=root;password=dragon00");
+                optionsBuilder.UseMySql(MyConnectionString);
             }
 
         }
