@@ -47,7 +47,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                                select i;
                 var list = await querySta.Take(10).ToListAsync(); //更新最后10次的，怕数据不全导致出错
 
-                var item = list.Last();
+                var item = list.LastOrDefault();
 
                 await calcStaPrice(stockList, db, item);
 
