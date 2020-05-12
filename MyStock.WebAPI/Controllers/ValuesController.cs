@@ -48,7 +48,6 @@ namespace MyStock.WebAPI.Controllers
             DateTime startDate = new DateTime(ticks);
             if (startDate == default)
             {
-                //默认只取1年的数据
                 startDate = DateTime.Now.AddYears(-_defalutYears);
             }
 
@@ -77,6 +76,36 @@ namespace MyStock.WebAPI.Controllers
                              ).AsNoTracking()
                            .ToListAsync();
 
+            //最新的一个实时数据
+            var realItem = await (
+                    from i in _db.RealTimeDataSet
+                    where i.StockId == id
+                    orderby i.Date descending
+                    select i
+                ).AsNoTracking().FirstOrDefaultAsync();
+
+            if (realItem != null)
+            {
+                var date = realItem.Date;
+                var dayTime = new DateTime(date.Year, date.Month, date.Day);
+                if (list.Any(s => s.Date == dayTime) == false)
+                {
+                    //历史数据中没有这个数据
+                    realItem.Date = dayTime;
+                    var item = new
+                    {
+                        realItem.Date,
+                        realItem.Open,
+                        realItem.High,
+                        realItem.Low,
+                        realItem.Close,
+                        realItem.ZhangDieFu,
+                        realItem.Amount
+                    };
+                    //在最后添加
+                    list.Add(item);
+                }
+            }
 
             return Ok(list);
         }
