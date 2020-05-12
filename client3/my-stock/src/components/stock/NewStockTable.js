@@ -79,31 +79,35 @@ class DemoBase extends React.PureComponent {
           dataSource={rows}
           keyExpr="stockId"
           showBorders={false}
+          columnAutoWidth={true}
+          width='100%'
         >
 
-          <Column dataField="date" caption="日期" dataType="date" format="yyyy-MM-dd" />
+          <Column dataField="date" caption="日期" dataType="date" format="yyyy-MM-dd" width={100} />
           <Column caption="股票代码" cellRender={this.cellRender}
             calculateSortValue="stockId"
             allowSorting='true'
+            width={100}
           />
-          <Column dataField="stockName" caption="股票名称"
+          <Column dataField="stockName" caption="股票名称" width={100}
           />
           <Column calculateCellValue={this.getZhangDieFuCellValue}
+            width={80}
             calculateSortValue="zhangDieFu"
             allowSorting='true'
             alignment="right"
             caption="涨跌幅" />
-          <Column dataField="close" caption="价格" />
-          <Column calculateCellValue={this.getHuanShouLvCellValue}
+          <Column width={80} dataField="close" caption="价格" alignment="right" />
+          <Column width={80} calculateCellValue={this.getHuanShouLvCellValue}
             calculateSortValue="huanShouLiu"
             allowSorting='true'
             alignment="right" caption="换手率" />
-          <Column calculateCellValue={this.getLiuTongShiZhiCellValue}
+          <Column width={120} calculateCellValue={this.getLiuTongShiZhiCellValue}
             calculateSortValue="liuTongShiZhi"
             allowSorting='true'
             alignment="right"
             caption="流通市值(亿元)" />
-          <Column calculateCellValue={this.getZongShiZhiCellValue}
+          <Column width={120} calculateCellValue={this.getZongShiZhiCellValue}
             calculateSortValue="zongShiZhi"
             allowSorting='true'
             alignment="right"

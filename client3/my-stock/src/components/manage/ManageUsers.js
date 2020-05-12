@@ -71,6 +71,8 @@ class App extends React.Component {
           keyExpr="id"
           allowColumnReordering={true}
           showBorders={true}
+          columnAutoWidth={true}
+          width='100%'
           onEditingStart={this.onEditingStart}
           onInitNewRow={this.onInitNewRow}
           onRowInserting={this.onRowInserting}
@@ -81,16 +83,16 @@ class App extends React.Component {
           onRowRemoved={this.removeRow}>
 
           <Paging enabled={true} />
-          <Editing
+          <Editing width={110}
             mode="row"
             allowUpdating={true}
             allowDeleting={true}
             allowAdding={true} />
 
-          <Column dataField="email" caption="Email" />
-          <Column dataField="username" caption="Username" />
-          <Column dataField="roleName" caption="RoleName" />
-          <Column dataField="expiredDate" dataType="date" format="yyyy-MM-dd" />
+          <Column width={120} dataField="email" caption="Email" />
+          <Column width={120}  dataField="username" caption="Username" />
+          <Column width={120}  dataField="roleName" caption="RoleName" />
+          <Column width={120}  dataField="expiredDate" dataType="date" format="yyyy-MM-dd" />
         </DataGrid>
 
         <div id="events">

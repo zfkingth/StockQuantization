@@ -77,6 +77,8 @@ class DemoBase extends React.PureComponent {
           dataSource={rows}
           keyExpr="eventName"
           showBorders={true}
+          columnAutoWidth={true}
+          width='100%'
           onRowValidating={this.onRowValidating}
           onEditorPreparing={this.onEditorPreparing}>
           <Editing
@@ -98,10 +100,10 @@ class DemoBase extends React.PureComponent {
                 onClick: this.clearEventStatus
               }
             ]} />
-          <Column dataField="eventName" caption="Title" />
-          <Column dataField="lastAriseStartDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
-          <Column dataField="lastAriseEndDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
-          <Column dataField="status" />
+          <Column width={150} dataField="eventName" caption="Title" />
+          <Column width={150} dataField="lastAriseStartDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
+          <Column width={150}dataField="lastAriseEndDate" dataType="date" format="yyyy-MM-dd HH:mm:ss" />
+          <Column width={50}dataField="status" />
 
         </DataGrid>
         <div id="events">
