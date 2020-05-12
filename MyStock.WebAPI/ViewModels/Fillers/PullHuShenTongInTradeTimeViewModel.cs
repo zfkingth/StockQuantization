@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -49,67 +50,94 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         private async Task pullWriteDataByHeadlessBrowserAsync()
         {
 
-            ChromeDriverService driverService = ChromeDriverService.CreateDefaultService();
-            driverService.HideCommandPromptWindow = true;//关闭黑色cmd窗口
-
-            ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--disable-gpu");
-            //禁用图片
-            options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
-            options.AddArgument("--headless");
-
-
-            System.Diagnostics.Debug.WriteLine("test case started ");
-            //create the reference for the browser  
-            IWebDriver driver = new ChromeDriver(driverService, options);
-
+            string chromeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             try
             {
-                driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
+                
+                ChromeDriverService driverService = ChromeDriverService.CreateDefaultService(chromeDir);
+                driverService.HideCommandPromptWindow = true;//关闭黑色cmd窗口
+                driverService.WhitelistedIPAddresses = "0.0.0.0";
+                
+
+                ChromeOptions options = new ChromeOptions();
+                
+                options.AddArgument("--headless");
+                options.AddArgument(" --no-sandbox");
+                options.AddArgument("--disable-setuid-sandbox");
+                options.AddArgument("--disable-gpu");
+                options.AddArgument("--disable-extensions");
+                options.AddArgument("--remote-debugging-port=9222");
+                //禁用图片
+                options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
 
 
 
-                // navigate to URL  
-                driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
 
+                System.Diagnostics.Debug.WriteLine("test case started ");
+                //create the reference for the browser  
+                using (IWebDriver driver = new ChromeDriver(driverService, options))
+                {
 
-                var ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_hgt\"]/td[5]/span"));
-                var huguTongstr = ele.Text;
+                    try
+                    {
 
-                ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_sgt\"]/td[5]/span"));
-
-                var shenguTongstr = ele.Text;
-
-
-                ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
-
-                var datestr = ele.Text;
-
-
-                //close the browser  
-                driver.Close();
-                System.Diagnostics.Debug.WriteLine("test case ended ");
+                        driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
 
 
 
-                //解析时间
-                var sa = datestr.Split('-');
-                int month = int.Parse(sa[0]);
-                int day = int.Parse(sa[1]);
+                        // navigate to URL  
+                        driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
 
-                DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
 
-                //写入数据库
+                        var ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_hgt\"]/td[5]/span"));
+                        var huguTongstr = ele.Text;
 
-                await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
-                await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
+                        ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_sgt\"]/td[5]/span"));
+
+                        var shenguTongstr = ele.Text;
+
+
+                        ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
+
+                        var datestr = ele.Text;
+
+
+                        //close the browser  
+                        driver.Close();
+                        System.Diagnostics.Debug.WriteLine("test case ended ");
+
+
+
+                        //解析时间
+                        var sa = datestr.Split('-');
+                        int month = int.Parse(sa[0]);
+                        int day = int.Parse(sa[1]);
+
+                        DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
+
+                        //写入数据库
+
+                        await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
+                        await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        driver.Quit();
+                        _logger.LogError($"fetch data by chrom is error.chrom dir is {chromeDir}");
+                        throw ex;
+                    }
+
+                }
 
             }
             catch (Exception ex)
             {
-                driver.Quit();
+                _logger.LogError($"fetch data by chrom is error.chrom dir is {chromeDir}");
                 throw ex;
             }
+
+
 
 
 
