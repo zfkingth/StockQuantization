@@ -51,92 +51,83 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
 
             string chromeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            try
+
+            ChromeDriverService driverService = ChromeDriverService.CreateDefaultService(chromeDir);
+            driverService.HideCommandPromptWindow = true;//关闭黑色cmd窗口
+            driverService.WhitelistedIPAddresses = "0.0.0.0";
+
+
+            ChromeOptions options = new ChromeOptions();
+
+            options.AddArgument("--headless");
+            options.AddArgument(" --no-sandbox");
+            options.AddArgument("--disable-setuid-sandbox");
+            options.AddArgument("--disable-gpu");
+            options.AddArgument("--disable-extensions");
+            options.AddArgument("--remote-debugging-port=9222");
+            //禁用图片
+            options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
+
+
+
+
+            System.Diagnostics.Debug.WriteLine("test case started ");
+            //create the reference for the browser  
+            using (IWebDriver driver = new ChromeDriver(driverService, options))
             {
-                
-                ChromeDriverService driverService = ChromeDriverService.CreateDefaultService(chromeDir);
-                driverService.HideCommandPromptWindow = true;//关闭黑色cmd窗口
-                driverService.WhitelistedIPAddresses = "0.0.0.0";
-                
 
-                ChromeOptions options = new ChromeOptions();
-                
-                options.AddArgument("--headless");
-                options.AddArgument(" --no-sandbox");
-                options.AddArgument("--disable-setuid-sandbox");
-                options.AddArgument("--disable-gpu");
-                options.AddArgument("--disable-extensions");
-                options.AddArgument("--remote-debugging-port=9222");
-                //禁用图片
-                options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
-
-
-
-
-                System.Diagnostics.Debug.WriteLine("test case started ");
-                //create the reference for the browser  
-                using (IWebDriver driver = new ChromeDriver(driverService, options))
+                try
                 {
 
-                    try
-                    {
-
-                        driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
+                    driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(20);
 
 
 
-                        // navigate to URL  
-                        driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
+                    // navigate to URL  
+                    driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
 
 
-                        var ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_hgt\"]/td[5]/span"));
-                        var huguTongstr = ele.Text;
+                    //await Task.Delay(TimeSpan.FromSeconds(10));
 
-                        ele = driver.FindElement(By.XPath("//*[@id=\"zjlx_sgt\"]/td[5]/span"));
-
-                        var shenguTongstr = ele.Text;
+                    var ele = driver.FindElement(By.XPath("//*[@id=\"north_1\"]/span"));
+                    var huguTongstr = ele.Text;
 
 
-                        ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
+                    ele = driver.FindElement(By.XPath("//*[@id=\"north_3\"]/span"));
 
-                        var datestr = ele.Text;
-
-
-                        //close the browser  
-                        driver.Close();
-                        System.Diagnostics.Debug.WriteLine("test case ended ");
+                    var shenguTongstr = ele.Text;
 
 
+                    ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
 
-                        //解析时间
-                        var sa = datestr.Split('-');
-                        int month = int.Parse(sa[0]);
-                        int day = int.Parse(sa[1]);
+                    var datestr = ele.Text;
 
-                        DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
 
-                        //写入数据库
+                    //close the browser  
+                    driver.Close();
+                    System.Diagnostics.Debug.WriteLine("test case ended ");
 
-                        await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
-                        await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        driver.Quit();
-                        _logger.LogError($"fetch data by chrom is error.chrom dir is {chromeDir}");
-                        throw ex;
-                    }
+                    //解析时间
+                    var sa = datestr.Split('-');
+                    int month = int.Parse(sa[0]);
+                    int day = int.Parse(sa[1]);
 
+                    DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
+
+                    //写入数据库
+
+                    await writetoDb(updateTime, MarketType.HuGuTong, huguTongstr);
+                    await writetoDb(updateTime, MarketType.ShenGuTong, shenguTongstr);
+
+                }
+                catch (Exception ex)
+                {
+                    driver.Quit();
+                    throw ex;
                 }
 
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"fetch data by chrom is error.chrom dir is {chromeDir}");
-                throw ex;
-            }
-
 
 
 
@@ -148,7 +139,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         private async Task writetoDb(DateTime updateTime, MarketType market, string strVal)
         {
-            string val = strVal.Replace("亿元", "");
+            string val = strVal.Replace("万元", "");
             var tempFloat = Utility.convertToFloat(val);
 
             if (tempFloat == null)
@@ -175,7 +166,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     {
                         MarketType = market,
                         Date = updateTime,
-                        DRZJLR = tempFloat.Value * 100,
+                        DRZJLR = tempFloat.Value / 100,
                         Permanent = false,
                     };
 
@@ -194,7 +185,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     else
                     {
 
-                        itemIndb.DRZJLR = tempFloat.Value * 100;
+                        itemIndb.DRZJLR = tempFloat.Value / 100;
 
                     }
                 }
