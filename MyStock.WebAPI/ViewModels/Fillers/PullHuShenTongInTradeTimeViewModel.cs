@@ -59,12 +59,18 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             ChromeOptions options = new ChromeOptions();
 
+
+            options.AddArgument("enable-automation");
             options.AddArgument("--headless");
-            options.AddArgument(" --no-sandbox");
+            options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--no-sandbox");
             options.AddArgument("--disable-setuid-sandbox");
-            options.AddArgument("--disable-gpu");
             options.AddArgument("--disable-extensions");
-            options.AddArgument("--remote-debugging-port=9222");
+            options.AddArgument("--dns-prefetch-disable");
+            options.AddArgument("--disable-gpu");
+            //options.AddArgument("--remote-debugging-port=9222");
+            options.PageLoadStrategy=PageLoadStrategy.Normal;
+
             //禁用图片
             options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
 
@@ -139,7 +145,21 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         private async Task writetoDb(DateTime updateTime, MarketType market, string strVal)
         {
-            string val = strVal.Replace("万元", "");
+            string val = "";
+            float mulfactor = 1.0f;
+            if (strVal.Contains("万元"))
+            {
+                val = strVal.Replace("万元", "");
+                mulfactor = 0.01f; //数据库中存储的是数据单位是百万。
+
+            }
+            else if (strVal.Contains("亿元"))
+            {
+                val = strVal.Replace("亿元", "");
+                mulfactor = 100f; //数据库中存储的是数据单位是百万。
+
+            }
+
             var tempFloat = Utility.convertToFloat(val);
 
             if (tempFloat == null)
@@ -166,7 +186,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     {
                         MarketType = market,
                         Date = updateTime,
-                        DRZJLR = tempFloat.Value / 100,
+                        DRZJLR = tempFloat.Value * mulfactor,
                         Permanent = false,
                     };
 
@@ -185,7 +205,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     else
                     {
 
-                        itemIndb.DRZJLR = tempFloat.Value / 100;
+                        itemIndb.DRZJLR = tempFloat.Value * mulfactor;
 
                     }
                 }
