@@ -189,8 +189,8 @@ namespace MyStock.WebAPI.Utils
 
 
 
-  
- 
+
+
         public static bool IsTradingTime(DateTime time)
         {
 
@@ -230,22 +230,36 @@ namespace MyStock.WebAPI.Utils
             return false;
         }
 
-        /// <summary>
-        /// 在开盘之前
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public static bool IsBeforeStart(DateTime time)
+        ///// <summary>
+        ///// 在开盘之前
+        ///// </summary>
+        ///// <param name="time"></param>
+        ///// <returns></returns>
+        //public static bool IsBeforeStart(DateTime time)
+        //{
+
+        //    var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
+        //    if (sp <= Constants.StockStartSpan)
+        //    {
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
+        public static bool IsBetween(TimeSpan start, TimeSpan end)
         {
+            DateTime time = DateTime.Now;
 
             var sp = new TimeSpan(time.Hour, time.Minute, time.Second);
-            if (sp <= Constants.StockStartSpan)
+            if (sp >= start && sp <= end)
             {
                 return true;
             }
 
             return false;
         }
+
 
         public static float? convertToFloat(string numberStr)
         {

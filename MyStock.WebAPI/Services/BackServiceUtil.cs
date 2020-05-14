@@ -336,7 +336,7 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    if (Utility.IsBeforeStart(DateTime.Now))
+                    if (Utility.IsBetween(Constants.RefreshMarginStartSpan, Constants.RefreshMarginEndSpan))
                         EnquePullMarginData();
                 }
             }
@@ -358,7 +358,7 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    if (Utility.IsAfterMarketEnd(DateTime.Now))
+                    if (Utility.IsBetween(Constants.IdleTimeEndSpan, Constants.IdleTimeEndSpan))
                         EnquePullMarketDealData();
                 }
             }

@@ -72,6 +72,9 @@ namespace BackgroundTasksSample.Services
             execLog(_util.JudgePullDailyData);
             execLog(() => _util.JudgeEraseRealTimeData().Wait());
             execLog(_util.JudgeCalcLimitNum);
+            execLog(() => _util.JudgePullMarketDealDataAsync().Wait());
+
+
 
 
         }
@@ -106,11 +109,7 @@ namespace BackgroundTasksSample.Services
             //有具体的判断，这个是在开盘前
             execLog(() => _util.JudgePullMarginDataAsync().Wait());
 
-            //这个是在收盘后
-            execLog(() => _util.JudgePullMarketDealDataAsync().Wait());
-
-
-
+        
         }
 
 
