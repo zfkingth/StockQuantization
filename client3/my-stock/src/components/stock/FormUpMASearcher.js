@@ -54,7 +54,7 @@ const defaultValues = {
     avgDays: 60,
     upDaysNum: 1,
     nearDaysNum: 30,
-    searchFromAllStocks: false,
+    searchFromAllStocks: true,
 };
 
 class TextFields extends React.PureComponent {

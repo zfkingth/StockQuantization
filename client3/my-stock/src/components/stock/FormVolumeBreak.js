@@ -54,7 +54,7 @@ const defaultValues = {
     zhangFu: 3,
     circleDaysNum: 10,
     nearDaysNum: 1,
-    searchFromAllStocks: false,
+    searchFromAllStocks: true,
 };
 
 class TextFields extends React.PureComponent {

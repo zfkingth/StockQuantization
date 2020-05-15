@@ -52,7 +52,7 @@ const defaultValues = {
     gapPercent: 1.0,
     limitPercent: 11.0,
     nearDaysNum: 2,
-    searchFromAllStocks: false,
+    searchFromAllStocks: true,
 };
 
 class TextFields extends React.PureComponent {

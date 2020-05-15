@@ -52,7 +52,7 @@ const styles = theme => ({
 const defaultValues = {
     marketLow: 20,
     marketHigh: 500,
-    searchFromAllStocks: false,
+    searchFromAllStocks: true,
 };
 
 class TextFields extends React.PureComponent {

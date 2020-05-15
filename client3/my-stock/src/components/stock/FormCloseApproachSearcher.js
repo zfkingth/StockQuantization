@@ -55,7 +55,7 @@ const defaultValues = {
     huiTiaoFuDuHigh: 25.0,
     nearDaysNum: 1,
     circleDaysNum: 60,
-    searchFromAllStocks: false,
+    searchFromAllStocks: true,
 };
 
 class TextFields extends React.PureComponent {

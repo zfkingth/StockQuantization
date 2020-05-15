@@ -51,7 +51,7 @@ const styles = theme => ({
 const defaultValues = {
     turnOverRateLow: 8,
     turnOverRateHigh: 100,
-    searchFromAllStocks: false,
+    searchFromAllStocks: true,
 };
 
 class TextFields extends React.PureComponent {
