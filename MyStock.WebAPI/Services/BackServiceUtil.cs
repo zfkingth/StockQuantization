@@ -358,7 +358,7 @@ namespace BackgroundTasksSample.Services
                 }
                 else
                 {
-                    if (Utility.IsBetween(Constants.IdleTimeEndSpan, Constants.IdleTimeEndSpan))
+                    if (Utility.IsBetween(Constants.IdleTimeStartSpan, Constants.IdleTimeEndSpan))
                         EnquePullMarketDealData();
                 }
             }
