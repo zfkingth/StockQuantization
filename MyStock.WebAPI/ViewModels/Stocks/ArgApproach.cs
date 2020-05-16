@@ -1,10 +1,11 @@
+using MyStock.WebAPI.ViewModels.Stocks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyStock.WebAPI.ViewModels
 {
-    public class ArgApproach
+    public class ArgApproach:IArg
     {
         public List<string> StockIdList { get; set; } = new List<string>();
         public bool SearchFromAllStocks { get; set; } = false;

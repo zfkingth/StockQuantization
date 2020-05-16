@@ -159,22 +159,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
 
 
 
-        private void prepareSearch()
-        {
-            _taskStartTime = DateTime.Now;
-
-            _actionName = "closeBreak";
-            if (_arg.SearchFromAllStocks)
-            {
-                _arg.StockIdList = new List<string>();
-                //只缓存从所有股票作为参数的任务结果
-                _needStoreInCache = true;
-                _argString = JsonConvert.SerializeObject(_arg);
-            }
-
-        }
-
-
+  
 
         /// <summary>
         /// 价格突破
@@ -188,12 +173,10 @@ namespace MyStock.WebAPI.ViewModels.Searcher
             {
                 throw new Exception("参数不正确");
             }
-            prepareSearch();
+            base.prepareSearch(_arg, "平台突破");
 
             List<RealTimeData> list = null;
 
-            if (_arg.SearchFromAllStocks)
-                _arg.StockIdList = GetAllStockIdWithOutIndex();
 
             list = await DoSearch(_arg.StockIdList, Filter);
 

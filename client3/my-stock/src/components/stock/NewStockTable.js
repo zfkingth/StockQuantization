@@ -83,35 +83,37 @@ class DemoBase extends React.PureComponent {
           width='100%'
         >
 
-          <Column dataField="date" caption="日期" dataType="date" format="yyyy-MM-dd" width={100} />
+          <Column dataField="date" caption="日期" dataType="date" format="yyyy-MM-dd" width={90} />
           <Column caption="股票代码" cellRender={this.cellRender}
             calculateSortValue="stockId"
             allowSorting='true'
-            width={100}
+            width={75}
           />
-          <Column dataField="stockName" caption="股票名称" width={100}
+          <Column dataField="stockName" caption="股票名称" width={80}
           />
           <Column calculateCellValue={this.getZhangDieFuCellValue}
-            width={80}
+            width={70}
             calculateSortValue="zhangDieFu"
             allowSorting='true'
             alignment="right"
             caption="涨跌幅" />
-          <Column width={80} dataField="close" caption="价格" alignment="right" />
-          <Column width={80} calculateCellValue={this.getHuanShouLvCellValue}
+          <Column width={70} dataField="close" caption="价格" alignment="right" />
+          <Column width={70} calculateCellValue={this.getHuanShouLvCellValue}
             calculateSortValue="huanShouLiu"
             allowSorting='true'
             alignment="right" caption="换手率" />
-          <Column width={120} calculateCellValue={this.getLiuTongShiZhiCellValue}
+          <Column width={90} calculateCellValue={this.getLiuTongShiZhiCellValue}
             calculateSortValue="liuTongShiZhi"
             allowSorting='true'
             alignment="right"
-            caption="流通市值(亿元)" />
-          <Column width={120} calculateCellValue={this.getZongShiZhiCellValue}
+            defaultSortIndex={0}
+            defaultSortOrder="desc"
+            caption="流通市值" />
+          <Column width={90} calculateCellValue={this.getZongShiZhiCellValue}
             calculateSortValue="zongShiZhi"
             allowSorting='true'
             alignment="right"
-            caption="总市值(亿元)" />
+            caption="总市值" />
 
         </DataGrid>
 

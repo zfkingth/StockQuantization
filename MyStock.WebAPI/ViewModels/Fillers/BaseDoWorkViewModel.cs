@@ -19,6 +19,7 @@ using MyStock.Model;
 using MyStock.WebAPI.Notifications;
 using MyStock.WebAPI.Notifications.Models;
 using MyStock.WebAPI.Utils;
+using MyStock.WebAPI.ViewModels.Stocks;
 
 namespace MyStock.WebAPI.ViewModels.Fillers
 {
@@ -717,6 +718,24 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
         #region result cache
+
+        protected void prepareSearch(IArg searchArg, string actionName)
+        {
+            _taskStartTime = DateTime.Now;
+
+            _actionName = actionName;
+            if (searchArg.SearchFromAllStocks)
+            {
+                searchArg.StockIdList = new List<string>();
+                //只缓存从所有股票作为参数的任务结果
+                _needStoreInCache = true;
+                _argString = JsonConvert.SerializeObject(searchArg);
+                searchArg.StockIdList = GetAllStockIdWithOutIndex();
+            }
+
+        }
+
+
 
 
         protected DateTime _taskStartTime;

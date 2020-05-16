@@ -1,10 +1,12 @@
+using MyStock.WebAPI.ViewModels.Stocks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyStock.WebAPI.ViewModels
 {
-    public class ArgCloseBreak
+    public class ArgCloseBreak : IArg
+
     {
         public List<string> StockIdList { get; set; } = new List<string>();
         public float HuiTiaoFuDuLow { get; set; } = 15;

@@ -124,8 +124,9 @@ namespace MyStock.WebAPI.ViewModels.Searcher
         {
             List<RealTimeData> list = null;
 
-            if (_arg.SearchFromAllStocks)
-                _arg.StockIdList = GetAllStockIdWithOutIndex();
+          
+
+            base.prepareSearch(_arg, "成交量突破");
 
             list = await DoSearch(_arg.StockIdList, Filter);
 

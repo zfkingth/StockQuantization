@@ -192,11 +192,10 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 throw new Exception("参数不正确");
             }
 
+            base.prepareSearch(_arg, "连续上涨");
 
             List<RealTimeData> list = null;
 
-            if (_arg.SearchFromAllStocks)
-                _arg.StockIdList = GetAllStockIdWithOutIndex();
 
 
             if (_arg.DownTag)

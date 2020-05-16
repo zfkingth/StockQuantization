@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MyStock.Data;
 using MyStock.Model;
 using MyStock.WebAPI.ViewModels.Fillers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,9 +109,9 @@ namespace MyStock.WebAPI.ViewModels.Searcher
 
             List<RealTimeData> list = null;
 
-            if (_arg.SearchFromAllStocks)
-                _arg.StockIdList = GetAllStockIdWithOutIndex();
 
+            base.prepareSearch(_arg, "涨跌幅限定");
+          
             list = await DoSearch(_arg.StockIdList, Filter);
 
             return list;
