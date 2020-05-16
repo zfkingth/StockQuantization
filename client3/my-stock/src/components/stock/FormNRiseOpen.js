@@ -157,7 +157,7 @@ class TextFields extends React.PureComponent {
 
                         />
                     }
-                    label="是否要求上涨的前一天必须是下跌的"
+                    label="启动前一天必须下跌"
                 />
 
 
