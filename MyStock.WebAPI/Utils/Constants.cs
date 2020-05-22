@@ -11,7 +11,7 @@ namespace MyStock.WebAPI.Utils
         public static readonly TimeSpan IdleTimeEndSpan = new TimeSpan(6, 30, 0);
 
         public static readonly TimeSpan RefreshMarginStartSpan = new TimeSpan(8, 30, 0);
-        public static readonly TimeSpan RefreshMarginEndSpan = new TimeSpan(9, 15, 0);
+        public static readonly TimeSpan RefreshMarginEndSpan = new TimeSpan(10, 0, 0);
 
         public static readonly TimeSpan StockStartSpan = new TimeSpan(9, 15, 0);
 
