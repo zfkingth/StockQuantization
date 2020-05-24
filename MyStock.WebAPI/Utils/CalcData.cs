@@ -122,7 +122,7 @@ namespace MyStock.WebAPI.Utils
         /// </summary>
         /// <param name="dataList"></param>
         /// <returns></returns>
-        public static float?[] DIFF(List<float> dataList)
+        public static (float?[] diff, float?[] dea) MACD(IList<float> dataList)
         {
             int cnt = dataList.Count;
 
@@ -138,7 +138,15 @@ namespace MyStock.WebAPI.Utils
                 diff[index] = EMA12[index] - EMA26[index];
             }
 
-            return diff;
+            var diffNotNull = (
+                  from ii in diff
+                  where ii != null
+                  select ii.Value
+                  ).ToList();
+            var dea = EXPMA(diffNotNull, 9);
+
+
+            return (diff, dea);
 
         }
 
@@ -176,7 +184,7 @@ namespace MyStock.WebAPI.Utils
         }
 
 
-        public static float?[] EXPMA(List<float> dataList, int daysNum)
+        public static float?[] EXPMA(IList<float> dataList, int daysNum)
         {
             if (daysNum <= 0)
                 throw new Exception("daysNum param error");

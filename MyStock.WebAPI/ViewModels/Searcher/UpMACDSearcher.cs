@@ -78,8 +78,14 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                     var closeList = (from ii in dayDataList
                                      select ii.Close).ToList();
 
-                    var diff = Utils.CalcData.DIFF(closeList);
-                    var dea = Utils.CalcData.DEA(diff);
+                    var macd = Utils.CalcData.MACD(closeList);
+                    var diff = macd.diff;
+                    var dea = macd.dea;
+
+              
+
+                    //从0开始是对齐的，因为是采用的时间逆序，后面的数据可能有缺失 。
+
 
                     //满足条件的flag
                     //对数据进行处理,当日的不处理
