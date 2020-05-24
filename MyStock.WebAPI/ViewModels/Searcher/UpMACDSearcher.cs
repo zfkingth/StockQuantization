@@ -82,7 +82,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                     var diff = macd.diff;
                     var dea = macd.dea;
 
-              
+
 
                     //从0开始是对齐的，因为是采用的时间逆序，后面的数据可能有缺失 。
 
@@ -93,7 +93,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                     {
                         var current = dayDataList[i];
 
-                        if (diff[i] > 0 && dea[i] > 0)
+                        if (diff[i] >= _arg.LowDiff && dea[i] >= _arg.LowDea)
                         {
 
                             //不满足条件
@@ -112,7 +112,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                             //var temp = dayDataList[j + _arg.UpDaysNum];
                             //if (temp.Close >= maArray[j + _arg.UpDaysNum])
                             int index = j + _arg.UpDaysNum;
-                            if (diff[j] > 0 && dea[j] > 0)
+                            if (diff[j] >= _arg.PreLowDiff && dea[j] >= _arg.PreLowDea)
                             {
                                 //满足条件
                                 exceptCnt++;

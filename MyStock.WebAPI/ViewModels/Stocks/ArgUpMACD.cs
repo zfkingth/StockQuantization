@@ -20,5 +20,10 @@ namespace MyStock.WebAPI.ViewModels
 
         public int NearDaysNum { get; set; } = 30;
         public int ExceptionNum { get; set; } = 0;
+        public float LowDiff { get; set; } = 0;
+        public float LowDea { get; set; } = 0;
+        public float PreLowDiff { get; set; } = 0;
+        public float PreLowDea { get; set; } = 0;
+
     }
 }

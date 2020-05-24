@@ -15,6 +15,8 @@ export const EXCEPTZHANGFU = `${SEARCH}ExceptZhangFu`
 export const NRISEOPEN = `${SEARCH}NRiseOpen`
 export const VOLUMEDECREASE = `${SEARCH}VolumeDecrease`
 export const VOLUMEBREAK = `${SEARCH}VolumeBreak`
+export const SEARCHMACD = `${SEARCH}UpMACD`
+
 
 //获取数据api
 

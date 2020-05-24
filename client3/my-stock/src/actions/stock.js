@@ -15,6 +15,7 @@ export const searchExceptZhangFu = createAction('searchExceptZhangFu')
 export const searchNRiseOpen = createAction('searchNRiseOpen')
 export const searchVolumeDecrease = createAction('searchVolumeDecrease')
 export const searchVolumeBreak = createAction('searchVolumeBreak')
+export const searchMACD = createAction('searchMACD')
 
 
 

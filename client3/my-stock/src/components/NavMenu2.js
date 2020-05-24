@@ -25,6 +25,7 @@ const menufun = ({ to, unauthorizeUser, loadManage, loadSystemStatus, }) => {
                             <li><button onClick={() => to('filterCloseBreak')}> 平台突破</button></li>
                             <li><button onClick={() => to('filterUpwardGap')}> 向上跳空</button></li>
                             <li><button onClick={() => to('filterUpMA')}>均线突破</button></li>
+                            <li><button onClick={() => to('filterMACD')}>MACD</button></li>
                             <li><button onClick={() => to('filterApproach')}>平台接近</button></li>
                             <li><button onClick={() => to('filterTurnOverRate')}> 换手率</button></li>
                             <li><button onClick={() => to('filterCiculatedMarket')}> 流通市值</button></li>

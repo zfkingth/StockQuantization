@@ -1,5 +1,6 @@
 
 import { default as FormUpwardGap } from './components/stock/FormUpwardGap'
+import  { default as FormMACD } from './components/stock/FormUpMACDSearcher'
 import { default as FormCloseBreakSearcher } from './components/stock/FormCloseBreakSearcher'
 import { default as stockTemplate } from './components/stock'
 import { default as FormUpMASearcher } from './components/stock/FormUpMASearcher'
@@ -59,6 +60,14 @@ const filterTurnOverRate = () => { return stockTemplate(FormTurnOverRate); };
 //这里输出的名称，state.navigation.page使用，
 //要和调用to action里的参数匹配。
 export { filterTurnOverRate };
+
+
+
+const filterMACD = () => { return stockTemplate(FormMACD); };
+
+//这里输出的名称，state.navigation.page使用，
+//要和调用to action里的参数匹配。
+export { filterMACD };
 
 
 
