@@ -6,6 +6,26 @@
 	},
 	"item": [
 		{
+			"name": "get weatherforecast",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://kf98.top/netcore/weatherforecast",
+					"protocol": "https",
+					"host": [
+						"kf98",
+						"top"
+					],
+					"path": [
+						"netcore",
+						"weatherforecast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "login",
 			"event": [
 				{
@@ -363,6 +383,48 @@
 						"api",
 						"search",
 						"UpwardGap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search MACD",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stockIdList\": [\n        \"1399001\"\n        \n    ],\n    \"AvgDays\": 60,\n    \"UpDaysNum\": 1,\n    \"NearDaysNum\": 20,\n    \"ExceptionNum\": 0,\n    \"searchFromAllStocks\": false,\n    \"baseDate\": \"9999-12-31T23:59:59.9999999\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:53791/api/search/UpMACD",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "53791",
+					"path": [
+						"api",
+						"search",
+						"UpMACD"
 					]
 				}
 			},
