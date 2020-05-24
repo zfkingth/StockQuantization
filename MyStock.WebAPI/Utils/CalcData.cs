@@ -117,6 +117,64 @@ namespace MyStock.WebAPI.Utils
             return ma;
         }
 
+        /// <summary>
+        /// 计算macd的diff,12天和26天
+        /// </summary>
+        /// <param name="dataList"></param>
+        /// <returns></returns>
+        public static float?[] DIFF(List<float> dataList)
+        {
+            int cnt = dataList.Count;
+
+            float?[] diff = new float?[cnt];
+
+            var EMA12 = EXPMA(dataList, 12);
+            var EMA26 = EXPMA(dataList, 26);
+
+            for (int i = 26; i < cnt; i++)
+            {
+                int index = cnt - 1 - i;
+
+                diff[index] = EMA12[index] - EMA26[index];
+            }
+
+            return diff;
+
+        }
+
+
+        /// <summary>
+        /// ema(diff,9)
+        /// </summary>
+        /// <param name="diff"></param>
+        /// <returns></returns>
+        public static float?[] DEA(float?[] diff)
+        {
+
+            int cnt = diff.Length;
+
+
+            float?[] dea = new float?[cnt];
+            for (int i = 0; i < dea.Length; i++)
+            {
+                //初始化
+                dea[i] = 0;
+            }
+
+            //从第27个数据 开始取，下标从0开始
+            for (int i = 26; i < cnt; i++)
+            {
+                //DEA（MACD）= 前一日DEA×8/10＋今日DIF×2/10
+                //数据时按照时间逆序开始排列的
+                int index = cnt - 1 - i;
+                dea[index] = dea[index + 1] * 8 / 10f + diff[index] * 2 / 10f;
+            }
+
+
+            return dea;
+
+        }
+
 
         public static float?[] EXPMA(List<float> dataList, int daysNum)
         {

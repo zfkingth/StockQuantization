@@ -38,7 +38,7 @@ namespace MyStock.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("UpwardGap")]
-        public ActionResult UpwardGap([FromBody]ArgUpwardGap model)
+        public ActionResult UpwardGap([FromBody] ArgUpwardGap model)
         {
             var userId = HttpContext.User.Identity.Name;
             var flag = HttpContext.User.IsInRole("admin");
@@ -55,7 +55,7 @@ namespace MyStock.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("ColseBreak")]
-        public ActionResult ColseBreak([FromBody]ArgCloseBreak model)
+        public ActionResult ColseBreak([FromBody] ArgCloseBreak model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new CloseBreakSearcher(_serviceScopeFactory, userId, _configuration,
@@ -71,7 +71,7 @@ namespace MyStock.WebAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("CloseApproach")]
-        public ActionResult CloseApproach([FromBody]ArgApproach model)
+        public ActionResult CloseApproach([FromBody] ArgApproach model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new CloseApproachSearcher(_serviceScopeFactory, userId, _configuration,
@@ -89,10 +89,26 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("UpMA")]
-        public ActionResult UpMA([FromBody]ArgUpMA model)
+        public ActionResult UpMA([FromBody] ArgUpMA model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new UpMASearcher(_serviceScopeFactory, userId, _configuration,
+                _logger, model);
+            //开启新的线程来执行任务
+            Task.Run(async () => await searcher.Search());
+            return NoContent();
+        }
+
+        /// <summary>
+        /// macd指标diff>0,dea>0
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("UpMACD")]
+        public ActionResult UpMACD([FromBody] ArgUpMACD model)
+        {
+            var userId = HttpContext.User.Identity.Name;
+            var searcher = new UpMACDSearcher(_serviceScopeFactory, userId, _configuration,
                 _logger, model);
             //开启新的线程来执行任务
             Task.Run(async () => await searcher.Search());
@@ -107,7 +123,7 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("CirculatedMarket")]
-        public ActionResult CirculatedMarket([FromBody]ArgCirculatedMarket model)
+        public ActionResult CirculatedMarket([FromBody] ArgCirculatedMarket model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new CirculatedMarketSearcher(_serviceScopeFactory, userId, _configuration,
@@ -124,7 +140,7 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("TurnOverRate")]
-        public ActionResult TurnOverRate([FromBody]ArgTurnOverRate model)
+        public ActionResult TurnOverRate([FromBody] ArgTurnOverRate model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new TurnOverRateSearcher(_serviceScopeFactory, userId, _configuration,
@@ -142,7 +158,7 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("ExceptZhangFu")]
-        public ActionResult ExceptZhangFu([FromBody]ArgExceptZhangFu model)
+        public ActionResult ExceptZhangFu([FromBody] ArgExceptZhangFu model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new ExceptZhangFuSearcher(_serviceScopeFactory, userId, _configuration,
@@ -160,7 +176,7 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("NRiseOpen")]
-        public ActionResult NRiseOpen([FromBody]ArgNRiseOpen model)
+        public ActionResult NRiseOpen([FromBody] ArgNRiseOpen model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new NRiseOpenSearcher(_serviceScopeFactory, userId, _configuration,
@@ -177,7 +193,7 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("VolumeDecrease")]
-        public ActionResult VolumeDecrease([FromBody]ArgVolumeDecrease model)
+        public ActionResult VolumeDecrease([FromBody] ArgVolumeDecrease model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new VolumeDecreaseSearcher(_serviceScopeFactory, userId, _configuration,
@@ -195,7 +211,7 @@ namespace MyStock.WebAPI.Controllers
         /// <returns></returns>
 
         [HttpPost("VolumeBreak")]
-        public ActionResult VolumeBreak([FromBody]ArgVolumeBreak model)
+        public ActionResult VolumeBreak([FromBody] ArgVolumeBreak model)
         {
             var userId = HttpContext.User.Identity.Name;
             var searcher = new VolumeBreakSearcher(_serviceScopeFactory, userId, _configuration,
