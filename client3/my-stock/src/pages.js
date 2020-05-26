@@ -1,6 +1,6 @@
 
 import { default as FormUpwardGap } from './components/stock/FormUpwardGap'
-import  { default as FormMACD } from './components/stock/FormUpMACDSearcher'
+import { default as FormMACD } from './components/stock/FormUpMACDSearcher'
 import { default as FormCloseBreakSearcher } from './components/stock/FormCloseBreakSearcher'
 import { default as stockTemplate } from './components/stock'
 import { default as FormUpMASearcher } from './components/stock/FormUpMASearcher'
