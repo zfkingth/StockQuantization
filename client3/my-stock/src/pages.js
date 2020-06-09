@@ -28,7 +28,6 @@ export { filterUpwardGap };
 
 const filterCloseBreak = () => { return stockTemplate(FormCloseBreakSearcher); };
 export { filterCloseBreak };
-export { filterCloseBreak as mainIndex };
 
 
 const filterUpMA = () => { return stockTemplate(FormUpMASearcher); };
@@ -36,6 +35,7 @@ const filterUpMA = () => { return stockTemplate(FormUpMASearcher); };
 //这里输出的名称，state.navigation.page使用，
 //要和调用to action里的参数匹配。
 export { filterUpMA };
+export { filterUpMA as mainIndex };
 
 
 const filterApproach = () => { return stockTemplate(FormCloseAppoach); };
