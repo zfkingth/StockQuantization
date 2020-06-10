@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connectTo } from '../../utils/generic';
-import { searchCirculatedMarket as searchAction,changeBaseDate } from '../../actions/stock';
+import { searchCirculatedMarket as searchAction, changeBaseDate } from '../../actions/stock';
 import { submitAsyncValidation, transFormValuestoPostValues, isConnected } from '../../utils/forms'
 import _ from 'lodash'
 import { FormLabel } from '@material-ui/core';
@@ -30,7 +30,7 @@ const styles = theme => ({
 
         marginLeft: theme.spacing(1),
     },
-  
+
     formTextInput: {
         fontSize: 18
     },
@@ -71,7 +71,7 @@ class TextFields extends React.PureComponent {
     };
 
     handleSubmit = fun => event => {
-        const postModel = transFormValuestoPostValues(this.state, defaultValues, this.props.stockList,this.props.baseDate);
+        const postModel = transFormValuestoPostValues(this.state, defaultValues, this.props.stockList, this.props.baseDate);
         const promise = fun(postModel);
         promise.then(data => {
             //请求成功
@@ -105,7 +105,17 @@ class TextFields extends React.PureComponent {
                         this.props.searchAction,
                     )}
             >
-                          <FormControlLabel
+
+                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
+                    搜索股票
+                 </Button>
+                <FormLabel disabled={!this.state.formHasError}
+                    className={classes.menu}
+                    error={this.state.formHasError}>
+                    {this.state.formErrorMessage}
+                </FormLabel>
+
+                <FormControlLabel
                     control={
                         <Switch
                             className={classes.switch}
@@ -117,16 +127,6 @@ class TextFields extends React.PureComponent {
                     }
                     label="从所有股票列表中筛选"
                 />
-
-
-                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
-                    搜索股票
-                 </Button>
-                <FormLabel disabled={!this.state.formHasError}
-                    className={classes.menu}
-                    error={this.state.formHasError}>
-                    {this.state.formErrorMessage}
-                </FormLabel>
 
 
 
@@ -192,7 +192,7 @@ class TextFields extends React.PureComponent {
                     variant="outlined"
                 />
 
-              
+
 
             </form>
         );
