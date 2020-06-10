@@ -52,8 +52,8 @@ const styles = theme => ({
 });
 
 const defaultValues = {
-    lowDiff: -0.01,
-    lowDea: -0.02,
+    lowDiff: -0.02,
+    lowDea: -0.04,
     preLowDiff: 0,
     preLowDea: 0,
     avgDays: 60,
