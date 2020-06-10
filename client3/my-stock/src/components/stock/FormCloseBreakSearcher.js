@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connectTo } from '../../utils/generic';
-import { searchColseBreak as searchAction,changeBaseDate } from '../../actions/stock';
+import { searchColseBreak as searchAction, changeBaseDate } from '../../actions/stock';
 import { submitAsyncValidation, transFormValuestoPostValues, isConnected } from '../../utils/forms'
 import _ from 'lodash'
 import { FormLabel } from '@material-ui/core';
@@ -30,7 +30,7 @@ const styles = theme => ({
 
         marginLeft: theme.spacing(1),
     },
-  
+
     formTextInput: {
         fontSize: 18
     },
@@ -74,7 +74,7 @@ class TextFields extends React.PureComponent {
     };
 
     handleSubmit = fun => event => {
-        const postModel = transFormValuestoPostValues(this.state, defaultValues, this.props.stockList,this.props.baseDate);
+        const postModel = transFormValuestoPostValues(this.state, defaultValues, this.props.stockList, this.props.baseDate);
         const promise = fun(postModel);
         promise.then(data => {
             //请求成功
@@ -108,6 +108,31 @@ class TextFields extends React.PureComponent {
                         this.props.searchAction,
                     )}
             >
+                <FormControlLabel
+                    control={
+                        <Switch
+                            className={classes.switch}
+                            id='searchFromAllStocks'
+                            checked={this.state.searchFromAllStocks}
+                            onChange={this.switchChange('searchFromAllStocks')}
+
+                        />
+                    }
+                    label="从所有股票列表中筛选"
+                />
+
+
+                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
+                    搜索股票
+                 </Button>
+                <FormLabel disabled={!this.state.formHasError}
+                    className={classes.menu}
+                    error={this.state.formHasError}>
+                    {this.state.formErrorMessage}
+                </FormLabel>
+
+
+
                 <label className={classes.textField} >出现平台突破形态：</label>
                 <TextField required
                     label="以__个交易日为周期"
@@ -213,28 +238,6 @@ class TextFields extends React.PureComponent {
                     variant="outlined"
                 />
 
-                <FormControlLabel
-                    control={
-                        <Switch
-                            className={classes.switch}
-                            id='searchFromAllStocks'
-                            checked={this.state.searchFromAllStocks}
-                            onChange={this.switchChange('searchFromAllStocks')}
-
-                        />
-                    }
-                    label="从所有股票列表中筛选"
-                />
-
-
-                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
-                    搜索股票
-                 </Button>
-                <FormLabel disabled={!this.state.formHasError}
-                    className={classes.menu}
-                    error={this.state.formHasError}>
-                    {this.state.formErrorMessage}
-                </FormLabel>
 
 
             </form>

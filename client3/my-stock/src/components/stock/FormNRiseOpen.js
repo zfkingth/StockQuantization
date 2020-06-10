@@ -106,6 +106,32 @@ class TextFields extends React.PureComponent {
                         this.props.searchAction,
                     )}
             >
+
+                <FormControlLabel
+                    control={
+                        <Switch
+                            className={classes.switch}
+                            id='searchFromAllStocks'
+                            checked={this.state.searchFromAllStocks}
+                            onChange={this.switchChange('searchFromAllStocks')}
+
+                        />
+                    }
+                    label="从所有股票列表中筛选"
+                />
+
+
+                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
+                    搜索股票
+                 </Button>
+                <FormLabel disabled={!this.state.formHasError}
+                    className={classes.menu}
+                    error={this.state.formHasError}>
+                    {this.state.formErrorMessage}
+                </FormLabel>
+
+
+
                 <label className={classes.textField} >连续上涨(收盘价高于开盘价)：</label>
                 <TextField required
                     label="在最近__天内"
@@ -181,29 +207,6 @@ class TextFields extends React.PureComponent {
                     margin="normal"
                     variant="outlined"
                 />
-
-                <FormControlLabel
-                    control={
-                        <Switch
-                            className={classes.switch}
-                            id='searchFromAllStocks'
-                            checked={this.state.searchFromAllStocks}
-                            onChange={this.switchChange('searchFromAllStocks')}
-
-                        />
-                    }
-                    label="从所有股票列表中筛选"
-                />
-
-
-                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
-                    搜索股票
-                 </Button>
-                <FormLabel disabled={!this.state.formHasError}
-                    className={classes.menu}
-                    error={this.state.formHasError}>
-                    {this.state.formErrorMessage}
-                </FormLabel>
 
 
             </form>

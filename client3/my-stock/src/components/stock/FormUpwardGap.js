@@ -106,6 +106,31 @@ class TextFields extends React.PureComponent {
                         this.props.searchAction,
                     )}
             >
+                <FormControlLabel
+                    control={
+                        <Switch
+                            className={classes.switch}
+                            id='searchFromAllStocks'
+                            checked={this.state.searchFromAllStocks}
+                            onChange={this.switchChange('searchFromAllStocks')}
+
+                        />
+                    }
+                    label="从所有股票列表中筛选"
+                />
+
+
+                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
+                    搜索股票
+                 </Button>
+                <FormLabel disabled={!this.state.formHasError}
+                    className={classes.menu}
+                    error={this.state.formHasError}>
+                    {this.state.formErrorMessage}
+                </FormLabel>
+
+
+
                 <label className={classes.textField} >出现向上跳空形态：</label>
                 <TextField required
                     id='t1'
@@ -191,28 +216,6 @@ class TextFields extends React.PureComponent {
                     variant="outlined"
                 />
 
-                <FormControlLabel
-                    control={
-                        <Switch
-                            className={classes.switch}
-                            id='searchFromAllStocks'
-                            checked={this.state.searchFromAllStocks}
-                            onChange={this.switchChange('searchFromAllStocks')}
-
-                        />
-                    }
-                    label="从所有股票列表中筛选"
-                />
-
-
-                <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
-                    搜索股票
-                 </Button>
-                <FormLabel disabled={!this.state.formHasError}
-                    className={classes.menu}
-                    error={this.state.formHasError}>
-                    {this.state.formErrorMessage}
-                </FormLabel>
 
 
             </form>
