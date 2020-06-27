@@ -29,6 +29,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
         {
             _logger = logger;
             _arg = arg;
+            this._actionName = "换手率";
 
         }
 
@@ -90,7 +91,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
             List<RealTimeData> list = null;
 
           
-            base.prepareSearch(_arg, "换手率");
+            base.prepareSearch(_arg);
 
             list = await DoSearch(_arg.StockIdList, Filter);
 

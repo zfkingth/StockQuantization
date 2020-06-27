@@ -30,6 +30,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
         {
             _logger = logger;
             _arg = arg;
+            this._actionName = "macd";
 
         }
 
@@ -159,7 +160,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 throw new Exception("参数不正确");
             }
 
-            base.prepareSearch(_arg, "上穿均线");
+            base.prepareSearch(_arg);
 
             List<RealTimeData> list = null;
 

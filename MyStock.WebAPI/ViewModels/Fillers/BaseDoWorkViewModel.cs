@@ -723,7 +723,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
             _taskStartTime = DateTime.Now;
 
-            _actionName = actionName;
+            this.ActionName = actionName;
             if (searchArg.SearchFromAllStocks)
             {
                 searchArg.StockIdList = new List<string>();
@@ -734,8 +734,25 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
 
         }
+        protected void prepareSearch(IArg searchArg)
+        {
+            prepareSearch(searchArg, this.ActionName);
+
+        }
 
 
+        public string ActionName
+        {
+            get
+            {
+                return _actionName;
+            }
+            set
+            {
+                if (_actionName != value)
+                    _actionName = value;
+            }
+        }
 
 
         protected DateTime _taskStartTime;

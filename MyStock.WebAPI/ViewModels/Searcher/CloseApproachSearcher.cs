@@ -31,6 +31,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
             _logger = logger;
             _arg = arg;
 
+            this._actionName = "接近平台";
         }
 
 
@@ -175,7 +176,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
             }
 
 
-            base.prepareSearch(_arg, "接近平台");
+            base.prepareSearch(_arg);
 
             List<RealTimeData> list = null;
 

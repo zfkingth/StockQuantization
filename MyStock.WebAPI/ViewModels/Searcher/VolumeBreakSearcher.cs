@@ -29,6 +29,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
         {
             _logger = logger;
             _arg = arg;
+            this._actionName = "成交量突破";
 
         }
 
@@ -126,7 +127,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
 
           
 
-            base.prepareSearch(_arg, "成交量突破");
+            base.prepareSearch(_arg);
 
             list = await DoSearch(_arg.StockIdList, Filter);
 

@@ -29,6 +29,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
         {
             _logger = logger;
             _arg = arg;
+            this._actionName = "连续上涨";
 
         }
 
@@ -192,7 +193,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 throw new Exception("参数不正确");
             }
 
-            base.prepareSearch(_arg, "连续上涨");
+            base.prepareSearch(_arg);
 
             List<RealTimeData> list = null;
 
