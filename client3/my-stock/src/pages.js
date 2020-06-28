@@ -4,6 +4,7 @@ import { default as FormMACD } from './components/stock/FormUpMACDSearcher'
 import { default as FormCloseBreakSearcher } from './components/stock/FormCloseBreakSearcher'
 import { default as stockTemplate } from './components/stock'
 import { default as FormUpMASearcher } from './components/stock/FormUpMASearcher'
+import { default as FormUpMATwiceSearcher } from './components/stock/FormUpMATwiceSearcher'
 import { default as FormCloseAppoach } from './components/stock/FormCloseApproachSearcher'
 import { default as FormCiculatedMarket } from './components/stock/FormCirculatedMarketSearcher'
 import { default as FormTurnOverRate } from './components/stock/FormTurnOverRate'
@@ -28,6 +29,10 @@ export { filterUpwardGap };
 
 const filterCloseBreak = () => { return stockTemplate(FormCloseBreakSearcher); };
 export { filterCloseBreak };
+
+
+const filterUpMATwice = () => { return stockTemplate(FormUpMATwiceSearcher); };
+export { filterUpMATwice };
 
 
 const filterUpMA = () => { return stockTemplate(FormUpMASearcher); };

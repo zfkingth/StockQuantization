@@ -22,8 +22,10 @@ const menufun = ({ to, unauthorizeUser, loadManage, loadSystemStatus, }) => {
                         </ul></li>
                     <li><button>常规筛选</button>
                         <ul>
+                        
                             <li><button onClick={() => to('filterUpMA')}>均线突破</button></li>
                             <li><button onClick={() => to('filterMACD')}>MACD</button></li>
+                            <li><button onClick={() => to('filterUpMATwice')}>二次突破</button></li>
                             <li><button onClick={() => to('filterCloseBreak')}> 平台突破</button></li>
                             <li><button onClick={() => to('filterUpwardGap')}> 向上跳空</button></li>
                             <li><button onClick={() => to('filterApproach')}>平台接近</button></li>

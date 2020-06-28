@@ -8,6 +8,7 @@ const SEARCH = `${BACKEND}search/`
 export const SEARCHUPWARDGAP = `${SEARCH}UpwardGap`
 export const SEARCHCOLSEBREAK = `${SEARCH}ColseBreak`
 export const UPMA = `${SEARCH}UpMA`
+export const UPMATwice = `${SEARCH}UpMATwice`
 export const APPROACH = `${SEARCH}CloseApproach`
 export const CIRCULATEDMARKET = `${SEARCH}CirculatedMarket`
 export const TURNOVERRATE = `${SEARCH}TurnOverRate`

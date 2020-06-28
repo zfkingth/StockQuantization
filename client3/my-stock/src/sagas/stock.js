@@ -45,6 +45,7 @@ const searchSaga = (url) =>
 export const searchUpwardGap = searchSaga(URL.SEARCHUPWARDGAP)
 export const searchColseBreak = searchSaga(URL.SEARCHCOLSEBREAK)
 export const searchUpMA = searchSaga(URL.UPMA)
+export const searchUpMATwice = searchSaga(URL.UPMATwice)
 export const searchApproach = searchSaga(URL.APPROACH)
 export const searchCirculatedMarket = searchSaga(URL.CIRCULATEDMARKET)
 export const searchTurnOverRate = searchSaga(URL.TURNOVERRATE)
