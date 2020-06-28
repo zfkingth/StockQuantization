@@ -55,8 +55,11 @@ namespace MyStock.WebAPI.ViewModels.Searcher
 
                 var helper = new Utils.Utility(db);
 
-                int numcnt = _arg.RecentDaysNum + _arg.MinDaysNumDownAvgBeforeFirst + _arg.MaxDaysNumUpAvgAfterFirst
-                    + _arg.MaxDaysNumDownAvgBeforeTwice + _arg.AvgDays;
+                int numcnt = _arg.RecentDaysNum
+                    + _arg.MaxDaysNumDownAvgBeforeTwice +
+                    +_arg.MaxDaysNumUpAvgAfterFirst
+                    + _arg.MinDaysNumDownAvgBeforeFirst
+                    + _arg.AvgDays;
 
                 //当天的数据算一个
                 var dayDataList = await helper.GetDayData(stockId, numcnt, _arg.BaseDate);
@@ -97,22 +100,18 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                         //重新设置标记
                         //检查在均线之下是否超过最大天数
                         fitFlag = false;
-                        int startIndex = gobleIndex + 1;
-                        int bianjie = startIndex + _arg.MaxDaysNumDownAvgBeforeTwice;
+                        int startIndex = gobleIndex + 1;  //之前的处理前一个数据时，并没有移动索引
+                        int bianjie = startIndex + _arg.MaxDaysNumDownAvgBeforeTwice + 1;//往前再弄一天
                         for (gobleIndex = startIndex; gobleIndex < bianjie; gobleIndex++)
                         {
                             var current = dayDataList[gobleIndex];
-                            //这个循环之前必定有一次在均线之下。
                             if (current.Close >= maArray[gobleIndex])
                             {
 
-                                //满足本阶段条件
-                                //在指定数量内逆序后，第一次出现高于均线
 
                                 fitFlag = true;
                                 break;
                             }
-
                         }
 
                     }
@@ -123,7 +122,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                         //重新设置标记
                         //检查在均线之上是否超过最大天数
                         fitFlag = false;
-                        int startIndex = gobleIndex;
+                        int startIndex = gobleIndex;  // //之前的处理前一个数据时，移动了索引
                         int bianjie = startIndex + _arg.MaxDaysNumUpAvgAfterFirst + 1;//刚好全部都在均线上，然后再往前一天在均线下了
                         for (gobleIndex = startIndex; gobleIndex < bianjie; gobleIndex++)
                         {
@@ -145,8 +144,8 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                     {
                         int exceptCnt = 0;
                         fitFlag = false;
-                        int startIndex = gobleIndex;
-                        int bianjie = startIndex + _arg.MinDaysNumDownAvgBeforeFirst - 1; //上一个检查必定有一个处于均线之下
+                        int startIndex = gobleIndex;//之前的处理前一个数据时，移动了索引
+                        int bianjie = startIndex + _arg.MinDaysNumDownAvgBeforeFirst - 1; //这里是满足性检查，不是数据变化检查，上一个检查必定有一个处于均线之下
                         for (gobleIndex = startIndex; gobleIndex < bianjie; gobleIndex++)
                         {
 

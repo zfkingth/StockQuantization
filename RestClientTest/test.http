@@ -32,10 +32,12 @@ Authorization: Bearer {{authToken}}
     ],
     "AvgDays": 60,
     "RecentDaysNum": 7,
+     "MaxDaysNumDownAvgBeforeTwice": 2,
+      "MaxDaysNumUpAvgAfterFirst": 8,
     "MinDaysNumDownAvgBeforeFirst": 20,
     "MaxDaysNumUpAvgBeforeFirst": 0,
-    "MaxDaysNumUpAvgAfterFirst": 8,
-    "MaxDaysNumDownAvgBeforeTwice": 3,
+   
+   
     "searchFromAllStocks": false,
     "baseDate": "9999-12-31T23:59:59.9999999"
 }
