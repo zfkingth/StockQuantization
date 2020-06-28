@@ -82,7 +82,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                         var current = dayDataList[gobleIndex];
 
                         if (current.Close >= maArray[gobleIndex] &&
-                            current.Close < maArray[gobleIndex + 1])
+                             dayDataList[gobleIndex + 1].Close < maArray[gobleIndex + 1])
                         {
 
                             //满足本阶段条件
@@ -124,7 +124,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                         //检查在均线之上是否超过最大天数
                         fitFlag = false;
                         int startIndex = gobleIndex;
-                        int bianjie = startIndex + _arg.MaxDaysNumUpAvgAfterFirst;
+                        int bianjie = startIndex + _arg.MaxDaysNumUpAvgAfterFirst + 1;//刚好全部都在均线上，然后再往前一天在均线下了
                         for (gobleIndex = startIndex; gobleIndex < bianjie; gobleIndex++)
                         {
                             var current = dayDataList[gobleIndex];
@@ -146,7 +146,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                         int exceptCnt = 0;
                         fitFlag = false;
                         int startIndex = gobleIndex;
-                        int bianjie = startIndex + _arg.MinDaysNumDownAvgBeforeFirst;
+                        int bianjie = startIndex + _arg.MinDaysNumDownAvgBeforeFirst - 1; //上一个检查必定有一个处于均线之下
                         for (gobleIndex = startIndex; gobleIndex < bianjie; gobleIndex++)
                         {
 

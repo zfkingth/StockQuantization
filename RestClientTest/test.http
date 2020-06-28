@@ -15,8 +15,27 @@ Content-Type: application/json
 }
 
  
-### 演示GET请求
+### 获取股票日线数据
 @authToken = {{login.response.body.token}}
 
 GET {{host}}/api/Values/0600000
 Authorization: Bearer {{authToken}}
+
+### MA 2u次突破测试
+POST {{host}}/api/search/UpMATwice HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "stockIdList": [
+        "0601138"
+    ],
+    "AvgDays": 60,
+    "RecentDaysNum": 7,
+    "MinDaysNumDownAvgBeforeFirst": 20,
+    "MaxDaysNumUpAvgBeforeFirst": 0,
+    "MaxDaysNumUpAvgAfterFirst": 8,
+    "MaxDaysNumDownAvgBeforeTwice": 3,
+    "searchFromAllStocks": false,
+    "baseDate": "9999-12-31T23:59:59.9999999"
+}
