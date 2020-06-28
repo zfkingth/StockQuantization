@@ -100,6 +100,25 @@ namespace MyStock.WebAPI.Controllers
         }
 
         /// <summary>
+        /// 均线突破
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+
+        [HttpPost("UpMATwice")]
+        public ActionResult UpMATwice([FromBody] ArgUpMATwice model)
+        {
+            var userId = HttpContext.User.Identity.Name;
+            var searcher = new UpMATwiceSearcher(_serviceScopeFactory, userId, _configuration,
+                _logger, model);
+            //开启新的线程来执行任务
+            Task.Run(async () => await searcher.Search());
+            return NoContent();
+        }
+
+
+
+        /// <summary>
         /// macd指标diff>0,dea>0
         /// </summary>
         /// <param name="model"></param>

@@ -1,0 +1,22 @@
+@host =http://localhost:53791
+@authToken  = ""
+### test basic api
+GET {{host}}/weatherforecast HTTP/1.1
+
+
+### login request
+# @name login
+POST  {{host}}/api/Auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+	"email":"hammergo@163.com",
+	"password":"dragon"
+}
+
+ 
+### 演示GET请求
+@authToken = {{login.response.body.token}}
+
+GET {{host}}/api/Values/0600000
+Authorization: Bearer {{authToken}}
