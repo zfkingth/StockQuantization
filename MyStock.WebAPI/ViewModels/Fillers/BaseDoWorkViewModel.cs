@@ -600,7 +600,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                           Payload = new TaskSuccessPayload
                           {
                               Message = "task success",
-                              ResultList = retList,
+                              Result = retList,
 
                           }
                       }

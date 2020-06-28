@@ -47,12 +47,12 @@ export default _ =>
       [stockActions.TaskFail]: (state, payload) => ({
         ...state,
         taskInfo: '任务失败：' + payload.message,
-        stockList: payload.resultList,
+        stockList: payload.result,
       }),
       [stockActions.TaskSuccess]: (state, payload) => ({
         ...state,
-        taskInfo: '任务成功,找到' + payload.resultList.length + '股票',
-        stockList: payload.resultList,
+        taskInfo: '任务成功,找到' + payload.result.length + '股票',
+        stockList: payload.result,
         completed: 100,
       }),
       [stockActions.TaskProgress]: (state, payload) => ({

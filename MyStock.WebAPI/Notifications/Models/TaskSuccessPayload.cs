@@ -6,6 +6,6 @@ namespace MyStock.WebAPI.Notifications.Models
     public class TaskSuccessPayload
     {
         public string Message { get; set; }
-        public List<RealTimeData> ResultList { get; set; }
+        public object Result { get; set; } //大部分为List<RealTimeData> 
     }
 }

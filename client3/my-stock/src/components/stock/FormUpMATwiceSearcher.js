@@ -51,7 +51,7 @@ const styles = theme => ({
 
 const defaultValues = {
     avgDays: 60,
-    recentDaysNum: 7,
+    recentDaysNum: 1,
     maxDaysNumDownAvgBeforeTwice: 3,
     maxDaysNumUpAvgAfterFirst: 8,
     minDaysNumDownAvgBeforeFirst: 20,
