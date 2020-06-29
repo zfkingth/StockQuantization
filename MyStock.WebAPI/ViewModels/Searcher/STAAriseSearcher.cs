@@ -54,6 +54,7 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 var db = scopedServices.GetRequiredService<StockContext>();
 
                 var helper = new Utils.Utility(db);
+                bool fitFlag = false;
 
                 int objIndex = _arg.StockIdList.IndexOf(stockId);
 
@@ -61,18 +62,28 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 //当天的数据算一个
                 var dayDataList = await helper.GetDayData(stockId, startDate, _arg.BaseDate);
 
-                //使用成交量，需要复权
-                //复权，会改变dayDataList中的数据
-                await Utils.CalcData.FuQuan(db, stockId, dayDataList);
 
-                bool fitFlag = true;
-                //
-                //获取均线数据
-                var high = (from ii in dayDataList
-                            select ii.High).Max();
-                dayData = dayDataList.FirstOrDefault();
-                var startItem = dayDataList.LastOrDefault();
-                dayData.ZhangDieFu = (high - startItem.Close) / startItem.Close * 100;
+                if (dayDataList.Count > 0)
+                {
+
+                    //使用成交量，需要复权
+                    //复权，会改变dayDataList中的数据
+                    await Utils.CalcData.FuQuan(db, stockId, dayDataList);
+
+                    //
+                    //获取均线数据
+                    var high = (from ii in dayDataList
+                                select ii.High).Max();
+
+                    if (high != 0)
+                    {
+                        dayData = dayDataList.FirstOrDefault();
+                        var startItem = dayDataList.LastOrDefault();
+                        dayData.ZhangDieFu = (high - startItem.Close) / startItem.Close * 100;
+
+                        fitFlag = true;
+                    }
+                }
 
 
                 //如果是null，表示不符合筛选条件

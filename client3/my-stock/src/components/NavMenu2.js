@@ -35,6 +35,7 @@ const menufun = ({ to, unauthorizeUser, loadManage, loadSystemStatus, }) => {
                         </ul></li>
                     <li><button>量价形态</button>
                         <ul>
+                            <li><button onClick={() => to('searchSTAArise')}> 统计上涨</button></li>
                             <li><button onClick={() => to('filterVolumeBreak')}> 成交放量</button></li>
                             <li><button onClick={() => to('filterExceptZhangFu')}> 涨幅限定</button></li>
                             <li><button onClick={() => to('filterNRiseOpen')}>连续上涨</button></li>

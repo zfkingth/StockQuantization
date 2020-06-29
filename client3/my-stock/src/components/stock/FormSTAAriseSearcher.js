@@ -1,14 +1,12 @@
 import React from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connectTo } from '../../utils/generic';
-import { searchNRiseOpen as searchAction, changeBaseDate } from '../../actions/stock';
-import { submitAsyncValidation, transFormValuestoPostValues, isConnected } from '../../utils/forms'
+import { searchSTAArise as searchAction, changeBaseDate } from '../../actions/stock';
+import { submitAsyncValidation, isConnected } from '../../utils/forms'
 import _ from 'lodash'
 import { FormLabel } from '@material-ui/core';
 
@@ -32,7 +30,7 @@ const styles = theme => ({
     },
 
     formTextInput: {
-        fontSize: 18
+        fontSize: 16
     },
     formTextLabel: {
         fontSize: 18
@@ -50,11 +48,27 @@ const styles = theme => ({
 });
 
 const defaultValues = {
-    nRiseNum: 1,
-    nearDaysNum: 1,
-    downTag: false,
-    searchFromAllStocks: true,
+
+    searchFromAllStocks: false,
+
 };
+
+
+function transFormValuestoPostValues(formValues, defaultValues, stockList, baseDate) {
+    let ret = {};
+    ret.baseDate = baseDate;
+    for (let key in defaultValues) {
+        ret[key] = formValues[key];
+    }
+    ret.StockIdList = stockList.map(function (item, index, array) {
+        return item.stockId;
+    });
+   ret.dateList = stockList.map(function (item, index, array) {
+        return item.date;
+    });
+
+    return ret;
+}
 
 class TextFields extends React.PureComponent {
 
@@ -108,9 +122,8 @@ class TextFields extends React.PureComponent {
             >
 
 
-
                 <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
-                    搜索股票
+                    统计最高涨幅
                  </Button>
                 <FormLabel disabled={!this.state.formHasError}
                     className={classes.menu}
@@ -118,78 +131,13 @@ class TextFields extends React.PureComponent {
                     {this.state.formErrorMessage}
                 </FormLabel>
 
-                <FormControlLabel
-                    control={
-                        <Switch
-                            className={classes.switch}
-                            id='searchFromAllStocks'
-                            checked={this.state.searchFromAllStocks}
-                            onChange={this.switchChange('searchFromAllStocks')}
-
-                        />
-                    }
-                    label="从所有股票列表中筛选"
-                />
 
 
-                <label className={classes.textField} >连续上涨(收盘价高于开盘价)：</label>
-                <TextField required
-                    label="在最近__天内"
-                    value={this.state.nearDaysNum}
-                    onChange={this.handleChange('nearDaysNum')}
-                    type="number"
-                    className={classes.textField}
-                    InputProps={{
-                        classes: {
-                            input: classes.formTextInput
-                        }
-                    }}
-                    InputLabelProps={{
-                        classes: {
-                            root: classes.formTextLabel
-                        }
-                    }}
-                    variant="outlined"
-                    margin="normal"
-                />
-
-
-                <TextField required
-                    label="出现连续__天上涨"
-                    value={this.state.nRiseNum}
-                    onChange={this.handleChange('nRiseNum')}
-                    type="number"
-                    className={classes.textField}
-                    InputProps={{
-                        classes: {
-                            input: classes.formTextInput
-                        }
-                    }}
-                    InputLabelProps={{
-                        classes: {
-                            root: classes.formTextLabel
-                        }
-                    }}
-                    margin="normal"
-                    variant="outlined"
-                />
-
-                <FormControlLabel
-                    control={
-                        <Switch
-                            className={classes.switch}
-                            checked={this.state.downTag}
-                            onChange={this.switchChange('downTag')}
-
-                        />
-                    }
-                    label="启动前一天必须下跌"
-                />
 
 
                 <TextField required
                     id='baseDate'
-                    label="搜索基准日期之前的数据"
+                    label="数据截止时间"
                     value={this.props.baseDate}
                     onChange={(e) => this.props.changeBaseDate(e.target.value)}
                     type="date"
