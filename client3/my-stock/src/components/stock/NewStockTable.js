@@ -46,6 +46,10 @@ class DemoBase extends React.PureComponent {
   }
 
 
+  getPriceCellValue(data) {
+    return formatNumber(data.close, 2);
+  }
+
 
   getHuanShouLvCellValue(data) {
     return formatNumber(data.huanShouLiu, 2) + '%';
@@ -92,12 +96,12 @@ class DemoBase extends React.PureComponent {
           <Column dataField="stockName" caption="股票名称" width={80}
           />
           <Column calculateCellValue={this.getZhangDieFuCellValue}
-            width={70}
+            width={75}
             calculateSortValue="zhangDieFu"
             allowSorting='true'
             alignment="right"
             caption="涨跌幅" />
-          <Column width={70} dataField="close" caption="价格" alignment="right" />
+          <Column width={70} caption="价格" alignment="right" calculateCellValue={this.getPriceCellValue} />
           <Column width={70} calculateCellValue={this.getHuanShouLvCellValue}
             calculateSortValue="huanShouLiu"
             allowSorting='true'
