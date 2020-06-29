@@ -117,6 +117,18 @@ namespace MyStock.WebAPI.Controllers
         }
 
 
+        [HttpPost("STAArise")]
+        public ActionResult STAArise([FromBody] ArgSTA model)
+        {
+            var userId = HttpContext.User.Identity.Name;
+            var searcher = new STAAriseSearcher(_serviceScopeFactory, userId, _configuration,
+                _logger, model);
+            //开启新的线程来执行任务
+            Task.Run(async () => await searcher.Search());
+            return NoContent();
+        }
+
+
 
         /// <summary>
         /// macd指标diff>0,dea>0

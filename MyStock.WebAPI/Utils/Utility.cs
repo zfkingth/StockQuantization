@@ -61,6 +61,7 @@ namespace MyStock.WebAPI.Utils
 
         }
 
+
         public DayData ConvertRealToDay(RealTimeData item)
         {
             DayData ret = new DayData();
@@ -81,6 +82,7 @@ namespace MyStock.WebAPI.Utils
 
             return ret;
         }
+
 
         /// <summary>
         /// 获取包括筛选时间的股票市值,换手率的的 real time data，如果没有会查询历史数据进行转换。
@@ -118,6 +120,46 @@ namespace MyStock.WebAPI.Utils
             return rt;
         }
 
+
+        internal async Task<List<DayData>> GetDayData(string stockId, DateTime startDate, DateTime endDate)
+        {
+            var dayDataList = await (from i in _db.DayDataSet
+                                     where i.StockId == stockId
+                                     && i.Date>=startDate
+                                     && i.Date <= endDate
+                                     orderby i.Date descending
+                                     select i
+                             ).AsNoTracking().ToListAsync();
+            var realData = await (from i in _db.RealTimeDataSet
+                                  where i.StockId == stockId && i.Date <= endDate
+                                  orderby i.Date descending
+                                  select i).AsNoTracking().FirstOrDefaultAsync();
+
+
+            if (dayDataList.Count > 0)
+            {
+                DayData lastData = dayDataList[0];//逆序排列的
+
+                DateTime tempDate = DateTime.MinValue;
+                if (realData != null)
+                    tempDate = new DateTime(realData.Date.Year, realData.Date.Month, realData.Date.Day);
+
+                //dayData只有日期，没有时间
+                if (tempDate > lastData.Date)
+                {
+
+                    //要将数据附加到日线数据中
+                    DayData temp = ConvertRealToDay(realData);
+                    dayDataList.RemoveAt(dayDataList.Count - 1);
+                    dayDataList.Insert(0, temp);
+                    //保证总数目不变
+
+                }
+
+            }
+            return dayDataList;
+
+        }
 
 
         /// <summary>

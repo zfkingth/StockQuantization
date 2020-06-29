@@ -6,6 +6,6 @@ namespace MyStock.WebAPI.Notifications.Models
     public class TaskFailPayload
     {
         public string Message { get; set; }
-        public List<RealTimeData> ResultList { get; set; }
+        public object Result { get; set; }
     }
 }

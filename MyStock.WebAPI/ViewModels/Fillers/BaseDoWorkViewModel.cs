@@ -645,7 +645,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                           Payload = new TaskFailPayload
                           {
                               Message = message,
-                              ResultList = retList,
+                              Result = retList,
 
                           }
                       }
@@ -758,7 +758,9 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         protected DateTime _taskStartTime;
         protected string _argString;
         protected string _actionName;
+
         protected bool _useCahce = false;
+
         protected bool _needStoreInCache = false;
         protected virtual async Task<List<RealTimeData>> GetResultFromCache()
         {
