@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connectTo } from '../../utils/generic';
 import { searchCirculatedMarket as searchAction, changeBaseDate } from '../../actions/stock';
-import { submitAsyncValidation, transFormValuestoPostValues, isConnected } from '../../utils/forms'
+import { submitAsyncValidation, transFormValuestoPostValuesWithDateList, isConnected } from '../../utils/forms'
 import _ from 'lodash'
 import { FormLabel } from '@material-ui/core';
 
@@ -50,9 +50,9 @@ const styles = theme => ({
 });
 
 const defaultValues = {
-    marketLow: 20,
-    marketHigh: 500,
-    searchFromAllStocks: true,
+    marketLow: 35,
+    marketHigh: 2000,
+    searchFromAllStocks: false,
 };
 
 class TextFields extends React.PureComponent {
@@ -71,7 +71,7 @@ class TextFields extends React.PureComponent {
     };
 
     handleSubmit = fun => event => {
-        const postModel = transFormValuestoPostValues(this.state, defaultValues, this.props.stockList, this.props.baseDate);
+        const postModel = transFormValuestoPostValuesWithDateList(this.state, defaultValues, this.props.stockList, this.props.baseDate);
         const promise = fun(postModel);
         promise.then(data => {
             //请求成功

@@ -59,8 +59,13 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 float marketHigh = _arg.MarketHigh;
                 RealTimeData ret = null;
 
+                int objIndex = _arg.StockIdList.IndexOf(stockId);
 
-                var realData = await helper.GetRealTimeDataWithDate(stockId, _arg.BaseDate);
+                DateTime date = _arg.BaseDate;
+                if (_arg.DateList.Count > 0)
+                    date = _arg.DateList[objIndex];
+
+                RealTimeData realData = await helper.GetRealTimeDataWithDate(stockId, date);
 
 
                 if (realData != null && realData.ZongShiZhi != null)

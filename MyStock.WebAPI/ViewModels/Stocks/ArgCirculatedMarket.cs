@@ -15,5 +15,6 @@ namespace MyStock.WebAPI.ViewModels
 
         public float MarketLow { get; set; } = 10;
         public float MarketHigh { get; set; } = 100;
+        public List<DateTime> DateList { get; set; } = new List<DateTime>();
     }
 }

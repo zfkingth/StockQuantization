@@ -72,14 +72,14 @@ namespace MyStock.WebAPI.ViewModels.Searcher
 
                     //
                     //获取均线数据
-                    var high = (from ii in dayDataList
-                                select ii.High).Max();
+                    var closePrice = (from ii in dayDataList
+                                select ii.Close).Max();
 
-                    if (high != 0)
+                    if (closePrice != 0)
                     {
-                        dayData = dayDataList.FirstOrDefault();
                         var startItem = dayDataList.LastOrDefault();
-                        dayData.ZhangDieFu = (high - startItem.Close) / startItem.Close * 100;
+                        dayData = startItem;
+                        dayData.ZhangDieFu = (closePrice - startItem.Close) / startItem.Close * 100;
 
                         fitFlag = true;
                     }

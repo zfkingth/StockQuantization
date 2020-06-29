@@ -15,6 +15,23 @@ export function transFormValuestoPostValues(formValues, defaultValues, stockList
   return ret;
 }
 
+
+export function transFormValuestoPostValuesWithDateList(formValues, defaultValues, stockList, baseDate) {
+  let ret = {};
+  ret.baseDate = baseDate;
+  for (let key in defaultValues) {
+      ret[key] = formValues[key];
+  }
+  ret.StockIdList = stockList.map(function (item, index, array) {
+      return item.stockId;
+  });
+  ret.dateList = stockList.map(function (item, index, array) {
+      return item.date;
+  });
+
+  return ret;
+}
+
 export function transSubmissonToString(state, formName) {
   const obj = getFormSubmitErrors(formName)(state);
   const entries = Object.entries(obj);

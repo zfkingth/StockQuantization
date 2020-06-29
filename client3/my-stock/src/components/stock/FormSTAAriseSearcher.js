@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connectTo } from '../../utils/generic';
 import { searchSTAArise as searchAction, changeBaseDate } from '../../actions/stock';
-import { submitAsyncValidation, isConnected } from '../../utils/forms'
+import { submitAsyncValidation, isConnected ,transFormValuestoPostValuesWithDateList} from '../../utils/forms'
 import _ from 'lodash'
 import { FormLabel } from '@material-ui/core';
 
@@ -54,21 +54,6 @@ const defaultValues = {
 };
 
 
-function transFormValuestoPostValues(formValues, defaultValues, stockList, baseDate) {
-    let ret = {};
-    ret.baseDate = baseDate;
-    for (let key in defaultValues) {
-        ret[key] = formValues[key];
-    }
-    ret.StockIdList = stockList.map(function (item, index, array) {
-        return item.stockId;
-    });
-   ret.dateList = stockList.map(function (item, index, array) {
-        return item.date;
-    });
-
-    return ret;
-}
 
 class TextFields extends React.PureComponent {
 
@@ -86,7 +71,7 @@ class TextFields extends React.PureComponent {
     };
 
     handleSubmit = fun => event => {
-        const postModel = transFormValuestoPostValues(this.state, defaultValues, this.props.stockList, this.props.baseDate);
+        const postModel = transFormValuestoPostValuesWithDateList(this.state, defaultValues, this.props.stockList, this.props.baseDate);
         const promise = fun(postModel);
         promise.then(data => {
             //请求成功
@@ -134,7 +119,6 @@ class TextFields extends React.PureComponent {
 
 
 
-
                 <TextField required
                     id='baseDate'
                     label="数据截止时间"
@@ -155,6 +139,11 @@ class TextFields extends React.PureComponent {
                     margin="normal"
                     variant="outlined"
                 />
+                <FormLabel >
+                    {this.props.message}
+                </FormLabel>
+
+
 
 
             </form>
@@ -166,11 +155,22 @@ TextFields.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
+const staResult = (stockList) => {
+
+    const cnt = stockList.reduce((total, currentValue) => { if (currentValue.zhangDieFu > 0) total++; return total; }, 0);
+
+    var s = "上涨概率为：" + _.round(100.0 * cnt / stockList.length, 2) + "%.";
+
+    return s;
+
+}
+
 export default connectTo(
     state => ({
         enabledSubmit: state.stock.isIdle && isConnected(state),
         stockList: state.stock.stockList,
         baseDate: state.stock.baseDate,
+        message: staResult(state.stock.stockList),
     }),
     { searchAction, changeBaseDate },
     withStyles(styles)(TextFields)

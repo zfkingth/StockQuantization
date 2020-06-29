@@ -125,7 +125,7 @@ namespace MyStock.WebAPI.Utils
         {
             var dayDataList = await (from i in _db.DayDataSet
                                      where i.StockId == stockId
-                                     && i.Date>=startDate
+                                     && i.Date >= startDate
                                      && i.Date <= endDate
                                      orderby i.Date descending
                                      select i
@@ -150,9 +150,7 @@ namespace MyStock.WebAPI.Utils
 
                     //要将数据附加到日线数据中
                     DayData temp = ConvertRealToDay(realData);
-                    dayDataList.RemoveAt(dayDataList.Count - 1);
                     dayDataList.Insert(0, temp);
-                    //保证总数目不变
 
                 }
 
