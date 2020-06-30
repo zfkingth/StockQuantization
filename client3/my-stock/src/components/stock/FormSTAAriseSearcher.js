@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connectTo } from '../../utils/generic';
-import { searchSTAArise as searchAction, changeBaseDate } from '../../actions/stock';
+import { searchSTAArise as searchAction, changeBaseDate  } from '../../actions/stock';
 import { submitAsyncValidation, isConnected ,transFormValuestoPostValuesWithDateList} from '../../utils/forms'
 import _ from 'lodash'
 import { FormLabel } from '@material-ui/core';
@@ -54,6 +54,15 @@ const defaultValues = {
 };
 
 
+export const getNextMonthDateText = () => {
+    const temp = new Date();
+    temp.setMonth(temp.getMonth() + 1);
+  
+  
+  
+    return temp.Format("yyyy-MM-dd");
+  }
+
 
 class TextFields extends React.PureComponent {
 
@@ -61,6 +70,7 @@ class TextFields extends React.PureComponent {
         ...defaultValues,
         formHasError: false,
         formErrorMessage: '',
+        baseDate:getNextMonthDateText(),
     };
 
     handleChange = name => event => {
@@ -71,7 +81,7 @@ class TextFields extends React.PureComponent {
     };
 
     handleSubmit = fun => event => {
-        const postModel = transFormValuestoPostValuesWithDateList(this.state, defaultValues, this.props.stockList, this.props.baseDate);
+        const postModel = transFormValuestoPostValuesWithDateList(this.state, defaultValues, this.props.stockList, this.state.baseDate);
         const promise = fun(postModel);
         promise.then(data => {
             //请求成功
@@ -122,8 +132,8 @@ class TextFields extends React.PureComponent {
                 <TextField required
                     id='baseDate'
                     label="数据截止时间"
-                    value={this.props.baseDate}
-                    onChange={(e) => this.props.changeBaseDate(e.target.value)}
+                    value={this.state.baseDate}
+                    onChange={this.handleChange('baseDate')}
                     type="date"
                     className={classes.textField}
                     InputProps={{
@@ -164,6 +174,8 @@ const staResult = (stockList) => {
     return s;
 
 }
+
+
 
 export default connectTo(
     state => ({

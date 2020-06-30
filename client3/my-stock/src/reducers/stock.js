@@ -13,7 +13,7 @@ const getDefaultState = () => ({
 
 })
 
-const getNextMonthDateText = () => {
+export const getNextMonthDateText = () => {
   const temp = new Date();
   temp.setMonth(temp.getMonth() + 1);
 
