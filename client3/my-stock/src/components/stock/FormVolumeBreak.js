@@ -51,10 +51,10 @@ const styles = theme => ({
 
 const defaultValues = {
     volTimesNum: 2,
-    zhangFu: 3,
+    zhangFu: -5,
     circleDaysNum: 10,
     nearDaysNum: 1,
-    searchFromAllStocks: true,
+    searchFromAllStocks: false,
 };
 
 class TextFields extends React.PureComponent {

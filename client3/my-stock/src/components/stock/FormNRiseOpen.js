@@ -53,7 +53,7 @@ const defaultValues = {
     nRiseNum: 1,
     nearDaysNum: 1,
     downTag: false,
-    searchFromAllStocks: true,
+    searchFromAllStocks: false,
 };
 
 class TextFields extends React.PureComponent {
