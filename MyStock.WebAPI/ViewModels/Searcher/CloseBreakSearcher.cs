@@ -87,10 +87,22 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                     {
                         //如果收盘价高于收盘价，最高价高于最高价，就排除邻近的一根日线
 
-                        if (dayDataList[breakIndex].Close >= dayDataList[breakIndex + 1].Close
-                            && dayDataList[breakIndex].High > dayDataList[breakIndex + 1].High)
+                        var nearItem = dayDataList[breakIndex + 1];
+
+                        if (dayDataList[breakIndex].Close >= nearItem.Close
+                            && dayDataList[breakIndex].High > nearItem.High)
                         {
-                            i++;
+                            bool allMatch = false;
+                            for (int tempj = i + 1; tempj < dayDataList.Count; tempj++)
+                            {
+                                if (dayDataList[tempj].High > nearItem.Close)
+                                {
+                                    allMatch = true;
+                                    break;
+                                }
+                            }
+                            if (allMatch)
+                                i++;
                         }
                     }
 
