@@ -15,22 +15,22 @@ namespace MyStock.WebAPI.ViewModels.Searcher
     /// <summary>
     /// 平台突破
     /// </summary>
-    public class CloseBreakSearcher : BaseDoWorkViewModel
+    public class MiddleBreakSearcher : BaseDoWorkViewModel
     {
 
 
 
         private readonly ILogger _logger;
 
-        private ArgCloseBreak _arg;
+        private ArgMiddleBreak _arg;
 
-        public CloseBreakSearcher(IServiceScopeFactory serviceScopeFactory,
+        public MiddleBreakSearcher(IServiceScopeFactory serviceScopeFactory,
                 string userId, IConfiguration configuration,
-            ILogger logger, ArgCloseBreak arg) : base(serviceScopeFactory, userId, configuration)
+            ILogger logger, ArgMiddleBreak arg) : base(serviceScopeFactory, userId, configuration)
         {
             _logger = logger;
             _arg = arg;
-            this._actionName = "平台突破";
+            this._actionName = "中阶突破";
 
         }
 
@@ -63,48 +63,52 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                 await Utils.CalcData.FuQuan(db, stockId, dayDataList);
 
 
-                int breakIndex = 0;
 
+                int breakIndex = 0;
                 if (dayDataList.Count == _arg.CircleDaysNum + _arg.NearDaysNum)
                 {
 
+                    var query = from item in dayDataList
+                                select (item.Open + item.Close) / 2;
 
-                    //求出最近的最高价格,收盘
+                    var midPrices = query.ToArray();
+
+                    //求出最近的最高中阶
                     int i = 0;
-                    float maxClosePrice = 0;
+                    float maxMiddlePrice = 0;
                     for (; i < _arg.NearDaysNum; i++)
                     {
-                        float current = dayDataList[i].Close;
-                        if (current > maxClosePrice)
+                        float current = midPrices[i];
+                        if (current > maxMiddlePrice)
                         {
-                            maxClosePrice = current;
+                            maxMiddlePrice = current;
                             breakIndex = i;
                         }
                     }
 
                     //求出之前的最高的盘中最高价格
-                    float previousMaxHigh = 0;
+                    float previousMaxMiddle = 0;
 
-                    for (; i < dayDataList.Count - _arg.NearDaysNum; i++)
+                    for (; i < midPrices.Count() - _arg.NearDaysNum; i++)
                     {
-                        float current = dayDataList[i].High;
-                        if (current > previousMaxHigh)
+                        float current = midPrices[i];
+                        if (current > previousMaxMiddle)
                         {
-                            previousMaxHigh = current;
+                            previousMaxMiddle = current;
                         }
                     }
 
                     //符合回调条件的点
                     bool match = false;
-                    if (maxClosePrice > previousMaxHigh)
+                    if (maxMiddlePrice > previousMaxMiddle)
                     {
                         for (i = 0; i < _arg.CircleDaysNum; i++)
                         {
                             //从最早的数据开始遍历
-                            var listItem = dayDataList[dayDataList.Count - 1 - i];
-                            if (listItem.High >= previousMaxHigh)
+                            var listItem = midPrices[midPrices.Count() - 1 - i];
+                            if (listItem >= previousMaxMiddle)
                             {
-                                //寻找到高点
+                                //寻找到了高点
 
                                 //后面的最低价格
                                 float suffixMinLow = float.MaxValue;
@@ -112,14 +116,14 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                                 //寻找后续最低点
                                 for (int j = i + 1; j < _arg.CircleDaysNum; j++)
                                 {
-                                    float current = dayDataList[dayDataList.Count - 1 - j].Low;
+                                    float current = midPrices[midPrices.Count() - 1 - j];
                                     if (current < suffixMinLow)
                                     {
                                         suffixMinLow = current;
                                     }
                                 }
 
-                                float fudu = (listItem.High - suffixMinLow) / listItem.High;
+                                float fudu = (listItem - suffixMinLow) / listItem;
 
                                 if (fudu >= _arg.HuiTiaoFuDuLow / 100f && fudu <= _arg.HuiTiaoFuDuHigh / 100f)
                                 {

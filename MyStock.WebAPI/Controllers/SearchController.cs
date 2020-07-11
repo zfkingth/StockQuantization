@@ -65,6 +65,24 @@ namespace MyStock.WebAPI.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// 中阶突破
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("MiddleBreak")]
+        public ActionResult MiddleBreak([FromBody] ArgMiddleBreak model)
+        {
+            var userId = HttpContext.User.Identity.Name;
+            var searcher = new MiddleBreakSearcher(_serviceScopeFactory, userId, _configuration,
+                _logger, model);
+            //开启新的线程来执行任务
+            Task.Run(async () => await searcher.Search());
+            return NoContent();
+        }
+
+
         /// <summary>
         /// 平台接近
         /// </summary>
