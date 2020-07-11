@@ -51,6 +51,7 @@ const styles = theme => ({
 
 const defaultValues = {
 
+    strictMode: true,
     huiTiaoFuDuLow: 9.5,
     huiTiaoFuDuHigh: 25.0,
     nearDaysNum: 1,
@@ -108,7 +109,7 @@ class TextFields extends React.PureComponent {
                         this.props.searchAction,
                     )}
             >
-    
+
 
                 <Button type="submit" disabled={!this.props.enabledSubmit} variant="contained" color="primary" className={classes.button}>
                     搜索股票
@@ -153,6 +154,7 @@ class TextFields extends React.PureComponent {
                     variant="outlined"
                     margin="normal"
                 />
+
 
                 <TextField required
                     id='t1'
@@ -238,6 +240,19 @@ class TextFields extends React.PureComponent {
                     variant="outlined"
                 />
 
+
+                <FormControlLabel
+                    control={
+                        <Switch
+                            className={classes.switch}
+                            id='stritModeFlag'
+                            checked={this.state.strictMode}
+                            onChange={this.switchChange('strictMode')}
+
+                        />
+                    }
+                    label="是否严格模式"
+                />
 
 
             </form>

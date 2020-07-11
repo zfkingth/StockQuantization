@@ -82,6 +82,19 @@ namespace MyStock.WebAPI.ViewModels.Searcher
                         }
                     }
 
+                    //如果不是严格模式
+                    if (!_arg.StrictMode)
+                    {
+                        //如果收盘价高于收盘价，最高价高于最高价，就排除邻近的一根日线
+
+                        if (dayDataList[breakIndex].Close >= dayDataList[breakIndex + 1].Close
+                            && dayDataList[breakIndex].High > dayDataList[breakIndex + 1].High)
+                        {
+                            i++;
+                        }
+                    }
+
+
                     //求出之前的最高的盘中最高价格
                     float previousMaxHigh = 0;
 

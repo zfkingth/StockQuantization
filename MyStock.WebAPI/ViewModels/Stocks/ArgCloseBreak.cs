@@ -8,6 +8,7 @@ namespace MyStock.WebAPI.ViewModels
     public class ArgCloseBreak : IArg
 
     {
+        public bool StrictMode { get; set; } = true;
         public List<string> StockIdList { get; set; } = new List<string>();
         public float HuiTiaoFuDuLow { get; set; } = 15;
         public float HuiTiaoFuDuHigh { get; set; } = 25;
