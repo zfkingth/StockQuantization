@@ -18,6 +18,7 @@ export const NRISEOPEN = `${SEARCH}NRiseOpen`
 export const VOLUMEDECREASE = `${SEARCH}VolumeDecrease`
 export const VOLUMEBREAK = `${SEARCH}VolumeBreak`
 export const SEARCHMACD = `${SEARCH}UpMACD`
+export const MIDDLEBREAK = `${SEARCH}MiddleBreak`
 
 
 //获取数据api

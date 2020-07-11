@@ -13,6 +13,7 @@ import { default as FormExceptZhangFu } from './components/stock/FormExceptZhang
 import { default as FormNRiseOpen } from './components/stock/FormNRiseOpen'
 import { default as FormVolumeDecrease } from './components/stock/FormVolumeDecrease'
 import { default as FormVolumeBreak } from './components/stock/FormVolumeBreak'
+import { default as FormMiddleBreakSearcher } from './components/stock/FormMiddleBreakSearcher'
 export { default as login } from './components/auth/login'
 export { default as register } from './components/auth/register'
 export { default as errorPage } from './components/ErrorPage'
@@ -34,6 +35,11 @@ export { filterCloseBreak };
 
 const searchSTAArise = () => { return stockTemplate(FormSTAAriseSearcher); };
 export { searchSTAArise };
+
+//这里输出的名称，state.navigation.page使用，
+//要和调用to action里的参数匹配。
+const filterMiddleBreak = () => { return stockTemplate(FormMiddleBreakSearcher); };
+export { filterMiddleBreak };
 
 
 
