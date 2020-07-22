@@ -53,7 +53,8 @@ const defaultValues = {
     avgDays: 60,
     recentDaysNum: 1,
     maxDaysNumDownAvgBeforeTwice: 3,
-    maxDaysNumUpAvgAfterFirst: 8,
+    maxDaysNumUpAvgAfterFirst: 15,
+    minDaysNumUpAvgAfterFirst:3,
     minDaysNumDownAvgBeforeFirst: 20,
     maxDaysNumUpAvgBeforeFirst: 0,
 
@@ -227,6 +228,26 @@ class TextFields extends React.PureComponent {
                     variant="outlined"
                 />
 
+                <TextField required
+                    id='t4minUp'
+                    label="第一次突破后在最少_日在均线之上"
+                    value={this.state.minDaysNumUpAvgAfterFirst}
+                    onChange={this.handleChange('minDaysNumUpAvgAfterFirst')}
+                    type="number"
+                    className={classes.textField}
+                    InputProps={{
+                        classes: {
+                            input: classes.formTextInput
+                        }
+                    }}
+                    InputLabelProps={{
+                        classes: {
+                            root: classes.formTextLabel
+                        }
+                    }}
+                    margin="normal"
+                    variant="outlined"
+                />
                 <TextField required
                     id='t5'
                     label="第一次突破前最少_日在均线之下"

@@ -26,7 +26,13 @@ namespace MyStock.WebAPI.ViewModels
         /// <summary>
         /// 第一次突破后，在均线上的最大持续天数
         /// </summary>
-        public int MaxDaysNumUpAvgAfterFirst { get; set; } = 8;
+        public int MaxDaysNumUpAvgAfterFirst { get; set; } = 15;
+
+        /// <summary>
+        /// 第一次突破后，在均线上的最少持续天数
+        /// </summary>
+        public int MinDaysNumUpAvgAfterFirst { get; set; } = 3;
+
 
         /// <summary>
         /// 第二次突破时，在均线下，最长多少天

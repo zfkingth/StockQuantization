@@ -138,6 +138,12 @@ namespace MyStock.WebAPI.ViewModels.Searcher
 
                         }
 
+                        if (gobleIndex - startIndex < _arg.MinDaysNumUpAvgAfterFirst)
+                        {
+                            //在均线之上的天数少于要求。
+                            fitFlag = false;
+                        }
+
                     }
 
                     if (fitFlag)

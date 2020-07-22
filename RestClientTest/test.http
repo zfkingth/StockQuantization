@@ -39,7 +39,7 @@ Authorization: Bearer {{authToken}}
    
    
     "searchFromAllStocks": false,
-    "baseDate": "9999-12-31T23:59:59.9999999"
+    "baseDate": "2020-06-16"
 }
 
 
