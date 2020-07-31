@@ -121,7 +121,7 @@ namespace MyStock.WebAPI
             #endregion
 
             int threadNum = Configuration.GetValue<int>("MaxThreadNum");
-            BaseDoWorkViewModel.MaxThreadNum = threadNum;
+            BaseDoWorkViewModel.DefaultMaxThreadNum = threadNum;
 
 
             services.AddSingleton<BackServiceUtil>();

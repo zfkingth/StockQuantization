@@ -41,24 +41,41 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         protected string _eventName = "";
 
 
-        static int _maxThreadNum = 10;
+        static int _defaultMaxThreadNum = 3;
         /// <summary>
         /// 最大线程数
         /// </summary>
-        public static int MaxThreadNum
+        public static int DefaultMaxThreadNum
         {
             get
             {
-                return _maxThreadNum;
+                return _defaultMaxThreadNum;
             }
             set
             {
-                if (_maxThreadNum != value)
+                if (_defaultMaxThreadNum != value)
                 {
-                    _maxThreadNum = value;
+                    _defaultMaxThreadNum = value;
                 }
             }
         }
+
+
+
+
+        private int _currentThreadNum=DefaultMaxThreadNum;
+        public int CurrentThreadNum
+        {
+            get { return _currentThreadNum; }
+            set
+            {
+                if (_currentThreadNum != value)
+                {
+                    _currentThreadNum = value;
+                }
+            }
+        }
+
 
         /// <summary>
         /// 获取所有的股票id，不包括指数
@@ -183,7 +200,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     var po = new ParallelOptions()
                     {
                         CancellationToken = cts.Token,
-                        MaxDegreeOfParallelism = MaxThreadNum,
+                        MaxDegreeOfParallelism = CurrentThreadNum,
                     };
 
 
@@ -669,7 +686,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             var po = new ParallelOptions()
             {
                 CancellationToken = cts.Token,
-                MaxDegreeOfParallelism = MaxThreadNum,
+                MaxDegreeOfParallelism = CurrentThreadNum,
             };
 
 

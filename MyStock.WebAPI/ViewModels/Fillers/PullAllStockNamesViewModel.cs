@@ -225,7 +225,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 var po = new ParallelOptions()
                 {
                     CancellationToken = cts.Token,
-                    MaxDegreeOfParallelism = MaxThreadNum,
+                    MaxDegreeOfParallelism = CurrentThreadNum,
                 };
 
 
