@@ -226,7 +226,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                        exceptions.Enqueue(e);
                        if (exceptions.Count >= 5)
                        {
-                           var nex = new Exception("too many exception in Parallel.ForEach clause");
+                           var nex = new Exception("并行执行没有完成，有多个未处理异常");
                            exceptions.Enqueue(nex);
                            throw new AggregateException(exceptions); //未捕获的异常会导致Parallel.ForEach退出。
 
@@ -234,6 +234,14 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                    }
 
                });
+                //完成了但是有异常有抛出。
+                if (exceptions.Count > 0)
+                {
+                    var nex = new Exception("并行执行完成了，但是有未处理异常。");
+                    exceptions.Enqueue(nex);
+
+                    throw new AggregateException(exceptions); //未捕获的异常会导致Parallel.ForEach退出。
+                }
             }
             IsRunning = false;
 

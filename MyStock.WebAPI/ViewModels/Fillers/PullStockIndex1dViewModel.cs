@@ -200,7 +200,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// <returns></returns>
         public async Task PullAll(int lastYear)
         {
-            CurrentThreadNum = 3;
+            CurrentThreadNum = 2;
             await setStartDate(_eventName);
             _lastTradeDay = await GetLastTradeDayFromWebPage();
 
@@ -309,18 +309,22 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         }
 
 
-        private static readonly Lazy<HttpClient> lazyForDaily =
-        new Lazy<HttpClient>(
-            () =>
-            {
-                var handler = new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip
+        SocketsHttpHandler socketsHttpHandler = new SocketsHttpHandler
+        {
+            PooledConnectionLifetime = TimeSpan.FromSeconds(20),
+            PooledConnectionIdleTimeout = TimeSpan.FromSeconds(5),
+            MaxConnectionsPerServer = 12,
+            AutomaticDecompression = DecompressionMethods.GZip
                                       | DecompressionMethods.Deflate
 
+        };
 
-                };
-                var client = new HttpClient(handler);
+
+        private HttpClient ClientForDaily
+        {
+            get
+            {
+                var client = new HttpClient(socketsHttpHandler);
 
                 client.BaseAddress = new Uri("http://quotes.money.163.com");
 
@@ -330,16 +334,13 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
                 client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
 
-                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
-                client.DefaultRequestHeaders.ExpectContinue = true;
+                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "false");
+                client.DefaultRequestHeaders.ExpectContinue = false;
 
 
                 return client;
             }
-            );
-        public static HttpClient ClientForDaily { get { return lazyForDaily.Value; } }
-
-
+        }
         private async Task<DateTime> WritePageDayData(string stockId)
         {
             var client = ClientForDaily;
