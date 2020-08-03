@@ -56,20 +56,21 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
-
-
-        private static readonly Lazy<HttpClient> lazyForF10 =
-        new Lazy<HttpClient>(
-            () =>
-            {
-                var handler = new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip
+        SocketsHttpHandler socketsHttpHandler = new SocketsHttpHandler
+        {
+            PooledConnectionLifetime = TimeSpan.FromSeconds(60),
+            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(20),
+            MaxConnectionsPerServer = 5,
+            AutomaticDecompression = DecompressionMethods.GZip
                                       | DecompressionMethods.Deflate
 
+        };
 
-                };
-                var client = new HttpClient(handler);
+        private HttpClient ClientForF10
+        {
+            get
+            {
+                var client = new HttpClient(socketsHttpHandler);
 
                 client.BaseAddress = new Uri("http://quotes.money.163.com");
 
@@ -86,8 +87,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
                 return client;
             }
-            );
-        public static HttpClient ClientForF10 { get { return lazyForF10.Value; } }
+        }
+
 
 
         /// <summary>
