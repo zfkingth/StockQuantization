@@ -120,7 +120,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
             else
             {
-                throw new Exception("通讯错误");
+                throw new Exception($"{stockId} f10信息，通讯错误\n 网址：{requestUri}");
             }
 
 
