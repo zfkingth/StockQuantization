@@ -63,7 +63,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
-        private int _currentThreadNum=DefaultMaxThreadNum;
+        private int _currentThreadNum = DefaultMaxThreadNum;
         public int CurrentThreadNum
         {
             get { return _currentThreadNum; }
@@ -180,32 +180,33 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// <param name="task"></param>
         protected void DoWork()
         {
-            try
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                using (var scope = _serviceScopeFactory.CreateScope())
+
+                var list = GetStockList();
+                //定义线程取消的一个对象
+
+                int progressCnt = 0;
+
+                int cnt = list.Count;
+                Progress = 0;
+
+                IsRunning = true;
+
+
+                var exceptions = new ConcurrentQueue<Exception>();
+                var po = new ParallelOptions()
                 {
-                    var db = scope.ServiceProvider.GetRequiredService<StockContext>();
-
-                    var list = GetStockList();
-                    //定义线程取消的一个对象
-
-                    int progressCnt = 0;
-
-                    int cnt = list.Count;
-                    Progress = 0;
-
-                    IsRunning = true;
+                    CancellationToken = cts.Token,
+                    MaxDegreeOfParallelism = CurrentThreadNum,
+                };
 
 
-                    var po = new ParallelOptions()
-                    {
-                        CancellationToken = cts.Token,
-                        MaxDegreeOfParallelism = CurrentThreadNum,
-                    };
-
-
-                    Parallel.ForEach(list, po, (stock) =>
+                Parallel.ForEach(list, po, (stock) =>
+               {
+                   try
                    {
+
                        po.CancellationToken.ThrowIfCancellationRequested();
 
 
@@ -218,14 +219,23 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                        {
                            Progress = progress;
                        }
+                   }
+                   // Store the exception and continue with the loop.                    
+                   catch (Exception e)
+                   {
+                       exceptions.Enqueue(e);
+                       if (exceptions.Count >= 5)
+                       {
+                           var nex = new Exception("too many exception in Parallel.ForEach clause");
+                           exceptions.Enqueue(nex);
+                           throw new AggregateException(exceptions); //未捕获的异常会导致Parallel.ForEach退出。
 
-                   });
-                }
+                       }
+                   }
+
+               });
             }
-            finally
-            {
-                IsRunning = false;
-            }
+            IsRunning = false;
 
 
         }

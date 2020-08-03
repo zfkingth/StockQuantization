@@ -43,7 +43,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         public async Task PullAll()
         {
-            CurrentThreadNum = 2;
+            CurrentThreadNum = 3;
             await setStartDate(_eventName);
 
 

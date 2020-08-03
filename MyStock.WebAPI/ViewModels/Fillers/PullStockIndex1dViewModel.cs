@@ -200,7 +200,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         /// <returns></returns>
         public async Task PullAll(int lastYear)
         {
-            CurrentThreadNum = 2;
+            CurrentThreadNum = 3;
             await setStartDate(_eventName);
             _lastTradeDay = await GetLastTradeDayFromWebPage();
 
