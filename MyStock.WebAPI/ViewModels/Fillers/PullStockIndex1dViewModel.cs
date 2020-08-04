@@ -20,11 +20,13 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
         private readonly ILogger _logger;
-        public PullStockIndex1dViewModel(IServiceScopeFactory serviceScopeFactory,
-
+        protected readonly IHttpClientFactory _clientFactory;
+        public PullStockIndex1dViewModel(IServiceScopeFactory serviceScopeFactory, IHttpClientFactory clientFactory,
             ILogger<PullStockIndex1dViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            _clientFactory = clientFactory;
+
             this.stockHandle = DayDataFiller_stockHandle;
             _eventName = SystemEvents.PullStockIndex1d;
 
@@ -273,7 +275,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             try
             {
-                var client = ClientForDaily;
+                var client = _clientFactory.CreateClient("163.com"); ;
                 //历史数据API获取数据
                 var response = await client.GetAsync(requestUri);
 
@@ -308,40 +310,9 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         }
 
-
-
-        private static readonly Lazy<HttpClient> lazyForDaily =
-        new Lazy<HttpClient>(
-            () =>
-            {
-                var handler = new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip
-                                      | DecompressionMethods.Deflate
-
-
-                };
-                var client = new HttpClient(handler);
-
-                client.BaseAddress = new Uri("http://quotes.money.163.com");
-
-
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, */*");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "zh-Hans-CN,zh-Hans;q=0.8,en-US;q=0.5,en;q=0.3");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-
-                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
-                client.DefaultRequestHeaders.ExpectContinue = true;
-
-
-                return client;
-            }
-            );
-        public static HttpClient ClientForDaily { get { return lazyForDaily.Value; } }
         private async Task<DateTime> WritePageDayData(string stockId)
         {
-            var client = ClientForDaily;
+            var client = _clientFactory.CreateClient("163.com"); ;
 
             string requestUriPage = string.Format("trade/lsjysj_{0}.html", stockId.Substring(1));
 

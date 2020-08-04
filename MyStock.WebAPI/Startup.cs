@@ -16,12 +16,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Http;
 using Microsoft.IdentityModel.Tokens;
 using MyStock.Data;
 using MyStock.WebAPI.Notifications;
 using MyStock.WebAPI.Services;
 using MyStock.WebAPI.Services.Abstraction;
 using MyStock.WebAPI.ViewModels.Fillers;
+using Polly;
+using Polly.Extensions.Http;
+using System.Net.Http;
+using System.Net;
 
 namespace MyStock.WebAPI
 {
@@ -137,6 +142,35 @@ namespace MyStock.WebAPI
             services.AddScoped<PullHuShenTongInTradeTimeViewModel>();
 
 
+            //http client
+
+            services.AddHttpClient("163.com", client =>
+             {
+                 client.BaseAddress = new Uri("http://quotes.money.163.com");
+
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, */*");
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.5");
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+
+
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
+                 client.DefaultRequestHeaders.ExpectContinue = true;
+
+             }).ConfigurePrimaryHttpMessageHandler(
+                x => new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }
+                )
+             .AddPolicyHandler(GetRetryPolicy());
+
+        }
+
+        static Polly.Retry.AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
+                                                                            retryAttempt)));
         }
 
         private void printSystemInfo()

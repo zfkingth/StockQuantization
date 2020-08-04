@@ -21,11 +21,14 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
         private readonly ILogger _logger;
-        public PullStockF10ViewModel(IServiceScopeFactory serviceScopeFactory,
+        protected readonly IHttpClientFactory _clientFactory;
+        public PullStockF10ViewModel(IServiceScopeFactory serviceScopeFactory, IHttpClientFactory clientFactory,
+
 
             ILogger<PullStockIndex1dViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            _clientFactory = clientFactory;
             this.stockHandle = F10Filler_stockHandle;
             _eventName = SystemEvents.PullStockF10;
 
@@ -44,7 +47,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
         public async Task PullAll()
         {
-            CurrentThreadNum = 3;
+            CurrentThreadNum = 2;
             await setStartDate(_eventName);
 
 
@@ -54,46 +57,6 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             await setFinishedDate(_eventName);
 
         }
-
-
-
-
-        private static readonly Lazy<HttpClient> lazyForF10 = initialClient();
-
-        private static Lazy<HttpClient> initialClient()
-        {
-            return new Lazy<HttpClient>(
-             () =>
-             {
-                 var handler = new HttpClientHandler
-                 {
-                     AutomaticDecompression = DecompressionMethods.GZip
-                                       | DecompressionMethods.Deflate
-
-
-                 };
-                 var client = new HttpClient(handler);
-
-                 client.BaseAddress = new Uri("http://quotes.money.163.com");
-
-
-                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, */*");
-                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.5");
-                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
-                 client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-
-
-                 client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
-                 client.DefaultRequestHeaders.ExpectContinue = true;
-
-
-                 return client;
-             }
-             );
-        }
-
-
-        public static HttpClient ClientForF10 { get { return lazyForF10.Value; } }
 
 
 
@@ -107,7 +70,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
-            var client = ClientForF10;
+            var client = _clientFactory.CreateClient("163.com");
             string requestUri = string.Format("f10/fhpg_{0}.html ", stockId.Substring(1));
 
 
@@ -115,17 +78,16 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             HttpResponseMessage response = await client.GetAsync(requestUri);
 
-            if (!response.IsSuccessStatusCode)
-            {
+            //if (!response.IsSuccessStatusCode)
+            //{
 
-                //如果发现错误重置一次连接
-                System.Diagnostics.Debug.WriteLine("reset client and sleep 10000");
-                Thread.Sleep(10000);
-                initialClient();
-                client = ClientForF10;
-                response = await client.GetAsync(requestUri);
+            //    //如果发现错误重置一次连接
+            //    System.Diagnostics.Debug.WriteLine("reset client and sleep 10000");
+            //    Thread.Sleep(10000);
+            //    client = _clientFactory.CreateClient("163.com"); 
+            //    response = await client.GetAsync(requestUri);
 
-            }
+            //}
 
             if (response.IsSuccessStatusCode)
             {
