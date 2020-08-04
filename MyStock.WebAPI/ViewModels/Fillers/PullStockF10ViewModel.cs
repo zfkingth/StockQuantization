@@ -28,6 +28,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<PullStockIndex1dViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            base._baseLogger = logger;
             _clientFactory = clientFactory;
             this.stockHandle = F10Filler_stockHandle;
             _eventName = SystemEvents.PullStockF10;

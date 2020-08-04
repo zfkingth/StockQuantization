@@ -20,11 +20,13 @@ using MyStock.WebAPI.Notifications;
 using MyStock.WebAPI.Notifications.Models;
 using MyStock.WebAPI.Utils;
 using MyStock.WebAPI.ViewModels.Stocks;
+using Microsoft.Extensions.Logging;
 
 namespace MyStock.WebAPI.ViewModels.Fillers
 {
     public class BaseDoWorkViewModel : ViewModelBase
     {
+        protected ILogger _baseLogger;
         protected readonly IServiceScopeFactory _serviceScopeFactory;
         protected readonly string _userId;
         protected readonly IConfiguration _configuration;
@@ -234,20 +236,30 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                    }
 
                });
-                //完成了但是有异常有抛出。
-                if (exceptions.Count > 0)
-                {
-                    var nex = new Exception("并行执行完成了，但是有未处理异常。");
-                    exceptions.Enqueue(nex);
+                //完成了如果有异常就记录。
 
-                    throw new AggregateException(exceptions); //未捕获的异常会导致Parallel.ForEach退出。
-                }
+                logError(exceptions);
+
             }
             IsRunning = false;
 
 
         }
 
+        private void logError(ConcurrentQueue<Exception> exceptions)
+        {
+            if (exceptions.Count > 0)
+            {
+                if (_baseLogger == null) throw new Exception("base logger is null");
+
+                _baseLogger.LogError($"并行执行完成了，但是有未处理异常。异常个数:{exceptions.Count}");
+                foreach (var ex in exceptions)
+                {
+                    _baseLogger.LogError(ex.Message);
+                    _baseLogger.LogError(ex.StackTrace);
+                }
+            }
+        }
 
         protected async Task setStartDate(string eventName)
         {
@@ -716,12 +728,12 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 po.CancellationToken.ThrowIfCancellationRequested();
 
                 RealTimeData real = null;
-                //using (var asyncBridge = AsyncHelper.Wait)
-                //{
-                //    asyncBridge.Run(handle(item), (callArg) => real = callArg);
-                //}
+            //using (var asyncBridge = AsyncHelper.Wait)
+            //{
+            //    asyncBridge.Run(handle(item), (callArg) => real = callArg);
+            //}
 
-                real = handle(item).Result;
+            real = handle(item).Result;
 
                 Interlocked.Increment(ref _progressedCnt);
 
@@ -733,8 +745,8 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     }
                 }
             }
-            // Store the exception and continue with the loop.                    
-            catch (Exception e)
+        // Store the exception and continue with the loop.                    
+        catch (Exception e)
             {
                 exceptions.Enqueue(e);
                 if (exceptions.Count >= 3)
@@ -857,7 +869,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
             if (_useCahce == false && _needStoreInCache && _actionName != null)
             {//在缓存中找不到才会插入这个,
-                //只有从所有股票中的操作结果才会缓存
+             //只有从所有股票中的操作结果才会缓存
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;

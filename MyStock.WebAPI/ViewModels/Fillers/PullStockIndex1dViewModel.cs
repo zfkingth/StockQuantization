@@ -25,6 +25,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             ILogger<PullStockIndex1dViewModel> logger) : base(serviceScopeFactory)
         {
             _logger = logger;
+            base._baseLogger = logger;
             _clientFactory = clientFactory;
 
             this.stockHandle = DayDataFiller_stockHandle;
