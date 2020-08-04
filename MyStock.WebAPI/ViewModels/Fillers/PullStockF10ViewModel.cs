@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyStock.WebAPI.ViewModels.Fillers
@@ -56,38 +57,43 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
 
-        SocketsHttpHandler socketsHttpHandler = new SocketsHttpHandler
+
+        private static readonly Lazy<HttpClient> lazyForF10 = initialClient();
+
+        private static Lazy<HttpClient> initialClient()
         {
-            PooledConnectionLifetime = TimeSpan.FromSeconds(60),
-            PooledConnectionIdleTimeout = TimeSpan.FromMinutes(20),
-            MaxConnectionsPerServer = 5,
-            AutomaticDecompression = DecompressionMethods.GZip
-                                      | DecompressionMethods.Deflate
-
-        };
-
-        private HttpClient ClientForF10
-        {
-            get
-            {
-                var client = new HttpClient(socketsHttpHandler);
-
-                client.BaseAddress = new Uri("http://quotes.money.163.com");
+            return new Lazy<HttpClient>(
+             () =>
+             {
+                 var handler = new HttpClientHandler
+                 {
+                     AutomaticDecompression = DecompressionMethods.GZip
+                                       | DecompressionMethods.Deflate
 
 
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, */*");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.5");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                 };
+                 var client = new HttpClient(handler);
+
+                 client.BaseAddress = new Uri("http://quotes.money.163.com");
 
 
-                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
-                client.DefaultRequestHeaders.ExpectContinue = true;
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html, application/xhtml+xml, */*");
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.5");
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
 
 
-                return client;
-            }
+                 client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
+                 client.DefaultRequestHeaders.ExpectContinue = true;
+
+
+                 return client;
+             }
+             );
         }
+
+
+        public static HttpClient ClientForF10 { get { return lazyForF10.Value; } }
 
 
 
@@ -102,16 +108,24 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
             var client = ClientForF10;
-
-
-
-
             string requestUri = string.Format("f10/fhpg_{0}.html ", stockId.Substring(1));
 
 
 
 
             HttpResponseMessage response = await client.GetAsync(requestUri);
+
+            if (!response.IsSuccessStatusCode)
+            {
+
+                //如果发现错误重置一次连接
+                System.Diagnostics.Debug.WriteLine("reset client and sleep 10000");
+                Thread.Sleep(10000);
+                initialClient();
+                client = ClientForF10;
+                response = await client.GetAsync(requestUri);
+
+            }
 
             if (response.IsSuccessStatusCode)
             {
@@ -121,9 +135,9 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             }
             else
             {
-                throw new Exception($"{stockId} f10信息，通讯错误\n 网址：{requestUri}");
-            }
 
+                throw new Exception($"{stockId} f10信息，status code: {response.StatusCode},通讯错误\n 网址：{requestUri}");
+            }
 
 
 

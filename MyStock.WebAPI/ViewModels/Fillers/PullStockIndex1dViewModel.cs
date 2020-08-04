@@ -309,22 +309,19 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         }
 
 
-        SocketsHttpHandler socketsHttpHandler = new SocketsHttpHandler
-        {
-            PooledConnectionLifetime = TimeSpan.FromSeconds(20),
-            PooledConnectionIdleTimeout = TimeSpan.FromSeconds(5),
-            MaxConnectionsPerServer = 12,
-            AutomaticDecompression = DecompressionMethods.GZip
+
+        private static readonly Lazy<HttpClient> lazyForDaily =
+        new Lazy<HttpClient>(
+            () =>
+            {
+                var handler = new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip
                                       | DecompressionMethods.Deflate
 
-        };
 
-
-        private HttpClient ClientForDaily
-        {
-            get
-            {
-                var client = new HttpClient(socketsHttpHandler);
+                };
+                var client = new HttpClient(handler);
 
                 client.BaseAddress = new Uri("http://quotes.money.163.com");
 
@@ -334,13 +331,14 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate");
                 client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
 
-                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "false");
-                client.DefaultRequestHeaders.ExpectContinue = false;
+                client.DefaultRequestHeaders.TryAddWithoutValidation("KeepAlive", "true");
+                client.DefaultRequestHeaders.ExpectContinue = true;
 
 
                 return client;
             }
-        }
+            );
+        public static HttpClient ClientForDaily { get { return lazyForDaily.Value; } }
         private async Task<DateTime> WritePageDayData(string stockId)
         {
             var client = ClientForDaily;
@@ -363,7 +361,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                 }
                 else
                 {
-                    throw new Exception(msg);
+                    throw new Exception(msg + $"status code: {response.StatusCode}");
                 }
             }
             catch (Exception ex)
