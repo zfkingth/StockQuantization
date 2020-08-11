@@ -252,25 +252,13 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
         title: {
           text: '股价'
         },
-        height: '40%',
+        height: '45%',
         resize: {
           enabled: true
         },
         lineWidth: 2
       },
-      {
-        labels: {
-          align: 'right',
-          x: -3
-        },
-        title: {
-          text: '成交额'
-        },
-        top: '40%',
-        height: '5%',
-        offset: 0,
-        lineWidth: 2
-      },
+    
       {
         labels: {
           align: 'right',
@@ -369,16 +357,9 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
 
     {
       type: 'column',
-      name: '成交金额',
-      data: money,
-      yAxis: 1,
-
-    },
-    {
-      type: 'column',
       name: '融资变化',
       data: marginForChart,
-      yAxis: 2,
+      yAxis: 1,
 
 
 
@@ -396,7 +377,7 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
       type: 'column',
       name: '陆股通流入',
       data: marketForChart,
-      yAxis: 3,
+      yAxis: 2,
 
       color: 'red', // 默认颜色
       zones: [{
@@ -412,7 +393,7 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
       type: 'line',
       name: 'CCI',
       data: cciData,
-      yAxis: 4,
+      yAxis: 3,
 
       color: 'brown', // 默认颜色
 
@@ -438,7 +419,7 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
       type: 'column',
       name: '涨停个数',
       data: staForChart.highData,
-      yAxis: 5,
+      yAxis: 4,
 
       color: 'red', // 默认颜色
 
@@ -449,7 +430,7 @@ const createOption = (stockInfo, historyData, marginData, marketDeal, staPrice) 
       type: 'column',
       name: '跌停个数',
       data: staForChart.lowData,
-      yAxis: 5,
+      yAxis: 4,
 
       color: 'green', // 默认颜色
 
