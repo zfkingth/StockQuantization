@@ -69,7 +69,7 @@ namespace MyStock.WebAPI.ViewModels.Fillers
             options.AddArgument("--dns-prefetch-disable");
             options.AddArgument("--disable-gpu");
             //options.AddArgument("--remote-debugging-port=9222");
-            options.PageLoadStrategy=PageLoadStrategy.Normal;
+            options.PageLoadStrategy = PageLoadStrategy.Normal;
 
             //禁用图片
             options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
@@ -88,9 +88,9 @@ namespace MyStock.WebAPI.ViewModels.Fillers
                     driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(20);
 
 
-
+                    const string url = "http://data.eastmoney.com/hsgt/index.html";
                     // navigate to URL  
-                    driver.Navigate().GoToUrl("http://data.eastmoney.com/hsgt/index.html");
+                    driver.Navigate().GoToUrl(url);
 
 
                     //await Task.Delay(TimeSpan.FromSeconds(10));
@@ -115,11 +115,12 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
                     //解析时间
-                    var sa = datestr.Split('-');
-                    int month = int.Parse(sa[0]);
-                    int day = int.Parse(sa[1]);
 
-                    DateTime updateTime = new DateTime(DateTime.Now.Year, month, day);
+                    if (DateTime.TryParseExact(datestr, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                         DateTimeStyles.None, out DateTime updateTime) == false)
+                    {
+                        throw new Exception($"解析{url} 中的时间 {datestr}字条串出错");
+                    }
 
                     //写入数据库
 

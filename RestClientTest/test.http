@@ -15,11 +15,24 @@ Content-Type: application/json
 }
 
  
-### 获取股票日线数据
 @authToken = {{login.response.body.token}}
 
+### 获取股票日线数据
 GET {{host}}/api/Values/0600000
 Authorization: Bearer {{authToken}}
+
+
+### 拉取北上资金流入
+POST {{host}}/api/Tasks/ariseSystemEvent HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+   
+     "EventName": "PullHuShenTongInTradeTime"
+     
+}
+
 
 ### MA 2u次突破测试
 POST {{host}}/api/search/UpMATwice HTTP/1.1
