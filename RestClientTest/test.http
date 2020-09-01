@@ -14,10 +14,13 @@ Content-Type: application/json
 	"password":"dragon"
 }
 
+### token
  
 @authToken = {{login.response.body.token}}
 
+
 ### 获取股票日线数据
+
 GET {{host}}/api/Values/0600000
 Authorization: Bearer {{authToken}}
 
