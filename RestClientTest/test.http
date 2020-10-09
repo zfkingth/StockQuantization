@@ -14,7 +14,7 @@ Content-Type: application/json
 	"password":"dragon"
 }
 
-### token
+### set token
  
 @authToken = {{login.response.body.token}}
 

@@ -94,16 +94,18 @@ namespace MyStock.WebAPI.ViewModels.Fillers
 
 
                     //await Task.Delay(TimeSpan.FromSeconds(10));
+                    ////*[@id="north_h_jme"]/span
 
-                    var ele = driver.FindElement(By.XPath("//*[@id=\"north_1\"]/span"));
+                    var ele = driver.FindElement(By.XPath("//*[@id=\"north_h_jme\"]/span"));
                     var huguTongstr = ele.Text;
 
 
-                    ele = driver.FindElement(By.XPath("//*[@id=\"north_3\"]/span"));
+                    ele = driver.FindElement(By.XPath("//*[@id=\"north_s_jme\"]/span"));
 
                     var shenguTongstr = ele.Text;
 
 
+                    ////*[@id="updateTime_bxzj"]
                     ele = driver.FindElement(By.XPath(" //*[@id=\"updateTime_bxzj\"]"));
 
                     var datestr = ele.Text;
@@ -148,15 +150,15 @@ namespace MyStock.WebAPI.ViewModels.Fillers
         {
             string val = "";
             float mulfactor = 1.0f;
-            if (strVal.Contains("万元"))
+            if (strVal.Contains("万"))
             {
-                val = strVal.Replace("万元", "");
+                val = strVal.Replace("万", "");
                 mulfactor = 0.01f; //数据库中存储的是数据单位是百万。
 
             }
-            else if (strVal.Contains("亿元"))
+            else if (strVal.Contains("亿"))
             {
-                val = strVal.Replace("亿元", "");
+                val = strVal.Replace("亿", "");
                 mulfactor = 100f; //数据库中存储的是数据单位是百万。
 
             }
