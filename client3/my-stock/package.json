@@ -19,7 +19,7 @@
     "highcharts-react-official": "^3.0.0",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
-    "luxon": "^1.22.2",
+    "luxon": "^1.28.1",
     "react": "^16.13.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.13.1",
